@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmation Ticket — ANTROTHON'27{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top:60px;">
+  <div class="container" style="max-width:820px;">
+    
+    <div class="hud-panel" style="border-color:var(--term-green); box-shadow:0 0 40px rgba(48,209,88,0.25); text-align:center; padding:40px 32px; margin-bottom:32px;">
+      <div class="hud-corner hud-corner-tl" style="border-color:var(--term-green);"></div>
+      <div class="hud-corner hud-corner-tr" style="border-color:var(--term-green);"></div>
+      <div class="hud-corner hud-corner-bl" style="border-color:var(--term-green);"></div>
+      <div class="hud-corner hud-corner-br" style="border-color:var(--term-green);"></div>
+
+      <div style="display:flex; justify-content:center; align-items:center; gap:18px; margin-bottom:16px;">
+        <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:76px; height:76px; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(48,209,88,0.45)); flex-shrink:0;">
+        <div style="width:48px; height:48px; border:2px solid var(--term-green); border-radius:50%; display:grid; place-items:center; background:rgba(48,209,88,0.15); color:var(--term-green); box-shadow:0 0 15px rgba(48,209,88,0.3); flex-shrink:0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <span class="term-badge term-badge-green" style="margin-bottom:12px;">APPLICATION CONFIRMED // PAYMENT RECORDED</span>
+      <h1 style="font-size:clamp(22px, 5vw, 32px); color:#fff; margin-bottom:6px; letter-spacing:0.04em;">REGISTRATION SUCCESSFUL</h1>
+      <p style="color:var(--term-steel); font-size:15px; margin-bottom:24px;">
+        Your team application for <strong>ANTROTHON’27</strong> has been securely logged into the PIIC registry.
+      </p>
+
+      <div style="display:inline-block; background:rgba(8,10,14,0.9); border:1px solid var(--term-border); padding:12px 28px; border-radius:4px; margin-bottom:28px;">
+        <span style="font-family:var(--font-tactical); font-size:12px; color:var(--term-steel); display:block; margin-bottom:4px;">TEAM IDENTIFICATION CODE</span>
+        <span style="font-family:var(--font-display); font-size:clamp(20px, 5vw, 26px); font-weight:900; color:var(--term-red); letter-spacing:0.1em;">
+          {{ registration.team_code }}
+        </span>
+      </div>
+
+      <!-- Ticket Manifest Details -->
+      <div style="text-align:left; background:rgba(11,14,20,0.85); border:1px solid var(--term-border); border-radius:4px; padding:20px 18px; margin-bottom:28px;">
+        <h4 style="font-size:16px; color:#fff; border-bottom:1px solid rgba(255,208,0,0.2); padding-bottom:10px; margin-bottom:16px;">
+          // TEAM DOSSIER SUMMARY
+        </h4>
+        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; font-size:14px; margin-bottom:20px;">
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">TEAM NAME</span>
+            <strong style="color:#fff;">{{ registration.team_name }}</strong>
+          </div>
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">SELECTED TRACK</span>
+            <span style="color:var(--term-red); word-break:break-word;">{{ registration.track }}</span>
+          </div>
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">TEAM LEADER</span>
+            <strong style="color:#fff;">{{ registration.leader_name }}</strong>
+          </div>
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">COLLEGE</span>
+            <span style="color:var(--term-chrome); word-break:break-word;">{{ registration.leader_college }}</span>
+          </div>
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">CREW SIZE</span>
+            <span style="color:#fff;">{{ registration.member_count }} Members Total</span>
+          </div>
+          <div>
+            <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">PAYMENT STATUS</span>
+            <span class="status-badge paid">{{ registration.payment_status }} (&#8377;{{ registration.amount_paid }})</span>
+          </div>
+        </div>
+
+        <!-- Idea Submission Dossier -->
+        <div style="background:rgba(8,10,14,0.6); padding:16px; border-radius:4px; margin-bottom:20px; border-left:3px solid var(--term-cyan);">
+          <span style="color:var(--term-cyan); font-family:var(--font-tactical); font-size:11px; display:block; margin-bottom:4px;">
+            // SUBMITTED IDEA PROPOSAL
+          </span>
+          <h4 style="color:#fff; font-size:16px; margin-bottom:8px; word-break:break-word;">{{ registration.idea_title or registration.project_title or 'Idea Dossier Logged' }}</h4>
+          {% if registration.idea_summary %}
+          <p style="color:var(--term-steel); font-size:13px; line-height:1.6; margin-bottom:12px; word-break:break-word;">
+            {{ registration.idea_summary }}
+          </p>
+          {% endif %}
+          {% if registration.idea_ppt_filename %}
+          <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-family:var(--font-tactical); color:var(--term-cyan); flex-wrap:wrap;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span style="word-break:break-all;">PRESENTATION ATTACHED: {{ registration.idea_ppt_filename }}</span>
+            {% if registration.idea_ppt_path %}
+            <a href="{{ registration.idea_ppt_path }}" download style="color:#fff; text-decoration:underline; margin-left:8px;">Download PPT</a>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Members Breakdown -->
+        <h5 style="color:#fff; font-size:13px; font-family:var(--font-tactical); margin-bottom:10px;">
+          ADDITIONAL CREW MEMBERS:
+        </h5>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:13px; color:var(--term-steel);">
+          {% for m in members %}
+          <div style="background:rgba(8,10,14,0.6); padding:8px 12px; border-radius:2px; border-left:2px solid var(--term-red); word-break:break-word;">
+            <strong style="color:#fff;">Member #{{ loop.index + 1 }}:</strong> {{ m.name }}<br>
+            <small style="word-break:break-all;">{{ m.phone }} &bull; {{ m.email }}</small>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Financial Transaction Data -->
+      <div style="text-align:left; font-family:var(--font-tactical); font-size:12px; color:var(--term-steel); background:rgba(8,10,14,0.6); padding:14px; border-radius:4px; margin-bottom:28px; word-break:break-all; overflow-wrap:anywhere;">
+        <div>PAYMENT GATEWAY: RAZORPAY // TRANSACTION ID: {{ registration.razorpay_payment_id or 'SIMULATED_AUTH' }}</div>
+        <div>ORDER ID: {{ registration.razorpay_order_id or 'N/A' }}</div>
+        <div>RECORDED TIMESTAMP: {{ registration.payment_timestamp or registration.created_at }}</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <button type="button" class="btn-terminator" onclick="window.print()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>PRINT / SAVE CONFIRMATION</span>
+        </button>
+        <a href="/" class="btn-cyber-outline">
+          <span>RETURN TO HOME</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

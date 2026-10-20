@@ -1,0 +1,737 @@
+{% extends "base.html" %}
+
+{% block title %}ANTROTHON'27{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-section" id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge-group">
+          <span class="term-badge">
+            <span class="pulse-led"></span>
+            24-HOUR INTER-COLLEGE HACKATHON
+          </span>
+          <span class="term-badge term-badge-amber">
+            JANUARY 7–8, 2027
+          </span>
+          <span class="term-badge">
+            TEAM SIZE: 4–6 MEMBERS
+          </span>
+        </div>
+
+        <h1 class="hero-title">
+          ANTROTHON<span class="year-accent">'27</span>
+        </h1>
+
+        <div class="hero-tagline">
+          Think Human. Innovate for Society.
+        </div>
+
+        <p class="hero-desc">
+          Organized by <strong>Patrician Institute Innovation Cell (PIIC)</strong> at 
+          <strong>Patrician College of Arts and Science</strong>. 
+          A high-stakes 24-hour crucible uniting student innovators, technologists, and entrepreneurs 
+          to forge technology-driven solutions to critical human and societal challenges.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/register" class="btn-terminator">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20"></path>
+            </svg>
+            <span>REGISTER TEAM</span>
+          </a>
+          <a href="/#tracks" class="btn-cyber-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>EXPLORE 3 TRACKS</span>
+          </a>
+          <a href="/download/idea-template" class="btn-cyber-outline" download style="border-color:var(--term-cyan); color:var(--term-cyan);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>DOWNLOAD IDEA PPT TEMPLATE</span>
+          </a>
+        </div>
+
+        <!-- COUNTDOWN TO REGISTRATION DEADLINE (20 DEC 2026) -->
+        <div class="countdown-container">
+          <div class="hud-corner hud-corner-tl"></div>
+          <div class="hud-corner hud-corner-tr"></div>
+          <div class="hud-corner hud-corner-bl"></div>
+          <div class="hud-corner hud-corner-br"></div>
+          <div class="countdown-header">
+            <div class="countdown-title">
+              <span class="pulse-led"></span>
+              <span>COUNTDOWN TO REGISTRATION DEADLINE (20 DEC 2026)</span>
+            </div>
+            <span class="term-badge term-badge-amber" id="cd-status-badge">CLOSES: 20 DEC 2026 // 23:59:59 IST</span>
+          </div>
+
+          <div class="countdown-digits">
+            <div class="digit-card">
+              <div class="digit-value" id="cd-days">--</div>
+              <div class="digit-label">DAYS</div>
+            </div>
+            <div class="digit-card">
+              <div class="digit-value" id="cd-hours">--</div>
+              <div class="digit-label">HOURS</div>
+            </div>
+            <div class="digit-card">
+              <div class="digit-value" id="cd-mins">--</div>
+              <div class="digit-label">MINUTES</div>
+            </div>
+            <div class="digit-card">
+              <div class="digit-value" id="cd-secs">--</div>
+              <div class="digit-label">SECONDS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TERMINATOR RETICLE HUD VISUAL -->
+      <div>
+        <div class="hero-hud-visual">
+          <div class="hud-data-tag hud-data-tag-1">
+            TARGET: SOCIETAL IMPACT // 24HRS
+          </div>
+          <div class="reticle-container">
+            <div class="reticle-crosshair-h"></div>
+            <div class="reticle-crosshair-v"></div>
+            <div class="reticle-ring-inner"></div>
+            <div class="reticle-core" style="width:62%; height:62%; overflow:visible; padding:0; background:transparent; border:none; box-shadow:none;">
+              <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Official Logo" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 18px rgba(255,208,0,0.6)); animation:rotateReverse 40s linear infinite;">
+            </div>
+          </div>
+          <div class="hud-data-tag hud-data-tag-2">
+            CYBERNETIC MATRIX: 45 FINALIST TEAMS
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="stat-val">24<span>HRS</span></div>
+        <div class="stat-desc">Non-Stop Hackathon</div>
+      </div>
+      <div class="stat-item">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="stat-val">3<span>TRACKS</span></div>
+        <div class="stat-desc">Human-Centred Domains</div>
+      </div>
+      <div class="stat-item">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="stat-val">&#8377;300</div>
+        <div class="stat-desc">Per Team Initial Registration</div>
+      </div>
+      <div class="stat-item">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="stat-val">45<span>TEAMS</span></div>
+        <div class="stat-desc">Shortlisted Finalists</div>
+      </div>
+      <div class="stat-item">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="stat-val">&#8377;350</div>
+        <div class="stat-desc">Finalist Fee / Per Participant</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT ANTROTHON'27 -->
+<section class="section section-alt" id="about">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// MISSION DOSSIER</span>
+      <h2 class="section-title">About ANTROTHON'27</h2>
+      <p class="section-desc">
+        Guided by the foundational ethos <em>"Think Human. Innovate for Society,"</em> 
+        ANTROTHON'27 fuses technical mastery with social empathy.
+      </p>
+    </div>
+
+    <div class="hud-panel" style="margin-bottom: 40px;">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
+      <div style="display:flex; gap:32px; align-items:center; flex-wrap:wrap;">
+        <div style="width:140px; height:140px; flex-shrink:0; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+          <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Official Insignia" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(255,208,0,0.5));">
+        </div>
+        <div style="flex:1; min-width:0; font-size:16px; color:#e2e8f0; line-height:1.8;">
+          <p style="margin-bottom:14px;">
+            <strong>ANTROTHON’27</strong> is a 24-hour inter-college hackathon organized by the 
+            <strong>Patrician Institute Innovation Cell (PIIC)</strong> of 
+            <strong>Patrician College of Arts and Science</strong>. The event aims to bring together student innovators, 
+            creative thinkers, and aspiring entrepreneurs from different colleges to develop innovative, 
+            technology-driven solutions to real-world societal challenges.
+          </p>
+          <p style="margin:0;">
+            Guided by the tagline <em>“Think Human. Innovate for Society,”</em> ANTROTHON’27 emphasizes human-centred innovation, 
+            collaboration, creativity, and responsible technology. Participants are encouraged to identify meaningful societal needs, 
+            apply design thinking and emerging technologies, and develop practical prototypes that address the needs of 
+            individuals and communities.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Objectives & Expected Outcomes Grid -->
+    <div class="responsive-duo-grid">
+      <div class="hud-panel">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <h4 style="color:#fff; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+          <span style="color:var(--term-red);">&#9658;</span> Key Objectives
+        </h4>
+        <ul style="list-style:none; color:var(--term-steel); font-size:14px; line-height:1.7;">
+          <li style="margin-bottom:10px;">&#9656; Encourage innovation and creative solution engineering among college students.</li>
+          <li style="margin-bottom:10px;">&#9656; Promote the development of technology-driven solutions to real-world societal challenges.</li>
+          <li style="margin-bottom:10px;">&#9656; Foster interdisciplinary collaboration and teamwork.</li>
+          <li style="margin-bottom:10px;">&#9656; Encourage the responsible application of artificial intelligence and emerging technologies.</li>
+          <li style="margin-bottom:10px;">&#9656; Promote awareness of human rights, accessibility, healthcare, education, and sustainability.</li>
+          <li>&#9656; Support entrepreneurial thinking and scalable social-impact prototypes.</li>
+        </ul>
+      </div>
+
+      <div class="hud-panel">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <h4 style="color:#fff; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+          <span style="color:var(--term-red);">&#9658;</span> Expected Outcomes
+        </h4>
+        <p style="color:var(--term-steel); font-size:15px; line-height:1.7; margin-bottom:16px;">
+          ANTROTHON’27 aims to inspire students to transform ideas into functional prototypes that address meaningful societal challenges. 
+          The event seeks to encourage responsible innovation, strengthen technical and entrepreneurial skills, promote collaboration among institutions, 
+          and support solutions with measurable social impact.
+        </p>
+        <div class="track-status-box">
+          <span class="track-status-text">
+            PROTOCOL: 24-HOUR NON-STOP PROTOTYPING // JURY VALIDATION
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HACKATHON TRACKS -->
+<section class="section" id="tracks">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// OPERATIONAL VECTORS</span>
+      <h2 class="section-title">Thematic Hackathon Tracks</h2>
+      <p class="section-desc">
+        Select your operational vector across our 3 designated thematic tracks. Teams innovate and engineer 
+        societal prototypes aligned directly with their chosen track.
+      </p>
+    </div>
+
+    <div class="tracks-grid">
+      <!-- TRACK 1 -->
+      <div class="track-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="track-header">
+          <span class="track-number">TRACK // 01</span>
+          <div class="track-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 class="track-title">Human Safety, Rights &amp; Empowerment</h3>
+        <p class="track-desc">
+          Focuses on protecting human dignity, promoting safety and equality, improving accessibility, 
+          and empowering individuals and underserved communities.
+        </p>
+        <ul class="track-areas-list">
+          <li class="track-area-item">Personal &amp; Public Safety Applications</li>
+          <li class="track-area-item">Women's &amp; Children's Safety Ecosystems</li>
+          <li class="track-area-item">Assistive Technologies for Persons with Disabilities</li>
+          <li class="track-area-item">Digital Rights, Data Privacy &amp; Legal Awareness</li>
+          <li class="track-area-item">Community Hazard &amp; Incident Reporting</li>
+          <li class="track-area-item">Skill-development &amp; Employment for Underserved Populations</li>
+        </ul>
+      </div>
+
+      <!-- TRACK 2 -->
+      <div class="track-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="track-header">
+          <span class="track-number">TRACK // 02</span>
+          <div class="track-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 class="track-title">Health, Education &amp; Digital Innovation</h3>
+        <p class="track-desc">
+          Leveraging technology to improve healthcare accessibility, educational experiences, and the delivery 
+          of essential human services across all demographics.
+        </p>
+        <ul class="track-areas-list">
+          <li class="track-area-item">AI-Assisted Personalized Learning &amp; Mentorship</li>
+          <li class="track-area-item">Affordable Digital Healthcare &amp; Diagnostics</li>
+          <li class="track-area-item">Preventive Health, Mental Wellness &amp; Student Wellbeing</li>
+          <li class="track-area-item">Multilingual &amp; Vernacular Educational Tools</li>
+          <li class="track-area-item">Smart Campus &amp; Institutional Governance</li>
+          <li class="track-area-item">Offline-First Tech for Low-Connectivity Communities</li>
+        </ul>
+      </div>
+
+      <!-- TRACK 3 -->
+      <div class="track-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="track-header">
+          <span class="track-number">TRACK // 03</span>
+          <div class="track-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v8M12 18v4M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h8M18 12h4M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 class="track-title">Sustainability, Smart Communities &amp; Social Entrepreneurship</h3>
+        <p class="track-desc">
+          Challenging builders to create solutions that promote environmental sustainability, efficient resource utilization, 
+          resilient infrastructure, and inclusive economic growth.
+        </p>
+        <ul class="track-areas-list">
+          <li class="track-area-item">Smart Waste Management &amp; Circular Recycling</li>
+          <li class="track-area-item">Water &amp; Energy Conservation Monitoring</li>
+          <li class="track-area-item">Climate Resilience &amp; Sustainable Agriculture</li>
+          <li class="track-area-item">Green Mobility &amp; Urban Transit Efficiency</li>
+          <li class="track-area-item">Community Marketplaces &amp; Local Livelihoods</li>
+          <li class="track-area-item">Social Entrepreneurship Platforms with Measurable Impact</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SIH-STYLE IDEA SUBMISSION TEMPLATE CALLOUT -->
+    <div class="hud-panel" style="margin-top:40px; background:linear-gradient(135deg, rgba(14,20,30,0.95) 0%, rgba(20,12,18,0.95) 100%); border-color:var(--term-cyan); box-shadow:0 0 30px rgba(0,210,255,0.15);">
+      <div class="hud-corner hud-corner-tl" style="border-color:var(--term-cyan);"></div>
+      <div class="hud-corner hud-corner-tr" style="border-color:var(--term-cyan);"></div>
+      <div class="hud-corner hud-corner-bl" style="border-color:var(--term-cyan);"></div>
+      <div class="hud-corner hud-corner-br" style="border-color:var(--term-cyan);"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;">
+        <div style="max-width:680px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <span class="pulse-led" style="background:var(--term-cyan); box-shadow:0 0 10px var(--term-cyan);"></span>
+            <span style="font-family:var(--font-tactical); color:var(--term-cyan); font-size:12px; letter-spacing:0.1em; font-weight:700;">
+              // SUBMISSION PROTOCOL
+            </span>
+          </div>
+          <h3 style="font-size:24px; color:#fff; margin-bottom:8px; font-family:var(--font-display);">
+            Official Idea Presentation Template (.PPTX)
+          </h3>
+          <p style="color:var(--term-steel); font-size:14px; line-height:1.7; margin:0;">
+            All participating teams must structure their idea submission using the official 6-slide ANTROTHON'27 Presentation Template. 
+            Includes dedicated sections for Track Alignment, Proposed Solution, Technical Architecture Diagram, Tech Stack, Novelty/USP, and Societal Impact (File upload limit: <strong>up to 10MB</strong>).
+          </p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; min-width:250px;">
+          <a href="/download/idea-template" class="btn-terminator" download style="background:var(--term-cyan); border-color:var(--term-cyan); color:#080a0e; font-weight:700; justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>DOWNLOAD PPT TEMPLATE</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT TIMELINE -->
+<section class="section section-alt" id="timeline">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// CHRONO PIPELINE</span>
+      <h2 class="section-title">Event Roadmap</h2>
+      <p class="section-desc">
+        Key operational checkpoints from track selection and dossier submission to final prototype demonstration.
+      </p>
+    </div>
+
+    <div class="timeline-pipeline">
+      <!-- STAGE 1 -->
+      <div class="timeline-stage active">
+        <div class="timeline-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <div class="timeline-info">
+          <div class="timeline-date-badge">30 OCTOBER 2026</div>
+          <h4 class="timeline-stage-title">Registration Opens</h4>
+          <p style="color:var(--term-steel); font-size:14px;">
+            Registrations are now open. 
+            Teams may select their operational track among the 3 thematic tracks and submit their proposal dossier (&#8377;300/team).
+          </p>
+        </div>
+      </div>
+
+      <!-- STAGE 2 -->
+      <div class="timeline-stage">
+        <div class="timeline-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="timeline-info">
+          <div class="timeline-date-badge">20 DECEMBER 2026</div>
+          <h4 class="timeline-stage-title">Registration Deadline</h4>
+          <p style="color:var(--term-steel); font-size:14px;">
+            Final cutoff for team applications and idea synopsis submissions. No further initial registrations accepted after midnight.
+          </p>
+        </div>
+      </div>
+
+      <!-- STAGE 3 -->
+      <div class="timeline-stage">
+        <div class="timeline-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="timeline-info">
+          <div class="timeline-date-badge">27 DECEMBER 2026</div>
+          <h4 class="timeline-stage-title">Finalist Results Announcement</h4>
+          <p style="color:var(--term-steel); font-size:14px;">
+            Selection results declared by the jury. Top <strong>45 finalist teams</strong> are shortlisted to proceed 
+            to the on-campus 24-hour hackathon.
+          </p>
+        </div>
+      </div>
+
+      <!-- STAGE 4 -->
+      <div class="timeline-stage">
+        <div class="timeline-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+        </div>
+        <div class="timeline-info">
+          <div class="timeline-date-badge" style="color:var(--term-red);">7–8 JANUARY 2027</div>
+          <h4 class="timeline-stage-title">ANTROTHON'27 — The 24-Hour Hackathon</h4>
+          <p style="color:var(--term-steel); font-size:14px;">
+            24 hours of live non-stop prototyping, mentor clinics, midnight reviews, final pitches to industry jurors, 
+            and victory ceremony at Patrician College of Arts and Science.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEES & GUIDELINES -->
+<section class="section" id="fees">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// FINANCIAL &amp; PROTOCOL DIRECTIVES</span>
+      <h2 class="section-title">Registration &amp; Participation Structure</h2>
+      <p class="section-desc">
+        Transparent two-tier fee architecture designed for collegiate accessibility.
+      </p>
+    </div>
+
+    <div class="responsive-duo-grid" style="margin-bottom:36px;">
+      <div class="hud-panel">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="term-badge" style="margin-bottom:12px;">TIER 1 // APPLICATION</div>
+        <h3 style="font-size:28px; color:#fff; margin-bottom:8px;">
+          &#8377;300 <span style="font-size:15px; color:var(--term-steel); font-family:var(--font-heading);">/ PER TEAM</span>
+        </h3>
+        <p style="color:var(--term-steel); font-size:15px; margin-bottom:20px;">
+          Initial application and synopsis evaluation fee. Teams must complete initial registration and payment 
+          to be eligible for jury shortlisting.
+        </p>
+        <ul style="list-style:none; font-size:14px; color:#cbd5e1; line-height:1.7;">
+          <li>&#10003; Full Team Registration (4 to 6 members)</li>
+          <li>&#10003; Thematic Track Selection &amp; Mentorship Guide</li>
+          <li>&#10003; Technical Synopsis Evaluation by Jury</li>
+          <li>&#10003; Digital Participation Credential</li>
+        </ul>
+      </div>
+
+      <div class="hud-panel">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="term-badge term-badge-amber" style="margin-bottom:12px;">TIER 2 // SHORTLISTED FINALISTS</div>
+        <h3 style="font-size:28px; color:#fff; margin-bottom:8px;">
+          &#8377;350 <span style="font-size:15px; color:var(--term-steel); font-family:var(--font-heading);">/ PER PARTICIPANT</span>
+        </h3>
+        <p style="color:var(--term-steel); font-size:15px; margin-bottom:20px;">
+          Applicable exclusively to the <strong>45 Shortlisted Finalist Teams</strong> announced on 27 December 2026.
+        </p>
+        <ul style="list-style:none; font-size:14px; color:#cbd5e1; line-height:1.7;">
+          <li>&#10003; 24-Hour Campus Hackathon Access &amp; Workspace</li>
+          <li>&#10003; Meals, Midnight Refreshments &amp; Energy Fuel</li>
+          <li>&#10003; Industry Mentorship &amp; Jury Pitch Sessions</li>
+          <li>&#10003; Swag Kit &amp; Finalist Certificates</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hud-panel" style="background:rgba(255,208,0,0.04); border-color:rgba(255,208,0,0.25);">
+      <div style="display:flex; gap:16px; align-items:flex-start;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--term-red)" stroke-width="2" style="flex-shrink:0; margin-top:2px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <div style="font-size:14px; color:var(--term-steel); line-height:1.6;">
+          <strong style="color:#fff;">CRITICAL PROTOCOL NOTICE:</strong> 
+          Payment of the initial registration fee (&#8377;300/team) qualifies your submission for jury review but does not guarantee finalist selection. 
+          The organizing committee and academic jury select the top 45 finalist teams based on innovation, feasibility, societal impact, and technical execution.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORGANIZING TEAM -->
+<section class="section section-alt" id="team">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// COMMAND CONTROLLERS</span>
+      <h2 class="section-title">Organizing Directorate</h2>
+      <p class="section-desc">
+        Patrician Institute Innovation Cell (PIIC) Core Committee. Reach out for any assistance or sponsorship enquiries.
+      </p>
+    </div>
+
+    <div class="team-grid">
+      <!-- Vasikaran A -->
+      <div class="team-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="team-avatar" style="width:72px; height:72px; max-width:72px; max-height:72px; overflow:hidden; border-radius:50%; position:relative; margin:0 auto 16px; border:2px solid var(--term-red); box-shadow:0 0 15px rgba(255,208,0,0.3); display:flex; align-items:center; justify-content:center; box-sizing:border-box; background:rgba(255,208,0,0.1);">
+          <img src="/static/img/vasikaran.jpg?v=4" alt="Vasikaran A - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
+        </div>
+        <h4 class="team-name">Vasikaran A</h4>
+        <div class="team-role">Event Organizer</div>
+        <div class="team-contact-list">
+          <a href="tel:9360531897" class="team-contact-link">
+            <span>&#9742; 9360531897</span>
+          </a>
+          <a href="mailto:karanvasi80@gmail.com" class="team-contact-link">
+            <span>&#9993; karanvasi80@gmail.com</span>
+          </a>
+          <a href="https://www.linkedin.com/in/vasikaran-a-813b5531b" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-cyan);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; flex-shrink:0;">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span>LinkedIn Profile</span>
+          </a>
+          <a href="https://www.instagram.com/vxsi93/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-red);">
+            <span>&#10022; @vxsi93 (Instagram)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Abdul Fahaad A.K -->
+      <div class="team-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="team-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <h4 class="team-name">Abdul Fahaad A.K</h4>
+        <div class="team-role">Event Organizer</div>
+        <div class="team-contact-list">
+          <a href="tel:9677037457" class="team-contact-link">
+            <span>&#9742; 9677037457</span>
+          </a>
+          <span style="color:var(--term-steel); font-size:12px;">Patrician College</span>
+        </div>
+      </div>
+
+      <!-- Cleven J -->
+      <div class="team-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="team-avatar" style="width:72px; height:72px; max-width:72px; max-height:72px; overflow:hidden; border-radius:50%; position:relative; margin:0 auto 16px; border:2px solid var(--term-red); box-shadow:0 0 15px rgba(255,208,0,0.3); display:flex; align-items:center; justify-content:center; box-sizing:border-box; background:rgba(255,208,0,0.1);">
+          <img src="/static/img/cleven.jpg?v=1" alt="Cleven J - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
+        </div>
+        <h4 class="team-name">Cleven J</h4>
+        <div class="team-role">Event Organizer</div>
+        <div class="team-contact-list">
+          <a href="tel:9962753510" class="team-contact-link">
+            <span>&#9742; 9962753510</span>
+          </a>
+          <a href="mailto:clevenmichaelrajj@gmail.com" class="team-contact-link">
+            <span>&#9993; clevenmichaelrajj@gmail.com</span>
+          </a>
+          <a href="https://www.linkedin.com/in/clevenmichaelraj/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-cyan);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; flex-shrink:0;">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span>LinkedIn Profile</span>
+          </a>
+          <a href="https://www.instagram.com/cxrtheofxspixx/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-red);">
+            <span>&#10022; @cxrtheofxspixx (Instagram)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Alan K Rison -->
+      <div class="team-card">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div class="team-avatar" style="width:72px; height:72px; max-width:72px; max-height:72px; overflow:hidden; border-radius:50%; position:relative; margin:0 auto 16px; border:2px solid var(--term-red); box-shadow:0 0 15px rgba(255,208,0,0.3); display:flex; align-items:center; justify-content:center; box-sizing:border-box; background:rgba(255,208,0,0.1);">
+          <img src="/static/img/alan.jpg?v=1" alt="Alan K Rison - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
+        </div>
+        <h4 class="team-name">Alan K Rison</h4>
+        <div class="team-role">Event Organizer</div>
+        <div class="team-contact-list">
+          <a href="tel:9940293860" class="team-contact-link">
+            <span>&#9742; 9940293860</span>
+          </a>
+          <a href="mailto:alanrison2@gmail.com" class="team-contact-link">
+            <span>&#9993; alanrison2@gmail.com</span>
+          </a>
+          <a href="https://www.linkedin.com/in/alan-k-rison-6b0a2b30a/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-cyan);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; flex-shrink:0;">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span>LinkedIn Profile</span>
+          </a>
+          <a href="https://www.instagram.com/alanspeakable/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-red);">
+            <span>&#10022; @alanspeakable (Instagram)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREQUENTLY ASKED QUESTIONS -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">// QUERY RESOLUTION</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-desc">
+        Direct intel on regulations, eligibility, fee structures, and technical protocols.
+      </p>
+    </div>
+
+    <div class="faq-accordion">
+      <div class="faq-item">
+        <button type="button" class="faq-trigger">
+          <span>What is the required team size for ANTROTHON'27?</span>
+          <span class="faq-icon">&#9660;</span>
+        </button>
+        <div class="faq-content">
+          Teams must consist of <strong>4 to 6 members</strong> (1 Team Leader + 3 to 5 additional members). 
+          Inter-disciplinary teams (e.g., Computer Science + Design + Business/Humanities) are highly encouraged!
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-trigger">
+          <span>Which tracks are available for team participation?</span>
+          <span class="faq-icon">&#9660;</span>
+        </button>
+        <div class="faq-content">
+          ANTROTHON'27 features <strong>3 designated thematic tracks</strong>: <strong>Track 1: Human Safety, Rights &amp; Empowerment</strong>, <strong>Track 2: Health, Education &amp; Digital Innovation</strong>, and <strong>Track 3: Sustainability, Smart Communities &amp; Social Entrepreneurship</strong>. Teams select the track that best aligns with their project concept and submit their innovation directly under that track.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-trigger">
+          <span>How does the two-stage payment work?</span>
+          <span class="faq-icon">&#9660;</span>
+        </button>
+        <div class="faq-content">
+          Stage 1: When your team applies, you pay an initial registration fee of <strong>&#8377;300 per team</strong> via the secure Razorpay gateway.<br>
+          Stage 2: On 27 December 2026, 45 finalist teams are selected. Only those 45 teams pay the finalist participation fee of <strong>&#8377;350 per head</strong> to attend the on-site 24-hour hackathon.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-trigger">
+          <span>Who is eligible to participate?</span>
+          <span class="faq-icon">&#9660;</span>
+        </button>
+        <div class="faq-content">
+          Students enrolled in any recognized undergraduate or postgraduate collegiate degree program (Engineering, Arts, Science, Commerce, Management) are eligible. Valid college identity cards are mandatory during physical check-in.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-trigger">
+          <span>What happens during the 24 hours on January 7–8, 2027?</span>
+          <span class="faq-icon">&#9660;</span>
+        </button>
+        <div class="faq-content">
+          Finalist teams arrive at Patrician College of Arts &amp; Science campus. You will have 24 hours non-stop access to high-speed internet, power points, sleeping zones, meals, and mentorship. At the 24th hour, code freezes and live prototype pitching begins.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALL TO ACTION BANNER -->
+<section class="section section-alt">
+  <div class="container" style="text-align:center;">
+    <span class="term-badge" style="margin-bottom:16px;">READY FOR INITIALIZATION?</span>
+    <h2 style="font-size:clamp(28px, 4vw, 44px); color:#fff; margin-bottom:16px;">
+      THINK HUMAN. INNOVATE FOR SOCIETY.
+    </h2>
+    <p style="color:var(--term-steel); max-width:600px; margin:0 auto 32px; font-size:16px;">
+      Join hundreds of collegiate innovators shaping responsible technology. 
+      Assemble your crew and prepare for deployment.
+    </p>
+    <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+      <a href="/register" class="btn-terminator">
+        <span>PROCEED TO REGISTRATION</span>
+      </a>
+      <a href="/#tracks" class="btn-cyber-outline">
+        <span>EXPLORE 3 TRACKS</span>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
