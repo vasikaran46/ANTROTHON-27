@@ -201,7 +201,7 @@ class GoogleDriveService:
                 "base64": b64_str,
                 "folderId": target_folder
             }
-            res = requests.post(webhook_url, json=payload, timeout=60, allow_redirects=True)
+            res = requests.post(webhook_url, json=payload, timeout=7, allow_redirects=True)
 
             content_type = res.headers.get("content-type", "")
             if "text/html" in content_type or res.text.strip().startswith("<!DOCTYPE html>"):

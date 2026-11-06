@@ -600,7 +600,15 @@ async function initiateRegistrationAndPayment() {
       body: formData
     });
 
-    const data = await res.json();
+    let data;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      alert(`Server error (${res.status}). Please check network or try again.`);
+      payBtn.disabled = false;
+      payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+      return;
+    }
     if (!res.ok || !data.success) {
       alert(data.message || 'Registration failed. Please check form data.');
       payBtn.disabled = false;

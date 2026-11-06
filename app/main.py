@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 import uuid
@@ -36,13 +37,21 @@ app = FastAPI(
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY, max_age=86400)
 
 BASE_DIR = Path(__file__).resolve().parent
-try:
-    UPLOAD_PPT_DIR = BASE_DIR / "static" / "uploads" / "ppt"
-    UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
-except Exception:
-    import tempfile
+import tempfile
+if os.getenv("VERCEL"):
     UPLOAD_PPT_DIR = Path(tempfile.gettempdir()) / "antrothon_uploads"
     UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
+else:
+    try:
+        UPLOAD_PPT_DIR = BASE_DIR / "static" / "uploads" / "ppt"
+        UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
+        # Probe write permission
+        _test_file = UPLOAD_PPT_DIR / ".write_probe"
+        _test_file.touch()
+        _test_file.unlink()
+    except Exception:
+        UPLOAD_PPT_DIR = Path(tempfile.gettempdir()) / "antrothon_uploads"
+        UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
 
 static_dir = BASE_DIR / "static"
 if not static_dir.exists():
@@ -331,15 +340,28 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
                 content={"success": False, "message": "Idea Presentation file size exceeds maximum limit of 10MB."}
             )
 
-        UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
         safe_name = re.sub(r"[^a-zA-Z0-9_\.-]", "_", filename)
         saved_filename = f"{team_code}_{safe_name}"
-        save_path = UPLOAD_PPT_DIR / saved_filename
-        with open(save_path, "wb") as f:
-            f.write(file_bytes)
-        
         ppt_filename = filename
         ppt_disk_path = f"/static/uploads/ppt/{saved_filename}"
+
+        save_path = None
+        try:
+            UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
+            save_path = UPLOAD_PPT_DIR / saved_filename
+            with open(save_path, "wb") as f:
+                f.write(file_bytes)
+        except Exception as write_err:
+            logger.warning("Local disk write skipped (serverless environment): %s", write_err)
+            try:
+                import tempfile
+                tmp_dir = Path(tempfile.gettempdir()) / "antrothon_uploads"
+                tmp_dir.mkdir(parents=True, exist_ok=True)
+                save_path = tmp_dir / saved_filename
+                with open(save_path, "wb") as f:
+                    f.write(file_bytes)
+            except Exception:
+                save_path = None
 
         # Upload directly to user's Google Drive (NO Supabase bucket used)
         try:
@@ -359,11 +381,11 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
                 ppt_disk_path = drive_res
                 logger.info("[+] PPT successfully uploaded directly to Google Drive: %s", drive_res)
                 # Remove local file now that it is stored directly in Google Drive
-                try:
-                    if save_path.exists():
+                if save_path and save_path.exists():
+                    try:
                         save_path.unlink()
-                except Exception:
-                    pass
+                    except Exception:
+                        pass
             else:
                 logger.warning("[!] Google Drive direct upload could not proceed: %s", drive_res)
         except Exception as drive_err:
@@ -428,6 +450,16 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
             content={
                 "success": False,
                 "message": f"Team name '{team_name}' is already reserved by another team (team names are unique & case-insensitive). Please choose a different team name."
+            }
+        )
+    except Exception as dberr:
+        db.rollback()
+        logger.error("Database commit error during registration: %s", dberr)
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "message": f"Database error during registration: {str(dberr)}"
             }
         )
 
