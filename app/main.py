@@ -44,8 +44,15 @@ except Exception:
     UPLOAD_PPT_DIR = Path(tempfile.gettempdir()) / "antrothon_uploads"
     UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
 
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
-templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+static_dir = BASE_DIR / "static"
+if not static_dir.exists():
+    static_dir = Path(__file__).resolve().parent.parent / "app" / "static"
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+
+templates_dir = BASE_DIR / "templates"
+if not templates_dir.exists():
+    templates_dir = Path(__file__).resolve().parent.parent / "app" / "templates"
+templates = Jinja2Templates(directory=str(templates_dir))
 
 # Inject common context to all templates
 def get_base_context(request: Request) -> dict:
