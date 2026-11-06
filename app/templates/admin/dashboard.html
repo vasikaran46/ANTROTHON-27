@@ -12,10 +12,16 @@
 
     <!-- TOP HEADER ROW -->
     <div class="admin-header-row">
-      <div class="admin-title-group" style="display:flex; align-items:center; gap:16px;">
-        <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:56px; height:56px; object-fit:contain; display:block; filter:drop-shadow(0 0 10px rgba(255,208,0,0.5)); flex-shrink:0;">
+      <div class="admin-title-group" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+          <img src="/static/img/patrician_logo.png" alt="Patrician College Logo" style="width:44px; height:44px; object-fit:contain; filter:drop-shadow(0 0 8px rgba(255,208,0,0.4)); flex-shrink:0;" title="Patrician College of Arts and Science">
+          <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:52px; height:52px; object-fit:contain; display:block; filter:drop-shadow(0 0 10px rgba(255,208,0,0.5)); flex-shrink:0;">
+          <div style="background:#ffffff; padding:3px 6px; border-radius:4px; display:inline-flex; align-items:center; box-shadow:0 0 8px rgba(255,255,255,0.25); flex-shrink:0;" title="Institution's Innovation Council (Ministry of Education Initiative)">
+            <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" style="height:24px; width:auto; display:block;">
+          </div>
+        </div>
         <div>
-          <div class="term-badge" style="margin-bottom:6px;">CYBERDYNE SYSTEMS // ADMIN DIRECTORY</div>
+          <div class="term-badge" style="margin-bottom:6px;">PATRICIAN INSTITUTE INNOVATION CELL // ADMIN DIRECTORY</div>
           <h1 style="margin:0; font-size:24px;">ANTROTHON'27 REGISTRATION COMMAND CENTER</h1>
         </div>
       </div>
@@ -145,6 +151,16 @@
           CLEAR
         </a>
         {% endif %}
+
+        <div style="margin-left:auto;">
+          <button type="button" class="btn-cyber-outline" style="padding:8px 16px; font-size:12px; color:var(--term-cyan); border-color:rgba(0,210,255,0.4);" onclick="openAuditHistoryModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            AUDIT HISTORY / EDIT LOGS ({{ total_audits }})
+          </button>
+        </div>
       </form>
     </div>
 
@@ -192,33 +208,12 @@
               <td>
                 <div style="display:flex; gap:6px; align-items:center;">
                   <button type="button" class="btn-cyber-outline" style="padding:6px 12px; font-size:11px;" 
-                    onclick='openDossier({{ {
-                      "id": r.id,
-                      "team_code": r.team_code,
-                      "team_name": r.team_name,
-                      "track": r.track,
-                      "project_title": r.project_title,
-                      "project_synopsis": r.project_synopsis,
-                      "leader_name": r.leader_name,
-                      "leader_email": r.leader_email,
-                      "leader_phone": r.leader_phone,
-                      "leader_college": r.leader_college,
-                      "college_name": r.college_name or r.leader_college,
-                      "leader_department": r.leader_department,
-                      "leader_year": r.leader_year,
-                      "idea_title": r.idea_title or r.project_title,
-                      "idea_summary": r.idea_summary or r.project_synopsis,
-                      "idea_description": r.idea_description,
-                      "idea_ppt_filename": r.idea_ppt_filename,
-                      "idea_ppt_path": r.idea_ppt_path,
-                      "payment_status": r.payment_status,
-                      "amount_paid": r.amount_paid,
-                      "razorpay_payment_id": r.razorpay_payment_id,
-                      "razorpay_order_id": r.razorpay_order_id,
-                      "status": r.status,
-                      "members": r.get_members()
-                    } | tojson }})'>
+                    onclick='openDossier({{ r.to_dict() | tojson }})'>
                     View
+                  </button>
+                  <button type="button" class="btn-cyber-outline" style="padding:6px 12px; font-size:11px; color:var(--term-cyan); border-color:rgba(0,210,255,0.4);"
+                    onclick='openEditModal({{ r.to_dict() | tojson }})'>
+                    Edit
                   </button>
                   <button type="button" class="btn-admin-delete"
                     onclick="deleteRegistration({{ r.id }}, '{{ r.team_name | escape }}', '{{ r.team_code | escape }}')"
@@ -346,6 +341,216 @@
           UPDATE PROTOCOL STATUS
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= EDIT PARTICIPANT MODAL ================= -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal-window" style="max-width:880px;">
+    <div class="modal-header">
+      <h3 style="color:#fff; font-size:18px;">
+        <span style="color:var(--term-cyan);">// EDIT PARTICIPANT DOSSIER:</span> <span id="edit-team-code-title">-</span>
+      </h3>
+      <button type="button" class="btn-close-modal" onclick="closeEditModal()">&times;</button>
+    </div>
+
+    <form id="edit-participant-form" onsubmit="return false;">
+      <!-- 1. Team & Track Specification -->
+      <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
+          01 // TEAM SPECIFICATION &amp; OPERATIONAL TRACK
+        </span>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px;">
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Team Name *</label>
+            <input type="text" id="edit-team-name" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">College / Institution *</label>
+            <input type="text" id="edit-college-name" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+          </div>
+          <div class="form-group" style="grid-column:1 / -1;">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Operational Track *</label>
+            <select id="edit-track" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+              <option value="Track 1: Human Safety, Rights &amp; Empowerment">Track 1: Human Safety, Rights &amp; Empowerment</option>
+              <option value="Track 2: Health, Education &amp; Digital Innovation">Track 2: Health, Education &amp; Digital Innovation</option>
+              <option value="Track 3: Sustainability, Smart Communities &amp; Social Entrepreneurship">Track 3: Sustainability, Smart Communities &amp; Social Entrepreneurship</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Team Commander (Leader) -->
+      <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
+          02 // PRIMARY COMMANDER (TEAM LEADER)
+        </span>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Leader Full Name *</label>
+            <input type="text" id="edit-leader-name" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Leader Phone *</label>
+            <input type="tel" id="edit-leader-phone" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Leader Email *</label>
+            <input type="email" id="edit-leader-email" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Department</label>
+            <input type="text" id="edit-leader-dept" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Year of Study</label>
+            <select id="edit-leader-year" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+              <option value="PG / Masters">PG / Masters</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Student ID / Roll No</label>
+            <input type="text" id="edit-leader-id" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Crew Members -->
+      <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red);">
+            03 // CREW MEMBERS (3 TO 5 CREW UNITS)
+          </span>
+          <button type="button" class="btn-cyber-outline" onclick="addEditMember()" style="padding:4px 12px; font-size:11px; color:var(--term-cyan); border-color:var(--term-cyan);">
+            + ADD CREW MEMBER
+          </button>
+        </div>
+        <div id="edit-members-container">
+          <!-- Populated dynamically via admin.js -->
+        </div>
+      </div>
+
+      <!-- 4. Idea Dossier & Presentation -->
+      <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-cyan); display:block; margin-bottom:10px;">
+          04 // PROPOSED IDEA DOSSIER &amp; PRESENTATION
+        </span>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Idea Title (Max 100 chars)</label>
+          <input type="text" id="edit-idea-title" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" maxlength="100">
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Abstract / Summary (Max 10,000 chars)</label>
+          <textarea id="edit-idea-summary" class="form-control" rows="3" style="font-size:12px; width:100%; box-sizing:border-box;" maxlength="10000"></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Idea Description (Max 50,000 chars)</label>
+          <textarea id="edit-idea-description" class="form-control" rows="5" style="font-size:12px; width:100%; box-sizing:border-box;" maxlength="50000"></textarea>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">PPT Filename</label>
+            <input type="text" id="edit-ppt-filename" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;">
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">
+              PPT URL / Google Drive URL
+              <a id="edit-ppt-test-link" href="#" target="_blank" style="margin-left:8px; color:var(--term-cyan); text-decoration:underline; font-size:10px; display:none;">Open URL &#8599;</a>
+            </label>
+            <input type="text" id="edit-ppt-path" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="https://drive.google.com/... or cloud storage URL">
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Status, Payment & Admin Notes -->
+      <div class="hud-panel" style="padding:16px; margin-bottom:20px;">
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
+          05 // EVALUATION PROTOCOL &amp; PAYMENT STATUS
+        </span>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Selection Status</label>
+            <select id="edit-status" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+              <option value="submitted">Submitted</option>
+              <option value="under_review">Under Review</option>
+              <option value="shortlisted_finalist">Shortlisted Finalist (45 Quota)</option>
+              <option value="waitlist">Waitlist</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Payment Status</label>
+            <select id="edit-payment-status" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Amount Paid (&#8377;)</label>
+            <input type="number" id="edit-amount-paid" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" value="300">
+          </div>
+          <div class="form-group" style="grid-column:1 / -1;">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Internal Admin Notes</label>
+            <input type="text" id="edit-admin-notes" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="Optional jury comments, verification notes...">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center;">
+        <button type="button" class="btn-cyber-outline" onclick="closeEditModal()" style="padding:10px 20px; font-size:12px;">
+          CANCEL
+        </button>
+        <button type="button" class="btn-terminator" id="btn-save-edit" onclick="saveParticipantEdit()" style="padding:10px 24px; font-size:12px;">
+          SAVE &amp; RECORD CHANGES
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= AUDIT TRAIL & EDIT HISTORY MODAL ================= -->
+<div class="modal-backdrop" id="audit-modal">
+  <div class="modal-window" style="max-width:940px;">
+    <div class="modal-header">
+      <div>
+        <h3 style="color:#fff; font-size:18px; margin-bottom:4px;">
+          <span style="color:var(--term-cyan);">// AUDIT TRAIL:</span> EDIT HISTORY &amp; UNDO ENGINE
+        </h3>
+        <p style="color:var(--term-steel); font-size:12px; margin:0;">
+          All participant modifications are cryptographically tracked with exact Indian Standard Time (IST), field diffs, operator ID, and reversible rollback (undo) capability.
+        </p>
+      </div>
+      <button type="button" class="btn-close-modal" onclick="closeAuditModal()">&times;</button>
+    </div>
+
+    <div class="table-responsive" style="max-height:540px; overflow-y:auto; margin-bottom:16px;">
+      <table class="admin-table" style="font-size:12px;">
+        <thead>
+          <tr>
+            <th>Log ID</th>
+            <th>Date &amp; Time (IST)</th>
+            <th>Team</th>
+            <th>Action</th>
+            <th>What Changed</th>
+            <th style="text-align:center;">Rollback (Undo)</th>
+          </tr>
+        </thead>
+        <tbody id="audit-logs-tbody">
+          <!-- Populated dynamically via admin.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end;">
+      <button type="button" class="btn-cyber-outline" onclick="closeAuditModal()" style="padding:8px 20px; font-size:12px;">
+        CLOSE
+      </button>
     </div>
   </div>
 </div>

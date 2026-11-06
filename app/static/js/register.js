@@ -415,7 +415,7 @@ async function validateCurrentStep(step) {
 
     const pptInput = document.getElementById('idea_ppt');
     if (!selectedPptFile && (!pptInput || !pptInput.files || pptInput.files.length === 0)) {
-      alert('Please upload your Idea Presentation PPT (.pptx, .ppt, or .pdf up to 10MB).');
+      alert('Please upload your Idea Presentation file (.pptx, .ppt, or .pdf).');
       return false;
     }
   }

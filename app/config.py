@@ -24,6 +24,13 @@ class Settings:
     ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
     ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "terminator27")
     
+    # Supabase
+    SUPABASE_DB_URL: str = os.getenv("SUPABASE_DB_URL", "").strip()
+    _raw_supabase_url: str = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
+    SUPABASE_URL: str = _raw_supabase_url[:-8] if _raw_supabase_url.endswith("/rest/v1") else _raw_supabase_url
+    SUPABASE_ANON_KEY: str = os.getenv("SUPABASE_ANON_KEY", "").strip()
+    SUPABASE_SERVICE_ROLE_KEY: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+
     # Razorpay
     RAZORPAY_KEY_ID: str = os.getenv("RAZORPAY_KEY_ID", "").strip()
     RAZORPAY_KEY_SECRET: str = os.getenv("RAZORPAY_KEY_SECRET", "").strip()
@@ -58,6 +65,10 @@ class Settings:
             return True
         now = datetime.now()
         return self.registration_open_date <= now <= self.registration_deadline
+
+    @property
+    def is_supabase_configured(self) -> bool:
+        return bool(self.SUPABASE_DB_URL or (self.SUPABASE_URL and (self.SUPABASE_ANON_KEY or self.SUPABASE_SERVICE_ROLE_KEY)))
 
     @property
     def is_razorpay_configured(self) -> bool:

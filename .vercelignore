@@ -1,0 +1,13 @@
+.env
+.git
+.vscode
+venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+antrothon.db
+app/static/uploads/ppt/*.pptx
+app/static/uploads/ppt/*.ppt
+app/static/uploads/ppt/*.pdf
+

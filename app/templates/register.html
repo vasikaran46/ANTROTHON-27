@@ -3,7 +3,7 @@
 {% block title %}Register Team — ANTROTHON'27{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/register.css?v=7">
+<link rel="stylesheet" href="/static/css/register.css?v=16">
 {% endblock %}
 
 {% block content %}
@@ -11,21 +11,25 @@
   <div class="container">
 
     <!-- ================= LIVE REGISTRATION WIZARD ================= -->
-    <div style="max-width:880px; margin:0 auto;">
+    <div style="max-width:880px; margin:0 auto; width:100%; box-sizing:border-box;">
       <!-- OFFICIAL CIRCULATION & LAUNCH INTIMATION BANNER -->
-      <div class="hud-panel" style="background:rgba(0, 230, 118, 0.08); border:1px solid #00e676; padding:12px 18px; border-radius:4px; margin-bottom:24px; font-family:var(--font-tactical); font-size:13px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; align-items:center; gap:10px; color:#00e676;">
-          <span class="pulse-led" style="background:#00e676; box-shadow:0 0 8px #00e676;"></span>
-          <strong>REGISTRATION TERMINAL ACTIVE // OPEN ENROLLMENT</strong>
+      <div class="hud-panel" style="background:rgba(0, 230, 118, 0.08); border:1px solid #00e676; padding:12px 18px; border-radius:4px; margin-bottom:24px; font-family:var(--font-tactical); font-size:13px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; width:100%; box-sizing:border-box;">
+        <div style="display:flex; align-items:center; gap:10px; color:#00e676; flex-wrap:wrap;">
+          <span class="pulse-led" style="background:#00e676; box-shadow:0 0 8px #00e676; flex-shrink:0;"></span>
+          <strong style="word-break:break-word;">REGISTRATIONS AND IDEA SUBMISSIONS ARE CURRENTLY OPEN</strong>
         </div>
-        <span style="color:var(--term-steel); font-size:12px;">
-          // Official campaign circulation &amp; branding launch commences <strong>30 October 2026</strong>. Registrations and Idea Submissions are currently open.
-        </span>
+        
       </div>
 
       <div class="section-header" style="margin-bottom:32px;">
-        <div style="width:84px; height:84px; margin:0 auto 16px;">
-          <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(255,208,0,0.5));">
+        <div style="display:flex; justify-content:center; align-items:center; gap:16px; margin:0 auto 16px; flex-wrap:wrap;">
+          <img src="/static/img/patrician_logo.png" alt="Patrician College of Arts and Science" style="width:58px; height:58px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,208,0,0.4)); flex-shrink:0;" title="Patrician College of Arts and Science">
+          <div style="width:76px; height:76px; flex-shrink:0;">
+            <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(255,208,0,0.5));">
+          </div>
+          <div style="background:#ffffff; padding:4px 8px; border-radius:4px; display:inline-flex; align-items:center; box-shadow:0 0 10px rgba(255,255,255,0.25); flex-shrink:0;" title="Institution's Innovation Council (Ministry of Education Initiative)">
+            <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" style="height:32px; width:auto; display:block;">
+          </div>
         </div>
         <span class="section-eyebrow">// INITIALIZATION PROTOCOL</span>
         <h1 class="section-title">Team Registration</h1>
@@ -36,7 +40,9 @@
 
       <!-- WIZARD PROGRESS BAR (3-STEP TACTICAL FLOW) -->
       <div class="wizard-progress">
-        <div class="wizard-progress-bar" id="wizard-progress-bar"></div>
+        <div class="wizard-progress-track">
+          <div class="wizard-progress-bar" id="wizard-progress-bar"></div>
+        </div>
         <div class="step-node active" id="step-node-1" onclick="goToStep(1)">
           <div class="step-circle">01</div>
           <div class="step-label">Team &amp; Crew</div>
@@ -72,8 +78,8 @@
                   <label class="form-label" for="team_name" style="margin-bottom:0;">Team Name <span class="required">*</span></label>
                   <span id="team-name-badge" style="font-size:11px; font-family:var(--font-tactical); letter-spacing:0.5px; display:none; font-weight:700;"></span>
                 </div>
-                <div style="position:relative;">
-                  <input type="text" id="team_name" class="form-control" placeholder="e.g. Cyberdyne Innovators" required maxlength="100" autocomplete="off" style="padding-right:38px;">
+                <div style="position:relative; width:100%; box-sizing:border-box;">
+                  <input type="text" id="team_name" class="form-control" placeholder="e.g. Cyberdyne Innovators" required maxlength="100" autocomplete="off" style="padding-right:38px; width:100%; box-sizing:border-box;">
                   <div id="team-name-icon" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:15px; display:none; pointer-events:none;"></div>
                 </div>
                 <div id="team-name-feedback" style="font-size:12px; margin-top:5px; font-family:var(--font-tactical); line-height:1.4; display:none;"></div>
@@ -104,11 +110,11 @@
             </div>
 
             <!-- Communication Notice (Requested Intimation) -->
-            <div class="hud-panel" style="background:rgba(255,208,0,0.08); border-color:var(--term-red); padding:14px 18px; margin-bottom:20px; border-radius:4px;">
-              <div style="display:flex; align-items:center; gap:10px; color:var(--term-red); font-family:var(--font-tactical); font-size:12px; font-weight:700; margin-bottom:6px;">
-                <span class="pulse-led"></span> // IMPORTANT TRANSMISSION NOTICE
+            <div class="hud-panel" style="background:rgba(255,208,0,0.08); border-color:var(--term-red); padding:14px 18px; margin-bottom:20px; border-radius:4px; width:100%; box-sizing:border-box;">
+              <div style="display:flex; align-items:center; gap:10px; color:var(--term-red); font-family:var(--font-tactical); font-size:12px; font-weight:700; margin-bottom:6px; flex-wrap:wrap;">
+                <span class="pulse-led" style="flex-shrink:0;"></span> // IMPORTANT TRANSMISSION NOTICE
               </div>
-              <p style="font-size:13px; color:#e2e8f0; margin:0; line-height:1.6;">
+              <p style="font-size:13px; color:#e2e8f0; margin:0; line-height:1.6; word-break:break-word;">
                 <strong>Every official instruction, team verification code, track orientation guidelines, and finalist announcement</strong> will be communicated directly to the <strong>Team Leader's Mobile Number and Email ID</strong>. Please ensure these credentials are valid and monitored.
               </p>
             </div>
@@ -170,7 +176,7 @@
               Click <strong>"+ Add Team Member"</strong> to dynamically register Member #5 and Member #6.
             </p>
 
-            <div id="members-container">
+            <div id="members-container" style="width:100%; box-sizing:border-box;">
               <!-- Dynamically populated via register.js -->
             </div>
 
@@ -200,17 +206,17 @@
             </div>
 
             <!-- PPT Template Download Callout (SIH style) -->
-            <div class="hud-panel" style="background:rgba(0,210,255,0.06); border-color:rgba(0,210,255,0.3); padding:16px 20px; margin-bottom:24px; border-radius:4px;">
+            <div class="hud-panel" style="background:rgba(0,210,255,0.06); border-color:rgba(0,210,255,0.3); padding:16px 20px; margin-bottom:24px; border-radius:4px; width:100%; box-sizing:border-box;">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
-                <div>
+                <div style="max-width:100%;">
                   <span style="font-family:var(--font-tactical); color:var(--term-cyan); font-size:12px; display:block; margin-bottom:4px;">
                     // OFFICIAL IDEA PRESENTATION TEMPLATE
                   </span>
-                  <span style="color:#fff; font-size:14px; font-weight:600;">
+                  <span style="color:#fff; font-size:14px; font-weight:600; line-height:1.5; display:block;">
                     Download the standardized ANTROTHON'27 Presentation Template to build your proposal before uploading.
                   </span>
                 </div>
-                <a href="/download/idea-template" class="btn-cyber-outline" style="border-color:var(--term-cyan); color:var(--term-cyan); padding:8px 18px; font-size:12px;" download>
+                <a href="/download/idea-template" class="btn-cyber-outline" style="border-color:var(--term-cyan); color:var(--term-cyan); padding:8px 18px; font-size:12px; max-width:100%; box-sizing:border-box; text-align:center;" download>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
@@ -256,12 +262,16 @@
               <span class="form-hint">Maximum 50,000 characters. Provide exhaustive technical, architectural, and operational depth.</span>
             </div>
 
-            <!-- Idea Presentation PPT (Upload up to 10MB) -->
+            <!-- Idea Presentation PPT (Upload or Google Drive link) -->
             <div class="form-group" style="margin-bottom:24px;">
-              <label class="form-label">Idea Presentation Template (PPT / PPTX, Max 10MB) <span class="required">*</span></label>
+              <label class="form-label">Idea Presentation Dossier (PPT / PPTX / PDF) <span class="required">*</span></label>
+              <div style="font-size:12px; color:var(--term-steel); margin-bottom:12px;">
+                Upload your presentation file directly (automatically saved to Google Drive) <strong>OR</strong> paste your Google Drive link below.
+              </div>
               
+              <!-- Direct File Upload Drop Zone -->
               <div class="file-upload-box" id="file-drop-zone">
-                <input type="file" id="idea_ppt" accept=".ppt,.pptx,.pdf" style="display:none;" required>
+                <input type="file" id="idea_ppt" accept=".ppt,.pptx,.pdf" style="display:none;">
                 <div style="color:var(--term-red); margin-bottom:10px;">
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -271,10 +281,10 @@
                   </svg>
                 </div>
                 <div style="font-weight:600; color:#fff; font-size:15px; margin-bottom:4px;" id="file-upload-label">
-                  Click to Browse or Drag &amp; Drop Presentation PPT
+                  Click to Browse or Drag &amp; Drop Presentation File
                 </div>
                 <div style="font-size:12px; color:var(--term-steel);" id="file-upload-info">
-                  Accepted formats: <strong>.pptx, .ppt, .pdf</strong> &bull; File Size: <strong>Up to 10MB</strong>
+                  Formats: <strong>.pptx, .ppt, .pdf</strong> &bull; Size: <strong>Up to 10MB</strong> &bull; Direct Google Drive Storage
                 </div>
               </div>
               <div id="file-error-msg" style="display:none; color:var(--term-red); font-size:12px; font-family:var(--font-tactical); margin-top:6px;"></div>
@@ -335,8 +345,8 @@
               </div>
             </div>
 
-            <div class="hud-panel" style="background:rgba(255,159,10,0.06); border-color:rgba(255,159,10,0.3); margin-bottom:24px;">
-              <p style="font-size:13px; color:#cbd5e1; line-height:1.6; margin:0;">
+            <div class="hud-panel" style="background:rgba(255,159,10,0.06); border-color:rgba(255,159,10,0.3); margin-bottom:24px; width:100%; box-sizing:border-box;">
+              <p style="font-size:13px; color:#cbd5e1; line-height:1.6; margin:0; word-break:break-word;">
                 <strong>&#9670; NOTE ON INITIAL APPLICATION FEE:</strong> 
                 Completing this &#8377;300 registration confirms your team's proposal submission for official evaluation by the PIIC jury panel. 
                 Selected finalist teams (45 teams announced on 27 December 2026) will pay the finalist fee of 

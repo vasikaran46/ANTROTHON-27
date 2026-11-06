@@ -4,7 +4,7 @@
 
 /* HERO SECTION */
 .hero-section {
-  padding: 110px 0 80px;
+  padding: 32px 0 50px;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--term-border);
@@ -15,14 +15,14 @@
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 48px;
-  align-items: center;
+  align-items: start;
 }
 
 .hero-badge-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 .hero-title {
@@ -30,7 +30,7 @@
   font-weight: 900;
   line-height: 1.05;
   margin-bottom: 16px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
 }
 
 .hero-title .year-accent {
@@ -42,7 +42,7 @@
   font-family: var(--font-heading);
   font-size: 22px;
   color: #fff;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-bottom: 24px;
   display: flex;
@@ -77,8 +77,8 @@
 .hero-hud-visual {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
+  max-width: 410px;
+  margin: 10px auto 0;
 }
 
 .reticle-container {
@@ -276,9 +276,9 @@
 }
 
 .stat-desc {
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
   color: var(--term-steel);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -646,7 +646,7 @@
    ===================================================================== */
 @media (max-width: 1024px) {
   .hero-section {
-    padding: 50px 0 40px;
+    padding: 28px 0 32px;
   }
   .hero-grid {
     grid-template-columns: 1fr;
@@ -766,7 +766,7 @@
    ===================================================================== */
 @media (max-width: 768px) {
   .hero-section {
-    padding: 38px 0 32px;
+    padding: 22px 0 24px;
   }
   .hero-title {
     font-size: clamp(30px, 7vw, 44px);
@@ -817,7 +817,7 @@
    ===================================================================== */
 @media (max-width: 580px) {
   .hero-section {
-    padding: 28px 0 24px;
+    padding: 16px 0 18px;
   }
   .hero-title {
     font-size: clamp(26px, 7.8vw, 36px);

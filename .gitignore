@@ -21,6 +21,9 @@ env/
 # Uploaded files and generated exports
 app/uploads/*
 !app/uploads/.gitkeep
+app/static/uploads/ppt/*
+!app/static/uploads/ppt/.gitkeep
+service_account.json
 
 # Logs
 *.log

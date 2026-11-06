@@ -8,6 +8,19 @@
   <div class="container">
     <div class="hero-grid">
       <div>
+        <!-- INSTITUTIONAL CO-HOSTING ACCREDITATION BADGE -->
+        <div class="inst-partner-strip">
+          <img src="/static/img/patrician_logo.png" alt="Patrician College of Arts and Science" class="inst-logo-patrician">
+          <div class="inst-details">
+            <strong>PATRICIAN COLLEGE OF ARTS AND SCIENCE</strong>
+            <span>Patrician Institute Innovation Cell (PIIC)</span>
+          </div>
+          <div class="inst-divider"></div>
+          <div class="inst-logo-iic-badge" title="Institution's Innovation Council (Ministry of Education Initiative)">
+            <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" class="inst-logo-iic">
+          </div>
+        </div>
+
         <div class="hero-badge-group">
           <span class="term-badge">
             <span class="pulse-led"></span>
@@ -169,24 +182,33 @@
       </p>
     </div>
 
-    <div class="hud-panel" style="margin-bottom: 40px;">
+    <div class="hud-panel about-overview-panel" style="margin-bottom: 40px;">
       <div class="hud-corner hud-corner-tl"></div>
       <div class="hud-corner hud-corner-tr"></div>
       <div class="hud-corner hud-corner-bl"></div>
       <div class="hud-corner hud-corner-br"></div>
-      <div style="display:flex; gap:32px; align-items:center; flex-wrap:wrap;">
-        <div style="width:140px; height:140px; flex-shrink:0; margin:0 auto; display:flex; align-items:center; justify-content:center;">
-          <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Official Insignia" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(255,208,0,0.5));">
+      <div class="about-overview-layout">
+        <div class="about-overview-logos">
+          <div class="about-logo-emblem">
+            <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Official Insignia" class="about-logo-img">
+          </div>
+          <div class="about-partner-logos">
+            <img src="/static/img/patrician_logo.png" alt="Patrician College of Arts and Science" class="about-patrician-img" title="Patrician College of Arts and Science">
+            <span class="about-partner-x">&times;</span>
+            <div class="about-iic-badge" title="Institution's Innovation Council (Ministry of Education Initiative)">
+              <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" class="about-iic-img">
+            </div>
+          </div>
         </div>
-        <div style="flex:1; min-width:0; font-size:16px; color:#e2e8f0; line-height:1.8;">
-          <p style="margin-bottom:14px;">
+        <div class="about-overview-text">
+          <p class="about-overview-p">
             <strong>ANTROTHON’27</strong> is a 24-hour inter-college hackathon organized by the 
             <strong>Patrician Institute Innovation Cell (PIIC)</strong> of 
             <strong>Patrician College of Arts and Science</strong>. The event aims to bring together student innovators, 
             creative thinkers, and aspiring entrepreneurs from different colleges to develop innovative, 
             technology-driven solutions to real-world societal challenges.
           </p>
-          <p style="margin:0;">
+          <p class="about-overview-p-sub">
             Guided by the tagline <em>“Think Human. Innovate for Society,”</em> ANTROTHON’27 emphasizes human-centred innovation, 
             collaboration, creativity, and responsible technology. Participants are encouraged to identify meaningful societal needs, 
             apply design thinking and emerging technologies, and develop practical prototypes that address the needs of 
@@ -531,6 +553,13 @@
 <section class="section section-alt" id="team">
   <div class="container">
     <div class="section-header">
+      <div style="display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom:14px; flex-wrap:wrap;">
+        <img src="/static/img/patrician_logo.png" alt="Patrician College Logo" style="width:50px; height:50px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,208,0,0.4));">
+        <span style="font-size:18px; color:rgba(255,208,0,0.4); font-family:var(--font-tactical);">&times;</span>
+        <div style="background:#ffffff; padding:4px 9px; border-radius:4px; display:inline-flex; align-items:center; box-shadow:0 0 10px rgba(255,255,255,0.25);">
+          <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" style="height:30px; width:auto; display:block;">
+        </div>
+      </div>
       <span class="section-eyebrow">// COMMAND CONTROLLERS</span>
       <h2 class="section-title">Organizing Directorate</h2>
       <p class="section-desc">
@@ -571,11 +600,8 @@
       <div class="team-card">
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
-        <div class="team-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+        <div class="team-avatar" style="width:72px; height:72px; max-width:72px; max-height:72px; overflow:hidden; border-radius:50%; position:relative; margin:0 auto 16px; border:2px solid var(--term-red); box-shadow:0 0 15px rgba(255,208,0,0.3); display:flex; align-items:center; justify-content:center; box-sizing:border-box; background:rgba(255,208,0,0.1);">
+          <img src="/static/img/fahaad.jpg?v=1" alt="Abdul Fahaad A.K - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
         </div>
         <h4 class="team-name">Abdul Fahaad A.K</h4>
         <div class="team-role">Event Organizer</div>
@@ -583,7 +609,18 @@
           <a href="tel:9677037457" class="team-contact-link">
             <span>&#9742; 9677037457</span>
           </a>
-          <span style="color:var(--term-steel); font-size:12px;">Patrician College</span>
+          <a href="mailto:abdulfahaad730@gmail.com" class="team-contact-link">
+            <span>&#9993; abdulfahaad730@gmail.com</span>
+          </a>
+          <a href="https://www.linkedin.com/in/abdulfahaad-1512r/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-cyan);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; flex-shrink:0;">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span>LinkedIn Profile</span>
+          </a>
+          <a href="https://www.instagram.com/fahaad_.fyr/" target="_blank" rel="noopener noreferrer" class="team-contact-link" style="color:var(--term-red);">
+            <span>&#10022; @fahaad_.fyr (Instagram)</span>
+          </a>
         </div>
       </div>
 
@@ -592,9 +629,9 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="team-avatar" style="width:72px; height:72px; max-width:72px; max-height:72px; overflow:hidden; border-radius:50%; position:relative; margin:0 auto 16px; border:2px solid var(--term-red); box-shadow:0 0 15px rgba(255,208,0,0.3); display:flex; align-items:center; justify-content:center; box-sizing:border-box; background:rgba(255,208,0,0.1);">
-          <img src="/static/img/cleven.jpg?v=1" alt="Cleven J - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
+          <img src="/static/img/cleven.jpg?v=2" alt="Cleven M R J - Event Organizer" style="width:100%; height:100%; max-width:72px; max-height:72px; object-fit:cover; border-radius:50%; display:block; margin:0; padding:0;">
         </div>
-        <h4 class="team-name">Cleven J</h4>
+        <h4 class="team-name">Cleven M R J</h4>
         <div class="team-role">Event Organizer</div>
         <div class="team-contact-list">
           <a href="tel:9962753510" class="team-contact-link">

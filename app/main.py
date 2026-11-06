@@ -2,7 +2,7 @@ import json
 import logging
 import uuid
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, List
 
@@ -16,7 +16,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 
 from app.config import settings
-from app.database import init_db, get_db, Registration, PreRegistrationAlert
+from app.database import init_db, get_db, Registration, PreRegistrationAlert, RegistrationAuditLog, get_supabase_client
 from app.services.payment import payment_service
 from app.services.export import generate_excel_spreadsheet, generate_csv_spreadsheet
 
@@ -36,8 +36,13 @@ app = FastAPI(
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY, max_age=86400)
 
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_PPT_DIR = BASE_DIR / "static" / "uploads" / "ppt"
-UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    UPLOAD_PPT_DIR = BASE_DIR / "static" / "uploads" / "ppt"
+    UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    import tempfile
+    UPLOAD_PPT_DIR = Path(tempfile.gettempdir()) / "antrothon_uploads"
+    UPLOAD_PPT_DIR.mkdir(parents=True, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
@@ -96,6 +101,16 @@ async def confirmation_page(request: Request, team_code: str, db: Session = Depe
     context["registration"] = reg
     context["members"] = reg.get_members()
     return templates.TemplateResponse(request=request, name="confirmation.html", context=context)
+
+@app.get("/invoice/{team_code}", response_class=HTMLResponse)
+async def invoice_page(request: Request, team_code: str, db: Session = Depends(get_db)):
+    context = get_base_context(request)
+    reg = db.query(Registration).filter(Registration.team_code == team_code).first()
+    if not reg:
+        raise HTTPException(status_code=404, detail="Registration record not found.")
+    context["registration"] = reg
+    context["members"] = reg.get_members()
+    return templates.TemplateResponse(request=request, name="invoice.html", context=context)
 
 # ----------------- CONVENIENCE NAV ROUTES ----------------- #
 
@@ -284,9 +299,15 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
     random_suffix = uuid.uuid4().hex[:4].upper()
     team_code = f"ANTRO-27-{count_today:03d}-{random_suffix}"
 
-    # Handle Idea PPT upload
+    # Handle Idea PPT upload & Cloud / Drive storage
     ppt_filename = None
     ppt_disk_path = None
+
+    idea_drive_link = str(data.get("idea_drive_link", "")).strip()
+    if idea_drive_link:
+        ppt_filename = "Google Drive Presentation"
+        ppt_disk_path = idea_drive_link
+
     if idea_ppt_file and hasattr(idea_ppt_file, "filename") and idea_ppt_file.filename:
         filename = idea_ppt_file.filename
         ext = Path(filename).suffix.lower()
@@ -312,6 +333,40 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
         
         ppt_filename = filename
         ppt_disk_path = f"/static/uploads/ppt/{saved_filename}"
+
+        # Upload directly to user's Google Drive (NO Supabase bucket used)
+        try:
+            from app.services.gdrive import gdrive_service
+            mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            if ext == ".pdf":
+                mime_type = "application/pdf"
+            elif ext == ".ppt":
+                mime_type = "application/vnd.ms-powerpoint"
+            
+            upload_success, drive_res, file_id = gdrive_service.upload_file(
+                file_bytes=file_bytes,
+                filename=saved_filename,
+                mime_type=mime_type
+            )
+            if upload_success:
+                ppt_disk_path = drive_res
+                logger.info("[+] PPT successfully uploaded directly to Google Drive: %s", drive_res)
+                # Remove local file now that it is stored directly in Google Drive
+                try:
+                    if save_path.exists():
+                        save_path.unlink()
+                except Exception:
+                    pass
+            else:
+                logger.warning("[!] Google Drive direct upload could not proceed: %s", drive_res)
+        except Exception as drive_err:
+            logger.warning("Google Drive upload error: %s", drive_err)
+
+    # If Google Drive link was explicitly entered by participant, store it directly into Supabase
+    if idea_drive_link:
+        ppt_disk_path = idea_drive_link
+        if not ppt_filename:
+            ppt_filename = "Google Drive Presentation"
 
     # Create Payment Order (₹300)
     order_data = payment_service.create_order(
@@ -400,7 +455,7 @@ async def api_verify_payment(request: Request, db: Session = Depends(get_db)):
     reg.payment_status = "paid"
     reg.razorpay_payment_id = payment_id
     reg.razorpay_signature = signature
-    reg.payment_timestamp = datetime.utcnow()
+    reg.payment_timestamp = datetime.now(timezone.utc).replace(tzinfo=None)
     db.commit()
 
     return {
@@ -510,6 +565,9 @@ async def admin_dashboard(
     track2_count = sum(1 for r in all_regs if "Health" in r.track or "Education" in r.track)
     track3_count = sum(1 for r in all_regs if "Sustainability" in r.track)
 
+    recent_audit_logs = db.query(RegistrationAuditLog).order_by(RegistrationAuditLog.created_at.desc()).limit(100).all()
+    total_audits = db.query(RegistrationAuditLog).count()
+
     context.update({
         "registrations": registrations,
         "total_teams": total_teams,
@@ -522,6 +580,8 @@ async def admin_dashboard(
         "track1_count": track1_count,
         "track2_count": track2_count,
         "track3_count": track3_count,
+        "recent_audit_logs": recent_audit_logs,
+        "total_audits": total_audits,
         "selected_track": track or "",
         "selected_status": status_filter or "",
         "search_term": search or ""
@@ -553,6 +613,246 @@ async def update_registration_status(
     
     db.commit()
     return {"success": True, "new_status": reg.status}
+
+@app.get("/api/admin/registration/{reg_id}")
+async def get_registration_api(
+    reg_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    if not get_current_admin(request):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    reg = db.query(Registration).filter(Registration.id == reg_id).first()
+    if not reg:
+        raise HTTPException(status_code=404, detail="Registration not found")
+    return {"success": True, "registration": reg.to_dict()}
+
+@app.post("/api/admin/registration/{reg_id}/edit")
+async def edit_registration_api(
+    reg_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    admin_user = get_current_admin(request)
+    if not admin_user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    reg = db.query(Registration).filter(Registration.id == reg_id).first()
+    if not reg:
+        raise HTTPException(status_code=404, detail="Registration not found")
+
+    data = await request.json()
+
+    # Capture snapshot before edit
+    snapshot_before = reg.to_dict()
+
+    # Check team name uniqueness if changed
+    new_team_name = data.get("team_name", "").strip()
+    if new_team_name and new_team_name.lower() != reg.team_name.lower():
+        existing = db.query(Registration).filter(
+            func.lower(Registration.team_name) == func.lower(new_team_name),
+            Registration.id != reg_id
+        ).first()
+        if existing:
+            return JSONResponse(
+                status_code=422,
+                content={"success": False, "message": f"Team name '{new_team_name}' is already taken by another team."}
+            )
+        reg.team_name = new_team_name
+
+    # Updatable fields
+    editable_fields = [
+        "college_name", "track", "project_title", "project_synopsis",
+        "idea_title", "idea_summary", "idea_description",
+        "idea_ppt_filename", "idea_ppt_path",
+        "leader_name", "leader_email", "leader_phone",
+        "leader_college", "leader_department", "leader_year",
+        "leader_gender", "leader_id_number",
+        "status", "admin_notes", "payment_status"
+    ]
+
+    for field in editable_fields:
+        if field in data:
+            val = data[field]
+            if isinstance(val, str):
+                val = val.strip()
+            setattr(reg, field, val)
+
+    if "amount_paid" in data and data["amount_paid"] is not None:
+        try:
+            reg.amount_paid = int(data["amount_paid"])
+        except (ValueError, TypeError):
+            pass
+
+    # Members list update
+    if "members" in data and isinstance(data["members"], list):
+        cleaned_members = []
+        for idx, m in enumerate(data["members"], start=2):
+            if not isinstance(m, dict):
+                continue
+            cleaned_members.append({
+                "id": idx,
+                "name": (m.get("name") or "").strip(),
+                "phone": (m.get("phone") or "").strip(),
+                "email": (m.get("email") or "").strip(),
+                "college": (m.get("college") or data.get("college_name") or reg.college_name or "").strip(),
+                "department": (m.get("department") or "").strip(),
+                "year": (m.get("year") or "3rd Year").strip(),
+            })
+        reg.set_members(cleaned_members)
+
+    # Capture snapshot after edit
+    snapshot_after = reg.to_dict()
+
+    # Compute changes diff
+    changes = {}
+    for key, old_val in snapshot_before.items():
+        if key in ("id", "created_at", "updated_at", "members_data"):
+            continue
+        new_val = snapshot_after.get(key)
+        if old_val != new_val:
+            changes[key] = {"old": old_val, "new": new_val}
+
+    if not changes:
+        return {"success": True, "message": "No changes detected.", "log_id": None}
+
+    # Format human-readable summary
+    summary_parts = []
+    for k in changes.keys():
+        friendly = k.replace("_", " ").title()
+        summary_parts.append(friendly)
+    summary_text = "Updated: " + ", ".join(summary_parts)
+
+    audit_log = RegistrationAuditLog(
+        registration_id=reg.id,
+        team_code=reg.team_code,
+        team_name=reg.team_name,
+        changed_by=admin_user if isinstance(admin_user, str) else "admin",
+        action="edit",
+        changes_summary=summary_text,
+        changes_json=json.dumps(changes),
+        snapshot_before=json.dumps(snapshot_before),
+        snapshot_after=json.dumps(snapshot_after),
+        is_undone=False,
+        created_at=datetime.utcnow()
+    )
+    db.add(audit_log)
+    db.commit()
+    db.refresh(audit_log)
+
+    return {
+        "success": True,
+        "message": f"Successfully updated details for Team {reg.team_name}.",
+        "changes": changes,
+        "log_id": audit_log.id
+    }
+
+@app.get("/api/admin/audit-logs")
+async def get_audit_logs_api(
+    request: Request,
+    team_code: Optional[str] = None,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    if not get_current_admin(request):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    query = db.query(RegistrationAuditLog)
+    if team_code:
+        query = query.filter(RegistrationAuditLog.team_code == team_code)
+    logs = query.order_by(RegistrationAuditLog.created_at.desc()).limit(limit).all()
+
+    items = []
+    for log in logs:
+        items.append({
+            "id": log.id,
+            "registration_id": log.registration_id,
+            "team_code": log.team_code,
+            "team_name": log.team_name,
+            "changed_by": log.changed_by,
+            "action": log.action,
+            "summary": log.changes_summary,
+            "changes": log.get_changes(),
+            "is_undone": log.is_undone,
+            "created_at_ist": log.get_created_at_ist(),
+            "undone_at": log.undone_at.isoformat() if log.undone_at else None
+        })
+
+    return {"success": True, "logs": items}
+
+@app.post("/api/admin/audit-log/{log_id}/undo")
+async def undo_audit_log_api(
+    log_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    admin_user = get_current_admin(request)
+    if not admin_user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    target_log = db.query(RegistrationAuditLog).filter(RegistrationAuditLog.id == log_id).first()
+    if not target_log:
+        raise HTTPException(status_code=404, detail="Audit log entry not found")
+
+    if target_log.is_undone:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "message": "This operation has already been undone."}
+        )
+
+    reg = db.query(Registration).filter(Registration.id == target_log.registration_id).first()
+    if not reg:
+        reg = db.query(Registration).filter(Registration.team_code == target_log.team_code).first()
+        if not reg:
+            return JSONResponse(
+                status_code=404,
+                content={"success": False, "message": f"Team registration ({target_log.team_code}) no longer exists."}
+            )
+
+    # Capture snapshot before undo
+    snapshot_before_undo = reg.to_dict()
+
+    # Apply the before-snapshot from target_log
+    snapshot_to_restore = target_log.get_snapshot_before()
+    reg.apply_dict(snapshot_to_restore)
+
+    # Capture snapshot after undo
+    snapshot_after_undo = reg.to_dict()
+
+    # Mark the target log as undone
+    target_log.is_undone = True
+    target_log.undone_at = datetime.utcnow()
+
+    # Compute undo diff
+    undo_changes = {}
+    for key, old_val in snapshot_before_undo.items():
+        if key in ("id", "created_at", "updated_at", "members_data"):
+            continue
+        new_val = snapshot_after_undo.get(key)
+        if old_val != new_val:
+            undo_changes[key] = {"old": old_val, "new": new_val}
+
+    undo_audit_log = RegistrationAuditLog(
+        registration_id=reg.id,
+        team_code=reg.team_code,
+        team_name=reg.team_name,
+        changed_by=admin_user if isinstance(admin_user, str) else "admin",
+        action="undo",
+        changes_summary=f"Undid Edit #{target_log.id} ({target_log.changes_summary or 'edit'})",
+        changes_json=json.dumps(undo_changes),
+        snapshot_before=json.dumps(snapshot_before_undo),
+        snapshot_after=json.dumps(snapshot_after_undo),
+        is_undone=False,
+        created_at=datetime.utcnow()
+    )
+    db.add(undo_audit_log)
+    db.commit()
+
+    return {
+        "success": True,
+        "message": f"Successfully rolled back edit #{log_id} for Team {reg.team_name}.",
+        "restored_fields": list(undo_changes.keys())
+    }
 
 @app.delete("/api/admin/registration/{reg_id}")
 async def delete_registration_api(

@@ -11,9 +11,14 @@
   <link rel="icon" type="image/png" href="/static/img/logo.png?v=5">
   <link rel="apple-touch-icon" href="/static/img/logo.png?v=5">
 
+  <!-- Typography: Playfair Display (Headings) and Lato (Body Text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
   <!-- Core Styles -->
-  <link rel="stylesheet" href="/static/css/terminator.css?v=7">
-  <link rel="stylesheet" href="/static/css/components.css?v=7">
+  <link rel="stylesheet" href="/static/css/terminator.css?v=15">
+  <link rel="stylesheet" href="/static/css/components.css?v=15">
   {% block extra_css %}{% endblock %}
 </head>
 <body data-countdown-target="{{ reg_deadline_iso }}">
@@ -50,6 +55,12 @@
       <a href="/" class="term-logo-wrapper">
         <div class="term-emblem">
           <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Emblem">
+        </div>
+        <div class="nav-inst-group" style="display:inline-flex; align-items:center; gap:8px;">
+          <img src="/static/img/patrician_logo.png" alt="Patrician College" style="width:30px; height:30px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(255,208,0,0.4)); flex-shrink:0;">
+          <div style="background:#ffffff; border-radius:3px; padding:2px 5px; display:inline-flex; align-items:center; flex-shrink:0;">
+            <img src="/static/img/iic_logo.png" alt="IIC Logo" style="height:18px; width:auto; display:block;">
+          </div>
         </div>
         <div>
           <div class="term-brand-name">ANTROTHON<span>'27</span></div>
@@ -91,14 +102,14 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
-              <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:52px; height:52px; object-fit:contain; display:block; filter:drop-shadow(0 0 10px rgba(255,208,0,0.45)); flex-shrink:0;">
-              <div>
+            <div class="footer-brand-header">
+              <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" class="footer-brand-logo">
+              <div class="footer-brand-text">
                 <div class="term-brand-name">ANTROTHON<span>'27</span></div>
-                <p class="tagline-mono" style="color:var(--term-red); margin:0;">"THINK HUMAN. INNOVATE FOR SOCIETY."</p>
+                <p class="tagline-mono footer-tagline">"THINK HUMAN. INNOVATE FOR SOCIETY."</p>
               </div>
             </div>
-            <p style="color:var(--term-steel); font-size:14px; line-height:1.6; max-width:380px;">
+            <p class="footer-brand-desc">
               A 24-hour inter-college hackathon empowering students to engineer responsible, human-centered technological solutions.
             </p>
           </div>
@@ -111,7 +122,13 @@
             </ul>
           </div>
           <div>
-            <h5 style="color:#fff; margin-bottom:16px;">Organizer Intel</h5>
+            <h5 style="color:#fff; margin-bottom:14px;">Organizer By</h5>
+            <div class="footer-organizer-logos">
+              <img src="/static/img/patrician_logo.png" alt="Patrician College Logo" style="width:46px; height:46px; object-fit:contain; filter:drop-shadow(0 0 8px rgba(255,208,0,0.4)); flex-shrink:0;">
+              <div style="background:#ffffff; padding:3px 8px; border-radius:4px; display:inline-flex; align-items:center; box-shadow:0 0 10px rgba(255,255,255,0.25); flex-shrink:0;">
+                <img src="/static/img/iic_logo.png" alt="Institution's Innovation Council" style="height:30px; width:auto; display:block;">
+              </div>
+            </div>
             <p style="font-size:14px; color:var(--term-steel); margin-bottom:6px;">
               <strong>Patrician Institute Innovation Cell (PIIC)</strong><br>
               Patrician College of Arts and Science<br>

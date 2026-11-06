@@ -3,7 +3,7 @@
    Cyberdyne Systems T-800 HUD & Tactical Cybernetic Interface
    ===================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Share+Tech+Mono&display=swap');
 
 :root {
   /* Color Palette - Tactical Cyber Yellow HUD & Brushed Steel */
@@ -35,11 +35,12 @@
   --term-cyan: #00f0ff;
   --term-green: #30d158;
 
-  /* Typography */
-  --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Typography: Playfair Display for Headings, Lato for Body */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-tactical: 'Share Tech Mono', monospace;
-  --font-heading: 'Rajdhani', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
 
   /* Spacing & Radii */
   --radius-xs: 2px;
@@ -60,15 +61,22 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
   background-color: var(--bg-deep);
   color: var(--term-chrome);
   font-family: var(--font-body);
+  font-weight: 400;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
   position: relative;
   min-height: 100vh;
 }
@@ -76,10 +84,9 @@ body {
 /* CRT Scanlines Overlay */
 .crt-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 999;
   background: linear-gradient(
@@ -122,23 +129,36 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-/* TYPOGRAPHY */
-h1, h2, h3, h4, .font-display {
-  font-family: var(--font-display);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-h5, h6, .font-heading {
+/* TYPOGRAPHY: Playfair Display for Headings */
+h1, h2, h3, h4, h5, h6, .font-display, .font-heading, .section-title {
   font-family: var(--font-heading);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+h1 { font-weight: 800; }
+h2 { font-weight: 700; }
+h3 { font-weight: 700; }
+h4 { font-weight: 600; }
+h5, h6 { font-weight: 600; }
+
+/* BODY TEXT: Lato */
+p, li, .section-desc, .hero-desc, label, input, select, textarea {
+  font-family: var(--font-body);
+}
+
+strong, b {
   font-weight: 700;
 }
 
-.mono-tag, .hud-telemetry, code, .tagline-mono {
+/* SYSTEM LOGS & TELEMETRY: Share Tech Mono */
+.mono-tag, .hud-telemetry, .hud-telemetry-item, code, pre, .tagline-mono, 
+.hud-data-tag, .system-log, .hud-bar, .term-badge, .digit-label,
+.hud-data-tag-1, .hud-data-tag-2, [class*="hud-telemetry"] {
   font-family: var(--font-tactical);
   letter-spacing: 0.05em;
 }
@@ -400,6 +420,7 @@ h5, h6, .font-heading {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .hud-panel {
@@ -410,6 +431,9 @@ h5, h6, .font-heading {
   position: relative;
   padding: 28px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* Tactical Corner Brackets */
@@ -818,3 +842,393 @@ h5, h6, .font-heading {
   }
 }
 
+/* ==========================================================================
+   INSTITUTIONAL CO-BRANDING (PATRICIAN COLLEGE & IIC)
+   ========================================================================== */
+.inst-partner-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 18, 26, 0.75);
+  border: 1px solid rgba(255, 208, 0, 0.3);
+  border-radius: 6px;
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.inst-logo-patrician {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 208, 0, 0.4));
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.inst-logo-patrician:hover {
+  transform: scale(1.06);
+}
+
+.inst-logo-iic-badge {
+  background: #ffffff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inst-logo-iic-badge:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+}
+
+.inst-logo-iic {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.inst-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 208, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.inst-details {
+  font-family: var(--font-tactical);
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--term-steel);
+}
+
+.inst-details strong {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .inst-partner-strip {
+    padding: 6px 10px;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .inst-logo-patrician {
+    width: 34px;
+    height: 34px;
+  }
+  .inst-logo-iic {
+    height: 22px;
+  }
+  .inst-details {
+    font-size: 10.5px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-inst-group {
+    display: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   ABOUT OVERVIEW PANEL (RESPONSIVE: DESKTOP SIDE-BY-SIDE, MOBILE LOGOS ON TOP)
+   ========================================================================== */
+.about-overview-layout {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+
+.about-overview-logos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.about-logo-emblem {
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 16px rgba(255, 208, 0, 0.5));
+}
+
+.about-partner-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.about-patrician-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 208, 0, 0.4));
+}
+
+.about-partner-x {
+  color: rgba(255, 208, 0, 0.35);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.about-iic-badge {
+  background: #ffffff;
+  padding: 3px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+.about-iic-img {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+.about-overview-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  color: #e2e8f0;
+  line-height: 1.8;
+}
+
+.about-overview-p {
+  margin: 0 0 14px 0;
+}
+
+.about-overview-p-sub {
+  margin: 0;
+}
+
+/* Tablet & Mobile View (<= 860px): Logos on top, text follows below */
+@media (max-width: 860px) {
+  .about-overview-layout {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 22px !important;
+  }
+
+  .about-overview-logos {
+    order: 1 !important; /* Logos come first (top) */
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding-bottom: 4px;
+  }
+
+  .about-logo-emblem {
+    width: 120px;
+    height: 120px;
+  }
+
+  .about-overview-text {
+    order: 2 !important; /* Text follows below */
+    width: 100% !important;
+    font-size: 15px;
+    line-height: 1.75;
+    text-align: left;
+  }
+}
+
+/* Small Mobile Phones (<= 540px) */
+@media (max-width: 540px) {
+  .about-overview-panel {
+    padding: 20px 16px !important;
+  }
+
+  .about-overview-layout {
+    gap: 18px !important;
+  }
+
+  .about-overview-logos {
+    gap: 12px;
+  }
+
+  .about-logo-emblem {
+    width: 105px;
+    height: 105px;
+  }
+
+  .about-partner-logos {
+    gap: 10px;
+  }
+
+  .about-patrician-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .about-iic-img {
+    height: 22px;
+  }
+
+  .about-overview-text {
+    font-size: 14px;
+    line-height: 1.68;
+    text-align: left;
+  }
+
+  .about-overview-p {
+    margin-bottom: 12px;
+  }
+}
+
+/* ==========================================================================
+   FOOTER BRANDING (RESPONSIVE: DESKTOP SIDE-BY-SIDE, MOBILE LOGO ON TOP)
+   ========================================================================== */
+.footer-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.footer-brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(255, 208, 0, 0.45));
+  flex-shrink: 0;
+}
+
+.footer-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-tagline {
+  color: var(--term-red);
+  margin: 0;
+}
+
+.footer-brand-desc {
+  color: var(--term-steel);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+.footer-organizer-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+/* Tablet & Mobile (<= 768px): Logo comes first (top), text follows below */
+@media (max-width: 768px) {
+  .footer-brand-header {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .footer-brand-logo {
+    order: 1 !important; /* Logo comes FIRST on top */
+    width: 60px !important;
+    height: 60px !important;
+    margin: 0 auto !important;
+  }
+
+  .footer-brand-text {
+    order: 2 !important; /* Text follows below logo */
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .footer-brand-text .term-brand-name {
+    font-size: 17px !important;
+    letter-spacing: 0.05em !important;
+    text-align: center !important;
+  }
+
+  .footer-tagline {
+    font-size: 11.5px !important;
+    letter-spacing: 0.06em !important;
+    margin-top: 4px !important;
+    text-align: center !important;
+  }
+
+  .footer-brand-desc {
+    text-align: center !important;
+    margin: 0 auto !important;
+    font-size: 13.5px !important;
+  }
+
+  .footer-organizer-logos {
+    justify-content: center !important;
+  }
+}
+
+/* Small mobile (<= 540px) */
+@media (max-width: 540px) {
+  .footer-brand-header {
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .footer-brand-logo {
+    width: 54px !important;
+    height: 54px !important;
+  }
+
+  .footer-brand-text .term-brand-name {
+    font-size: 16px !important;
+  }
+
+  .footer-tagline {
+    font-size: 10.5px !important;
+  }
+}
+
+/* ==========================================================================
+   ABOUT OVERVIEW CONTENT - CENTRAL ALIGNMENT (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 860px) {
+  .about-overview-text,
+  .about-overview-text p,
+  .about-overview-p,
+  .about-overview-p-sub {
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .about-overview-text,
+  .about-overview-text p,
+  .about-overview-p,
+  .about-overview-p-sub {
+    text-align: center !important;
+  }
+}

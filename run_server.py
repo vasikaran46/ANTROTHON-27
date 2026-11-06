@@ -14,4 +14,5 @@ if __name__ == "__main__":
     print(f"[*] Host: {settings.HOST}:{settings.PORT}")
     print(f"[*] Admin Portal: http://{settings.HOST}:{settings.PORT}/admin")
     print(f"[*] Mode: {'LIVE RAZORPAY' if settings.is_razorpay_configured else 'HIGH-FIDELITY SIMULATOR'}")
+    print(f"[*] Database: {'SUPABASE POSTGRESQL' if settings.is_supabase_configured else 'LOCAL SQLITE (Paste SUPABASE_DB_URL in .env to switch)'}")
     uvicorn.run("app.main:app", host=settings.HOST, port=settings.PORT, reload=True)

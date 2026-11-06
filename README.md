@@ -2,6 +2,7 @@
 > **"Think Human. Innovate for Society."**  
 > Organized by **Patrician Institute Innovation Cell (PIIC)**  
 > **Patrician College of Arts and Science**, Chennai  
+> Under the aegis of **Institution's Innovation Council (IIC - Ministry of Education Initiative)**  
 > Event Dates: **January 7–8, 2027** (24-Hour Inter-College Hackathon)
 
 ---
@@ -66,7 +67,7 @@ Built with a sleek, cinematic **Terminator Cyberdyne HUD** theme:
 ## 🛠️ Technology Stack
 - **Frontend:** Vanilla HTML5, Vanilla CSS3 (Terminator Cyber HUD Design System), Vanilla JavaScript (Web Audio API, dynamic DOM wizard).
 - **Backend:** Python 3.10+ (tested on Python 3.13) + FastAPI + Starlette Session Middleware.
-- **Database:** SQLite with SQLAlchemy (`antrothon.db`).
+- **Database:** Supabase PostgreSQL with SQLAlchemy ORM (with automatic fallback to local SQLite when offline or before keys are added).
 - **Spreadsheet Engine:** `openpyxl` & Python `csv`.
 - **Payment Gateway:** Razorpay Python SDK + Client-side Checkout JS.
 
@@ -101,6 +102,7 @@ python -m venv venv
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+.\venv\Scripts\Activate.ps1
 ```
 
 ---
@@ -130,6 +132,16 @@ HOST=127.0.0.1
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=terminator27
 
+# ─── Supabase Database ───────────────────────────────────────────────
+# Supabase PostgreSQL Connection String (Transaction Pooler or Direct)
+# Find in: Supabase Dashboard → Project Settings → Database → Connection string (URI)
+SUPABASE_DB_URL=postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
+
+# Supabase API (Optional / For client SDK)
+SUPABASE_URL=https://[PROJECT-REF].supabase.co
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
 # Razorpay Keys (Leave blank to use the high-fidelity test payment simulator)
 RAZORPAY_KEY_ID=
 RAZORPAY_KEY_SECRET=
@@ -154,6 +166,12 @@ FORCE_UNLOCK_REGISTRATION=false
 To populate the database with realistic sample teams and test the admin dashboard and Excel export:
 ```powershell
 python scripts/seed_demo_data.py
+```
+
+### Step 5b (Optional): Migrate Existing SQLite Data to Supabase
+Once you have pasted your `SUPABASE_DB_URL` into `.env`, you can transfer existing local SQLite records into Supabase:
+```powershell
+python scripts/migrate_sqlite_to_supabase.py
 ```
 
 ---
@@ -205,6 +223,6 @@ Access the application in your browser:
 
 ## 👥 Organizing Committee Contacts
 - **Vasikaran A (Lead Organizer):** 9360531897 | karanvasi80@gmail.com | [@vxsi93](https://www.instagram.com/vxsi93/) | [LinkedIn](https://www.linkedin.com/in/vasikaran-a-813b5531b)
-- **Abdul Fahaad A.K (Core Coordinator):** 9677037457
+- **Abdul Fahaad A.K (Core Coordinator):** 9677037457 | abdulfahaad730@gmail.com | [@fahaad_.fyr](https://www.instagram.com/fahaad_.fyr/) | [LinkedIn](https://www.linkedin.com/in/abdulfahaad-1512r/)
 - **Cleven J (Technical Operations):** 9962753510 | clevenmichaelrajj@gmail.com | [@cxrtheofxspixx](https://www.instagram.com/cxrtheofxspixx/) | [LinkedIn](https://www.linkedin.com/in/clevenmichaelraj/)
 - **Alan K Rison (Event Logistics):** 9940293860 | alanrison2@gmail.com | [@alanspeakable](https://www.instagram.com/alanspeakable/) | [LinkedIn](https://www.linkedin.com/in/alan-k-rison-6b0a2b30a/)
