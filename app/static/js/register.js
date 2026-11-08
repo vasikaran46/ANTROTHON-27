@@ -43,7 +43,7 @@ function renderMembersContainer() {
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Member Full Name <span class="required">*</span></label>
-          <input type="text" class="form-control" data-idx="${idx}" data-field="name" value="${escapeHtml(m.name || '')}" placeholder="e.g. Sarah Connor" required>
+          <input type="text" class="form-control" data-idx="${idx}" data-field="name" value="${escapeHtml(m.name || '')}" placeholder="Full Name" required>
         </div>
         <div class="form-group">
           <label class="form-label">Member Mobile Number <span class="required">*</span></label>
@@ -51,11 +51,11 @@ function renderMembersContainer() {
         </div>
         <div class="form-group">
           <label class="form-label">Member Email ID <span class="required">*</span></label>
-          <input type="email" class="form-control" data-idx="${idx}" data-field="email" value="${escapeHtml(m.email || '')}" placeholder="crew@college.edu" required>
+          <input type="email" class="form-control" data-idx="${idx}" data-field="email" value="${escapeHtml(m.email || '')}" placeholder="Email Address" required>
         </div>
         <div class="form-group">
           <label class="form-label">Department / Branch</label>
-          <input type="text" class="form-control" data-idx="${idx}" data-field="department" value="${escapeHtml(m.department || '')}" placeholder="e.g. Computer Science / IT">
+          <input type="text" class="form-control" data-idx="${idx}" data-field="department" value="${escapeHtml(m.department || '')}" placeholder="Department">
         </div>
         <div class="form-group">
           <label class="form-label">Year of Study</label>
@@ -64,7 +64,6 @@ function renderMembersContainer() {
             <option value="2nd Year" ${m.year === '2nd Year' ? 'selected' : ''}>2nd Year</option>
             <option value="3rd Year" ${m.year === '3rd Year' ? 'selected' : ''}>3rd Year</option>
             <option value="4th Year" ${m.year === '4th Year' ? 'selected' : ''}>4th Year</option>
-            <option value="Postgraduate" ${m.year === 'Postgraduate' ? 'selected' : ''}>Postgraduate</option>
           </select>
         </div>
       </div>
