@@ -1,9 +1,9 @@
 /**
  * ANTROTHON'27 - TERMINATOR THEME JAVASCRIPT
- * HUD Telemetry, Countdown Engine, Sound FX Synthesizer
+ * HUD Telemetry, Dynamic Coordinates, Background Music Engine, Countdown Engine
  */
 
-// Sound Synthesizer via Web Audio API (zero external assets needed)
+// Sound Synthesizer via Web Audio API for interactive clicks/hover
 class CyberAudioEngine {
   constructor() {
     this.enabled = false;
@@ -19,18 +19,12 @@ class CyberAudioEngine {
     }
   }
 
-  toggle() {
-    this.init();
-    if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
-    this.enabled = !this.enabled;
-    return this.enabled;
-  }
-
   playBeep(freq = 880, duration = 0.06, type = 'sine') {
     if (!this.enabled || !this.ctx) return;
     try {
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = type;
@@ -55,22 +49,179 @@ class CyberAudioEngine {
 
 const cyberAudio = new CyberAudioEngine();
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Sound toggle button in HUD
-  const soundBtn = document.getElementById('term-sound-toggle');
-  if (soundBtn) {
-    soundBtn.addEventListener('click', () => {
-      const active = cyberAudio.toggle();
-      soundBtn.classList.toggle('active', active);
-      const textSpan = soundBtn.querySelector('.sound-state-text');
-      if (textSpan) {
-        textSpan.textContent = active ? 'HUD AUDIO: ON' : 'HUD AUDIO: OFF';
+// =====================================================================
+// DYNAMIC USER LOCATION COORDINATES
+// =====================================================================
+function initDynamicLocation() {
+  const locEl = document.getElementById('hud-live-location');
+  if (!locEl) return;
+
+  function renderCoords(lat, lng) {
+    if (typeof lat !== 'number' || typeof lng !== 'number' || isNaN(lat) || isNaN(lng)) return;
+    const latDir = lat >= 0 ? 'N' : 'S';
+    const lngDir = lng >= 0 ? 'E' : 'W';
+    locEl.textContent = `[LOC: ${Math.abs(lat).toFixed(4)}° ${latDir}, ${Math.abs(lng).toFixed(4)}° ${lngDir}]`;
+    locEl.style.color = 'var(--term-yellow, #ffd000)';
+  }
+
+  // 1. Check cached session coordinates first for instant display
+  try {
+    const cached = sessionStorage.getItem('antrothon_user_coords');
+    if (cached) {
+      const data = JSON.parse(cached);
+      if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
+        renderCoords(data.lat, data.lng);
       }
-      if (active) cyberAudio.playTargetLock();
+    }
+  } catch (e) {}
+
+  // 2. Query browser Geolocation API
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        renderCoords(lat, lng);
+        try {
+          sessionStorage.setItem('antrothon_user_coords', JSON.stringify({ lat, lng }));
+        } catch (e) {}
+      },
+      () => {
+        // Fallback: IP-based location lookup
+        fetchLocationFromIP();
+      },
+      { timeout: 8000, maximumAge: 600000, enableHighAccuracy: false }
+    );
+  } else {
+    fetchLocationFromIP();
+  }
+
+  function fetchLocationFromIP() {
+    fetch('https://ipapi.co/json/')
+      .then(r => r.json())
+      .then(d => {
+        if (d && typeof d.latitude === 'number' && typeof d.longitude === 'number') {
+          renderCoords(d.latitude, d.longitude);
+          try {
+            sessionStorage.setItem('antrothon_user_coords', JSON.stringify({ lat: d.latitude, lng: d.longitude }));
+          } catch (e) {}
+        }
+      })
+      .catch(() => {
+        // Secondary fallback
+        fetch('https://ipwho.is/')
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.success !== false && typeof d.latitude === 'number' && typeof d.longitude === 'number') {
+              renderCoords(d.latitude, d.longitude);
+              try {
+                sessionStorage.setItem('antrothon_user_coords', JSON.stringify({ lat: d.latitude, lng: d.longitude }));
+              } catch (e) {}
+            }
+          })
+          .catch(() => {
+            // Retains default Patrician College Chennai coords [LOC: 13.0067° N, 80.2570° E]
+          });
+      });
+  }
+}
+
+// =====================================================================
+// BACKGROUND MUSIC & TACTICAL HUD AUDIO CONTROLLER
+// =====================================================================
+function initBackgroundMusic() {
+  const bgm = document.getElementById('term-bgm');
+  const soundBtn = document.getElementById('term-sound-toggle');
+  if (!bgm || !soundBtn) return;
+
+  const iconUnmuted = soundBtn.querySelector('.audio-icon-unmuted');
+  const iconMuted = soundBtn.querySelector('.audio-icon-muted');
+  const textSpan = soundBtn.querySelector('.sound-state-text');
+
+  bgm.volume = 0.35; // Ambient, tactical volume
+
+  function updateVisuals(isPlaying) {
+    soundBtn.classList.toggle('active', isPlaying);
+    if (iconUnmuted && iconMuted) {
+      iconUnmuted.style.display = isPlaying ? 'inline-block' : 'none';
+      iconMuted.style.display = isPlaying ? 'none' : 'inline-block';
+    }
+    if (textSpan) {
+      textSpan.textContent = isPlaying ? 'HUD AUDIO: ON' : 'HUD AUDIO: OFF';
+    }
+    cyberAudio.enabled = isPlaying;
+  }
+
+  function playMusic() {
+    cyberAudio.init();
+    bgm.play().then(() => {
+      updateVisuals(true);
+      try { localStorage.setItem('antrothon_bgm_muted', 'false'); } catch (e) {}
+    }).catch(() => {
+      updateVisuals(false);
     });
   }
 
-  // Interactive buttons sound trigger
+  function pauseMusic() {
+    bgm.pause();
+    updateVisuals(false);
+    try { localStorage.setItem('antrothon_bgm_muted', 'true'); } catch (e) {}
+  }
+
+  // Sound toggle button click in HUD top bar
+  soundBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (bgm.paused) {
+      playMusic();
+      cyberAudio.playTargetLock();
+    } else {
+      pauseMusic();
+    }
+  });
+
+  // Check user's stored mute preference
+  let isMutedPref = false;
+  try {
+    isMutedPref = localStorage.getItem('antrothon_bgm_muted') === 'true';
+  } catch (e) {}
+
+  if (!isMutedPref) {
+    // Attempt automatic playback
+    const promise = bgm.play();
+    if (promise !== undefined) {
+      promise.then(() => {
+        updateVisuals(true);
+      }).catch(() => {
+        // Browser autoplay blocked audio until user interaction
+        updateVisuals(false);
+        const startOnGesture = () => {
+          let mutedNow = false;
+          try { mutedNow = localStorage.getItem('antrothon_bgm_muted') === 'true'; } catch (e) {}
+          if (!mutedNow && bgm.paused) {
+            playMusic();
+          }
+          window.removeEventListener('click', startOnGesture);
+          window.removeEventListener('keydown', startOnGesture);
+          window.removeEventListener('touchstart', startOnGesture);
+        };
+        window.addEventListener('click', startOnGesture, { once: true });
+        window.addEventListener('keydown', startOnGesture, { once: true });
+        window.addEventListener('touchstart', startOnGesture, { once: true });
+      });
+    }
+  } else {
+    updateVisuals(false);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Background Music & Audio Toggle
+  initBackgroundMusic();
+
+  // 2. Initialize Dynamic Location
+  initDynamicLocation();
+
+  // 3. Interactive buttons sound trigger
   document.querySelectorAll('.btn-terminator, .btn-cyber-outline, .track-card, .faq-trigger').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cyberAudio.playBeep(640, 0.03, 'sine');
@@ -80,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Mobile navigation
+  // 4. Mobile navigation
   const navToggle = document.getElementById('mobile-nav-toggle');
   const navLinks = document.getElementById('term-nav-links');
   if (navToggle && navLinks) {
@@ -104,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Live HUD Clock (UTC & IST)
+  // 5. Live HUD Clock (UTC & IST)
   function updateTelemetryClock() {
     const clockEl = document.getElementById('hud-live-clock');
     if (!clockEl) return;
@@ -115,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateTelemetryClock, 1000);
   updateTelemetryClock();
 
-  // COUNTDOWN ENGINE
+  // 6. COUNTDOWN ENGINE
   // Target: December 20, 2026 23:59:59 IST (Registration Deadline)
   const targetDateStr = document.body.dataset.countdownTarget || '2026-12-20T23:59:59';
   const targetDate = new Date(targetDateStr).getTime();
@@ -159,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateCountdown, 1000);
   updateCountdown();
 
-  // FAQ Accordion
+  // 7. FAQ Accordion
   document.querySelectorAll('.faq-trigger').forEach(trigger => {
     trigger.addEventListener('click', () => {
       const item = trigger.closest('.faq-item');

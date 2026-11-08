@@ -132,6 +132,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  padding-top: 36px; /* Offset for fixed top HUD telemetry bar */
 }
 
 /* TYPOGRAPHY: Playfair Display for Headings */
@@ -181,11 +182,12 @@ strong, b {
   color: #64748b;
 }
 
-/* HUD TELEMETRY BAR (TOP) */
+/* HUD TELEMETRY BAR (TOP) - ALWAYS FIXED AT THE VERY TOP */
 .hud-bar {
-  background: rgba(11, 14, 20, 0.95);
+  background: rgba(11, 14, 20, 0.96);
   border-bottom: 1px solid var(--term-border);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 6px 20px;
   font-family: var(--font-tactical);
   font-size: 12px;
@@ -193,9 +195,18 @@ strong, b {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 36px;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.hud-status-short {
+  display: none;
 }
 
 .hud-telemetry-item {
@@ -225,16 +236,17 @@ strong, b {
 
 /* NAVIGATION */
 .term-navbar {
-  background: rgba(8, 10, 14, 0.9);
+  background: rgba(8, 10, 14, 0.92);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 208, 0, 0.2);
   padding: 14px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
-  top: 33px;
-  z-index: 90;
+  top: 36px;
+  z-index: 990;
 }
 
 .term-logo-wrapper {
@@ -409,9 +421,10 @@ strong, b {
 }
 
 .btn-sound-toggle.active {
-  border-color: var(--term-red);
-  color: var(--term-red);
-  background: var(--term-red-dim);
+  border-color: var(--term-yellow, #ffd000);
+  color: var(--term-yellow, #ffd000);
+  background: rgba(255, 208, 0, 0.12);
+  box-shadow: 0 0 10px rgba(255, 208, 0, 0.25);
 }
 
 /* HUD CARDS & CONTAINERS */
@@ -583,20 +596,27 @@ strong, b {
    RESPONSIVE - TABLET & SMALL LAPTOP (max-width: 1024px)
    ===================================================================== */
 @media (max-width: 1024px) {
-  /* HUD TELEMETRY BAR: on tablet/mobile, static so it gracefully scrolls away */
+  /* HUD TELEMETRY BAR: ALWAYS FIXED AT TOP */
   .hud-bar {
-    position: relative;
-    top: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     font-size: 11px;
-    padding: 7px 16px;
-    z-index: 10;
+    padding: 6px 16px;
+    height: 36px;
+    z-index: 1000;
   }
 
-  /* NAVBAR: sticky at top:0 without hardcoded pixel collision */
+  .content-wrapper {
+    padding-top: 36px;
+  }
+
+  /* NAVBAR: sticky directly below fixed HUD bar */
   .term-navbar {
     position: sticky;
-    top: 0;
-    z-index: 100;
+    top: 36px;
+    z-index: 990;
     padding: 12px 18px;
   }
 
@@ -694,15 +714,21 @@ strong, b {
 @media (max-width: 768px) {
   .hud-bar {
     font-size: 10px;
-    padding: 6px 14px;
+    padding: 6px 12px;
+    height: 36px;
     gap: 8px;
   }
 
-  .hud-telemetry-item:nth-child(2) span:last-child {
-    display: none; /* Hide [LOC: ...] on screens <= 768px to prevent overflow */
+  .hud-status-full {
+    display: none;
+  }
+
+  .hud-status-short {
+    display: inline;
   }
 
   .term-navbar {
+    top: 36px;
     padding: 10px 14px;
   }
 
@@ -763,16 +789,32 @@ strong, b {
 @media (max-width: 540px) {
   .hud-bar {
     font-size: 9px;
-    padding: 5px 10px;
+    padding: 5px 8px;
+    height: 36px;
     justify-content: space-between;
+    gap: 4px;
+  }
+
+  .hud-status-full {
+    display: none;
+  }
+
+  .hud-status-short {
+    display: inline;
   }
 
   .hud-bar .hud-telemetry-item:nth-child(2) {
-    display: none; /* Keep HUD clean: LED Status on left, Audio toggle on right */
+    display: flex;
+    gap: 4px;
+    font-size: 8.5px;
+  }
+
+  #hud-live-clock {
+    display: none; /* Hide T-SYS clock on small mobile to ensure [LOC: ...] fits cleanly */
   }
 
   .btn-sound-toggle {
-    padding: 4px 8px;
+    padding: 3px 6px;
     font-size: 9px;
   }
 
@@ -781,6 +823,7 @@ strong, b {
   }
 
   .term-navbar {
+    top: 36px;
     padding: 8px 12px;
   }
 

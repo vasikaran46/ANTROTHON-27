@@ -497,6 +497,19 @@ async def api_verify_payment(request: Request, db: Session = Depends(get_db)):
     reg.payment_timestamp = datetime.now(timezone.utc).replace(tzinfo=None)
     db.commit()
 
+    # Send confirmation email (non-blocking, failure doesn't affect response)
+    try:
+        from app.services.email import send_registration_confirmation
+        send_registration_confirmation(
+            to_email=reg.leader_email,
+            team_code=reg.team_code,
+            team_name=reg.team_name,
+            track=reg.track,
+            leader_name=reg.leader_name
+        )
+    except Exception as email_err:
+        logger.warning("Confirmation email failed for %s: %s", team_code, email_err)
+
     return {
         "success": True,
         "message": "Payment verified successfully!",

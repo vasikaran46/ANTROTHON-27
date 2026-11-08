@@ -34,6 +34,12 @@ class Settings:
     # Razorpay
     RAZORPAY_KEY_ID: str = os.getenv("RAZORPAY_KEY_ID", "").strip()
     RAZORPAY_KEY_SECRET: str = os.getenv("RAZORPAY_KEY_SECRET", "").strip()
+
+    # SMTP Email (Gmail)
+    SMTP_EMAIL: str = os.getenv("SMTP_EMAIL", "").strip()
+    SMTP_APP_PASSWORD: str = os.getenv("SMTP_APP_PASSWORD", "").strip()
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com").strip()
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", 587))
     
     # Fees & Members
     REGISTRATION_FEE_INR: int = int(os.getenv("REGISTRATION_FEE_INR", 300))
@@ -73,5 +79,9 @@ class Settings:
     @property
     def is_razorpay_configured(self) -> bool:
         return bool(self.RAZORPAY_KEY_ID and self.RAZORPAY_KEY_SECRET)
+
+    @property
+    def is_smtp_configured(self) -> bool:
+        return bool(self.SMTP_EMAIL and self.SMTP_APP_PASSWORD)
 
 settings = Settings()
