@@ -17,8 +17,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <!-- Core Styles -->
-  <link rel="stylesheet" href="/static/css/terminator.css?v=18">
-  <link rel="stylesheet" href="/static/css/components.css?v=18">
+  <link rel="stylesheet" href="/static/css/terminator.css?v=20">
+  <link rel="stylesheet" href="/static/css/components.css?v=20">
   {% block extra_css %}{% endblock %}
 </head>
 <body data-countdown-target="{{ reg_deadline_iso }}">
@@ -28,43 +28,49 @@
   <div class="cyber-grid"></div>
   <div class="red-vignette"></div>
 
-  <div class="content-wrapper">
-    <!-- Top Persistent Sticky Header (HUD Telemetry + Navigation) -->
-    <div class="site-header-sticky">
-      <!-- Top HUD Telemetry Status Bar -->
-      <header class="hud-bar" id="hud-top-bar">
-        <div class="hud-telemetry-item">
-          <span class="pulse-led"></span>
-          <span class="mono-tag">
-            <span class="hud-status-full">SYS.STATUS: ARMED // DEFENSE GRID ACTIVE</span>
-            <span class="hud-status-short">SYS.STATUS: ARMED</span>
-          </span>
-        </div>
-        <div class="hud-telemetry-item">
-          <span class="mono-tag" id="hud-live-clock">T-SYS: --:--:-- IST</span>
-          <span class="mono-tag" id="hud-live-location" style="color:var(--term-yellow, #ffd000);">[LOC: 13.0067° N, 80.2570° E]</span>
-        </div>
-        <div class="hud-telemetry-item">
-          <button type="button" class="btn-sound-toggle" id="term-sound-toggle" title="Toggle Background Music & Tactical Audio (Mute / Unmute)">
-            <!-- Unmuted Icon (Sound Playing) -->
-            <svg class="audio-icon audio-icon-unmuted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            </svg>
-            <!-- Muted Icon -->
-            <svg class="audio-icon audio-icon-muted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <line x1="23" y1="9" x2="17" y2="15"></line>
-              <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
-            <span class="sound-state-text">HUD AUDIO: OFF</span>
-          </button>
-        </div>
-      </header>
+  <!-- Top HUD Telemetry Status Bar (Always Fixed at Viewport Top) -->
+  <header class="hud-bar" id="hud-top-bar">
+    <div class="hud-telemetry-item">
+      <span class="pulse-led"></span>
+      <span class="mono-tag">
+        <span class="hud-status-full">SYS.STATUS: ARMED // DEFENSE GRID ACTIVE</span>
+        <span class="hud-status-short">SYS.STATUS: ARMED</span>
+      </span>
+    </div>
+    <div class="hud-telemetry-item">
+      <span class="mono-tag" id="hud-live-clock">T-SYS: --:--:-- IST</span>
+      <span class="mono-tag" id="hud-live-location" style="color:var(--term-yellow, #ffd000);">[LOC: 13.0067° N, 80.2570° E]</span>
+    </div>
+    <div class="hud-telemetry-item">
+      <button type="button" class="btn-sound-toggle" id="term-sound-toggle" title="Toggle Background Music & Tactical Audio (Mute / Unmute)">
+        <!-- Unmuted Icon (Sound Playing) -->
+        <svg class="audio-icon audio-icon-unmuted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <!-- Muted Icon -->
+        <svg class="audio-icon audio-icon-muted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <span class="sound-state-text">HUD AUDIO: OFF</span>
+      </button>
+    </div>
+  </header>
+  <script>
+    (function(){
+      var h = document.getElementById('hud-top-bar');
+      if (h) {
+        document.documentElement.style.setProperty('--hud-height', h.offsetHeight + 'px');
+      }
+    })();
+  </script>
 
-      <!-- Main Navigation Bar -->
-      <nav class="term-navbar">
+  <div class="content-wrapper">
+    <!-- Main Navigation Bar -->
+    <nav class="term-navbar">
         <a href="/" class="term-logo-wrapper">
           <div class="term-emblem">
             <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Emblem">
@@ -104,7 +110,6 @@
           </li>
         </ul>
       </nav>
-    </div>
 
     <!-- Main Dynamic Content -->
     <main>
@@ -168,7 +173,7 @@
   <audio id="term-bgm" src="/static/audio/bgm.mp3" loop preload="auto" style="display:none;"></audio>
 
   <!-- Core Scripts -->
-  <script src="/static/js/terminator.js?v=18"></script>
+  <script src="/static/js/terminator.js?v=20"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

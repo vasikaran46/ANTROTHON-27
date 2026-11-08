@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Share+Tech+Mono&display=swap');
 
 :root {
+  --hud-height: 33px;
   /* Color Palette - Tactical Cyber Yellow HUD & Brushed Steel */
   --term-red: #ffd000;
   --term-red-bright: #ffe033;
@@ -132,6 +133,8 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  padding-top: var(--hud-height, 33px);
+  margin-top: 0;
 }
 
 /* TYPOGRAPHY: Playfair Display for Headings */
@@ -181,17 +184,9 @@ strong, b {
   color: #64748b;
 }
 
-/* PERSISTENT STICKY HEADER (HUD TELEMETRY + NAVIGATION) */
-.site-header-sticky {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  width: 100%;
-}
-
-/* HUD TELEMETRY BAR (TOP) */
+/* HUD TELEMETRY BAR (TOP) - ALWAYS PINNED AT THE VERY TOP OF VIEWPORT */
 .hud-bar {
-  background: rgba(11, 14, 20, 0.96);
+  background: rgba(11, 14, 20, 0.98);
   border-bottom: 1px solid var(--term-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -202,9 +197,14 @@ strong, b {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   box-sizing: border-box;
   margin: 0;
+  z-index: 10000;
 }
 
 .hud-status-short {
@@ -238,7 +238,7 @@ strong, b {
 
 /* NAVIGATION */
 .term-navbar {
-  background: rgba(8, 10, 14, 0.92);
+  background: rgba(8, 10, 14, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 208, 0, 0.2);

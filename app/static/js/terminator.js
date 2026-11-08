@@ -215,6 +215,16 @@ function initBackgroundMusic() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Synchronize HUD Bar Height for 0px Gap
+  function syncHudHeight() {
+    const hud = document.getElementById('hud-top-bar');
+    if (!hud) return;
+    const h = hud.getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--hud-height', Math.round(h) + 'px');
+  }
+  syncHudHeight();
+  window.addEventListener('resize', syncHudHeight);
+
   // 1. Initialize Background Music & Audio Toggle
   initBackgroundMusic();
 
