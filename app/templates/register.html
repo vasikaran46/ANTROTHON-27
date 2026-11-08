@@ -3,7 +3,7 @@
 {% block title %}Register Team — ANTROTHON'27{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/register.css?v=16">
+<link rel="stylesheet" href="/static/css/register.css?v=18">
 {% endblock %}
 
 {% block content %}
@@ -74,7 +74,7 @@
             <!-- Team Level Details -->
             <div class="form-grid">
               <div class="form-group">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                   <label class="form-label" for="team_name" style="margin-bottom:0;">Team Name <span class="required">*</span></label>
                   <span id="team-name-badge" style="font-size:11px; font-family:var(--font-tactical); letter-spacing:0.5px; display:none; font-weight:700;"></span>
                 </div>
@@ -82,12 +82,14 @@
                   <input type="text" id="team_name" class="form-control" placeholder="" required maxlength="100" autocomplete="off" style="padding-right:38px; width:100%; box-sizing:border-box;">
                   <div id="team-name-icon" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:15px; display:none; pointer-events:none;"></div>
                 </div>
-                <div id="team-name-feedback" style="font-size:12px; margin-top:5px; font-family:var(--font-tactical); line-height:1.4; display:none;"></div>
-                <span class="form-hint" id="team-name-default-hint">Team names are strictly unique across all registrations (case-insensitive).</span>
+                <div id="team-name-feedback" style="font-size:12px; font-family:var(--font-tactical); line-height:1.4; display:none;"></div>
+                <span class="form-hint" id="team-name-default-hint">Unique identifier across all registrations.</span>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="college_name">College / Institution Name <span class="required">*</span></label>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <label class="form-label" for="college_name" style="margin-bottom:0;">College / Institution Name <span class="required">*</span></label>
+                </div>
                 <input type="text" id="college_name" class="form-control" placeholder="" required maxlength="200">
                 <span class="form-hint">Affiliated institution of the team.</span>
               </div>
@@ -123,6 +125,7 @@
               <div class="form-group">
                 <label class="form-label" for="leader_name">Team Leader Name <span class="required">*</span></label>
                 <input type="text" id="leader_name" class="form-control" placeholder="Full Name" required>
+                <span class="form-hint">Primary commander of the team.</span>
               </div>
 
               <div class="form-group">
@@ -140,6 +143,7 @@
               <div class="form-group">
                 <label class="form-label" for="leader_department">Department / Branch</label>
                 <input type="text" id="leader_department" class="form-control" placeholder="Department">
+                <span class="form-hint">Academic department &amp; branch of study.</span>
               </div>
 
               <div class="form-group">
