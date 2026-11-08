@@ -195,6 +195,7 @@ class Registration(Base):
     leader_email = Column(String(128), index=True, nullable=False)
     leader_phone = Column(String(20), nullable=False)
     leader_college = Column(String(256), nullable=False)
+    leader_degree = Column(String(128), nullable=True)
     leader_department = Column(String(128), nullable=False)
     leader_year = Column(String(32), nullable=False)
     leader_gender = Column(String(32), nullable=True)
@@ -251,6 +252,7 @@ class Registration(Base):
             "leader_email": self.leader_email,
             "leader_phone": self.leader_phone,
             "leader_college": self.leader_college,
+            "leader_degree": self.leader_degree or "",
             "leader_department": self.leader_department,
             "leader_year": self.leader_year,
             "leader_gender": self.leader_gender or "",
@@ -372,7 +374,9 @@ def init_db():
                     ("idea_description", "TEXT"),
                     ("idea_summary", "TEXT"),
                     ("idea_ppt_filename", "VARCHAR(256)"),
-                    ("idea_ppt_path", "VARCHAR(256)")
+                    ("idea_ppt_path", "VARCHAR(256)"),
+                    ("leader_degree", "VARCHAR(128)"),
+                    ("leader_gender", "VARCHAR(32)")
                 ]
                 for col_name, col_type in new_cols:
                     if col_name not in columns:
@@ -380,6 +384,14 @@ def init_db():
 
                 cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_registrations_team_name_lower ON registrations(LOWER(team_name))")
                 conn.connection.commit()
+        else:
+            with engine.connect() as conn:
+                try:
+                    conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS leader_degree VARCHAR(128);"))
+                    conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS leader_gender VARCHAR(32);"))
+                    conn.commit()
+                except Exception as pg_err:
+                    logger.debug("PostgreSQL column verification note: %s", pg_err)
     except Exception as e:
         logger.error("[!] Note during DB initialization: %s", e)
 

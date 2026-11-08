@@ -210,16 +210,6 @@
   position: relative;
 }
 
-.digit-card::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(255, 208, 0, 0.15);
-}
-
 .digit-value {
   font-family: var(--font-display);
   font-size: clamp(26px, 4vw, 38px);
@@ -397,11 +387,12 @@
 .timeline-pipeline::before {
   content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 29px;
+  bottom: 29px;
   left: 28px;
   width: 2px;
   background: linear-gradient(180deg, var(--term-red) 0%, rgba(255, 208, 0, 0.2) 100%);
+  z-index: 1;
 }
 
 .timeline-stage {
@@ -409,31 +400,55 @@
   gap: 28px;
   margin-bottom: 40px;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 .timeline-node {
   width: 58px;
   height: 58px;
-  background: var(--bg-panel);
+  background: #0b0e14;
   border: 2px solid var(--term-border);
   border-radius: 50%;
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  position: relative;
   z-index: 2;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+  transition: all 0.4s ease;
 }
 
 .timeline-stage.active .timeline-node {
   border-color: var(--term-red);
-  box-shadow: 0 0 20px var(--term-red);
-  background: rgba(255, 208, 0, 0.15);
+  box-shadow: 0 0 25px rgba(255, 208, 0, 0.85), inset 0 0 14px rgba(255, 208, 0, 0.25);
+  background: radial-gradient(circle, #241d08 0%, #0b0e14 75%);
+  animation: nodePulse 2.5s infinite alternate;
+}
+
+.timeline-stage.completed .timeline-node {
+  border-color: rgba(255, 208, 0, 0.55);
+  box-shadow: 0 0 10px rgba(255, 208, 0, 0.2);
+  background: #0b0e14;
 }
 
 .timeline-node svg {
   width: 24px;
   height: 24px;
   color: var(--term-red);
+  transition: all 0.3s ease;
+}
+
+.timeline-stage.active .timeline-node svg {
+  filter: drop-shadow(0 0 6px var(--term-red));
+}
+
+@keyframes nodePulse {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 208, 0, 0.7), inset 0 0 10px rgba(255, 208, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 32px rgba(255, 208, 0, 0.95), inset 0 0 18px rgba(255, 208, 0, 0.35);
+  }
 }
 
 .timeline-info {
@@ -442,6 +457,12 @@
   padding: 24px 28px;
   border-radius: var(--radius-sm);
   flex-grow: 1;
+  transition: all 0.3s ease;
+}
+
+.timeline-stage.active .timeline-info {
+  border-color: rgba(255, 208, 0, 0.45);
+  box-shadow: 0 0 25px rgba(255, 208, 0, 0.08);
 }
 
 .timeline-date-badge {
@@ -666,28 +687,36 @@
     max-width: 620px;
     font-size: 15px;
   }
-  .hero-hud-visual {
-    max-width: 280px;
-    margin: 16px auto 0;
-    overflow: hidden;
-  }
-  .reticle-crosshair-h {
+  .hero-grid > div:last-child {
+    display: flex;
+    justify-content: center;
     width: 100%;
   }
+  .hero-hud-visual {
+    width: 100%;
+    max-width: clamp(280px, 80vw, 360px);
+    margin: 24px auto 0;
+    overflow: visible;
+  }
+  .reticle-crosshair-h {
+    width: 118%;
+  }
   .reticle-crosshair-v {
-    height: 100%;
+    height: 118%;
   }
   .hud-data-tag {
-    font-size: 10px;
-    padding: 4px 10px;
+    font-size: clamp(9px, 2.5vw, 10.5px);
+    padding: 5px 12px;
+    z-index: 3;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.8), 0 0 8px rgba(255, 208, 0, 0.15);
   }
   .hud-data-tag-1 {
-    top: 8px;
-    right: 8px;
+    top: 8%;
+    right: -8px;
   }
   .hud-data-tag-2 {
-    bottom: 8px;
-    left: 8px;
+    bottom: 10%;
+    left: -10px;
   }
   .hero-badge-group {
     justify-content: center;
@@ -733,7 +762,9 @@
     height: 20px;
   }
   .timeline-pipeline::before {
-    left: 21px;
+    top: 21px;
+    bottom: 21px;
+    left: 20px;
   }
   .timeline-info {
     padding: 16px 20px;
@@ -858,8 +889,21 @@
     box-sizing: border-box;
   }
   .hero-hud-visual {
-    max-width: 220px;
-    margin: 16px auto 0;
+    max-width: clamp(260px, 82vw, 320px);
+    margin: 20px auto 0;
+    overflow: visible;
+  }
+  .hud-data-tag {
+    font-size: clamp(8.5px, 2.4vw, 10px);
+    padding: 4px 10px;
+  }
+  .hud-data-tag-1 {
+    top: 6%;
+    right: -6px;
+  }
+  .hud-data-tag-2 {
+    bottom: 8%;
+    left: -8px;
   }
   .hero-badge-group {
     flex-direction: column;
@@ -953,7 +997,9 @@
     height: 17px;
   }
   .timeline-pipeline::before {
-    left: 18px;
+    top: 18px;
+    bottom: 18px;
+    left: 17px;
   }
   .timeline-info {
     padding: 12px 14px;
@@ -1046,6 +1092,22 @@
 @media (max-width: 375px) {
   .hero-title {
     font-size: 24px;
+  }
+  .hero-hud-visual {
+    max-width: 260px;
+    margin: 16px auto 0;
+  }
+  .hud-data-tag {
+    font-size: 8.5px;
+    padding: 3px 8px;
+  }
+  .hud-data-tag-1 {
+    top: 5%;
+    right: -4px;
+  }
+  .hud-data-tag-2 {
+    bottom: 6%;
+    left: -6px;
   }
   .countdown-digits {
     grid-template-columns: repeat(2, 1fr);

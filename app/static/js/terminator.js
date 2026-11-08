@@ -331,4 +331,43 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // 8. DYNAMIC ROADMAP TIMELINE PROGRESS ENGINE
+  // Automatically advances the active glowing node based on roadmap stage deadlines
+  function initDynamicTimeline() {
+    const stages = document.querySelectorAll('.timeline-stage[data-deadline]');
+    if (!stages.length) return;
+
+    function updateTimelineStages() {
+      const now = Date.now();
+      let activeFound = false;
+
+      stages.forEach((stage) => {
+        const deadlineStr = stage.dataset.deadline;
+        const deadline = deadlineStr ? new Date(deadlineStr).getTime() : Infinity;
+
+        stage.classList.remove('active', 'completed');
+
+        if (now > deadline) {
+          // Deadline has passed: mark as completed phase
+          stage.classList.add('completed');
+        } else if (!activeFound) {
+          // First upcoming milestone is current active stage
+          stage.classList.add('active');
+          activeFound = true;
+        }
+      });
+
+      // If all scheduled deadlines have passed, keep final hackathon stage active
+      if (!activeFound && stages.length > 0) {
+        stages[stages.length - 1].classList.remove('completed');
+        stages[stages.length - 1].classList.add('active');
+      }
+    }
+
+    updateTimelineStages();
+    setInterval(updateTimelineStages, 10000); // Check every 10 seconds
+  }
+
+  initDynamicTimeline();
 });

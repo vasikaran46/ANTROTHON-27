@@ -221,6 +221,7 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
     leader_email = str(data.get("leader_email", "")).strip().lower()
     leader_phone = str(data.get("leader_phone", "")).strip()
     leader_college = str(data.get("leader_college", "")).strip() or college_name
+    leader_degree = str(data.get("leader_degree", "")).strip()
     leader_department = str(data.get("leader_department", "")).strip() or "General"
     leader_year = str(data.get("leader_year", "")).strip() or "1st Year"
     leader_gender = str(data.get("leader_gender", "")).strip()
@@ -238,10 +239,10 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
             members_list = []
 
     # Validate essential team & leader fields
-    if not (team_name and college_name and track and leader_name and leader_email and leader_phone):
+    if not (team_name and college_name and track and leader_name and leader_email and leader_phone and leader_degree and leader_gender):
         return JSONResponse(
             status_code=422,
-            content={"success": False, "message": "Please fill in Team Name, College Name, Track, and Team Leader credentials."}
+            content={"success": False, "message": "Please fill in Team Name, College Name, Track, Degree, Gender, and Team Leader credentials."}
         )
 
     # Enforce case-insensitive unique team name
@@ -302,13 +303,47 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
             }
         )
 
-    # Validate each member has at least name, email, phone
+    # Clean and validate each crew member
+    cleaned_members = []
     for idx, m in enumerate(members_list, start=2):
-        if not (m.get("name") and m.get("email") and m.get("phone")):
+        if not isinstance(m, dict):
+            continue
+        m_name = str(m.get("name", "")).strip()
+        m_email = str(m.get("email", "")).strip()
+        m_phone = str(m.get("phone", "")).strip()
+        m_gender = str(m.get("gender", "")).strip()
+        m_degree = str(m.get("degree", "")).strip()
+        m_dept = str(m.get("department", "")).strip() or "General"
+        m_year = str(m.get("year", "3rd Year")).strip()
+
+        if not (m_name and m_email and m_phone):
             return JSONResponse(
                 status_code=422,
-                content={"success": False, "message": f"Please provide Name, Email, and Mobile Number for Team Member #{idx}."}
+                content={"success": False, "message": f"Please provide Name, Email, and Mobile Number for Crew Member #{idx}."}
             )
+        if not m_gender:
+            return JSONResponse(
+                status_code=422,
+                content={"success": False, "message": f"Please select Gender for Crew Member #{idx}."}
+            )
+        if not m_degree:
+            return JSONResponse(
+                status_code=422,
+                content={"success": False, "message": f"Please select Degree for Crew Member #{idx}."}
+            )
+
+        cleaned_members.append({
+            "id": idx,
+            "name": m_name,
+            "email": m_email,
+            "phone": m_phone,
+            "college": college_name,
+            "degree": m_degree,
+            "department": m_dept,
+            "year": m_year,
+            "gender": m_gender,
+        })
+    members_list = cleaned_members
 
     # Generate unique team code: ANTRO-27-XXXX
     count_today = db.query(Registration).count() + 101
@@ -426,6 +461,7 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
         leader_email=leader_email,
         leader_phone=leader_phone,
         leader_college=leader_college,
+        leader_degree=leader_degree,
         leader_department=leader_department,
         leader_year=leader_year,
         leader_gender=leader_gender,
@@ -622,6 +658,7 @@ async def admin_dashboard(
 
     context.update({
         "registrations": registrations,
+        "registrations_dict": {r.id: r.to_dict() for r in registrations},
         "total_teams": total_teams,
         "paid_teams": paid_teams,
         "finalist_teams": finalist_teams,
@@ -718,7 +755,7 @@ async def edit_registration_api(
         "idea_title", "idea_summary", "idea_description",
         "idea_ppt_filename", "idea_ppt_path",
         "leader_name", "leader_email", "leader_phone",
-        "leader_college", "leader_department", "leader_year",
+        "leader_college", "leader_degree", "leader_department", "leader_year",
         "leader_gender", "leader_id_number",
         "status", "admin_notes", "payment_status"
     ]
@@ -748,8 +785,10 @@ async def edit_registration_api(
                 "phone": (m.get("phone") or "").strip(),
                 "email": (m.get("email") or "").strip(),
                 "college": (m.get("college") or data.get("college_name") or reg.college_name or "").strip(),
+                "degree": (m.get("degree") or "").strip(),
                 "department": (m.get("department") or "").strip(),
                 "year": (m.get("year") or "3rd Year").strip(),
+                "gender": (m.get("gender") or "").strip(),
             })
         reg.set_members(cleaned_members)
 

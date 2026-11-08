@@ -700,6 +700,9 @@ textarea.form-control {
   .hud-panel {
     padding: 16px 12px !important;
   }
+  .reg-status-banner {
+    padding: 10px 14px !important;
+  }
 
   .form-section-title {
     font-size: 14px;

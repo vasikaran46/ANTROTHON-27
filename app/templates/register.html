@@ -3,7 +3,7 @@
 {% block title %}Register Team — ANTROTHON'27{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/register.css?v=18">
+<link rel="stylesheet" href="/static/css/register.css?v=22">
 {% endblock %}
 
 {% block content %}
@@ -13,12 +13,11 @@
     <!-- ================= LIVE REGISTRATION WIZARD ================= -->
     <div style="max-width:880px; margin:0 auto; width:100%; box-sizing:border-box;">
       <!-- OFFICIAL CIRCULATION & LAUNCH INTIMATION BANNER -->
-      <div class="hud-panel" style="background:rgba(0, 230, 118, 0.08); border:1px solid #00e676; padding:12px 18px; border-radius:4px; margin-bottom:24px; font-family:var(--font-tactical); font-size:13px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; width:100%; box-sizing:border-box;">
-        <div style="display:flex; align-items:center; gap:10px; color:#00e676; flex-wrap:wrap;">
+      <div class="hud-panel reg-status-banner" style="background:rgba(0, 230, 118, 0.08); border:1px solid #00e676; padding:10px 14px; border-radius:4px; margin-bottom:24px; font-family:var(--font-tactical); display:flex; align-items:center; width:100%; box-sizing:border-box;">
+        <div style="display:flex; align-items:center; gap:10px; color:#00e676; width:100%; flex-wrap:nowrap;">
           <span class="pulse-led" style="background:#00e676; box-shadow:0 0 8px #00e676; flex-shrink:0;"></span>
-          <strong style="word-break:break-word;">REGISTRATIONS AND IDEA SUBMISSIONS ARE CURRENTLY OPEN</strong>
+          <strong style="font-size:clamp(11px, 2.9vw, 13px); line-height:1.4; letter-spacing:0.04em;">REGISTRATIONS AND IDEA SUBMISSIONS ARE CURRENTLY OPEN</strong>
         </div>
-        
       </div>
 
       <div class="section-header" style="margin-bottom:32px;">
@@ -113,7 +112,7 @@
 
             <!-- Communication Notice (Requested Intimation) -->
             <div class="hud-panel" style="background:rgba(255,208,0,0.08); border-color:var(--term-red); padding:14px 18px; margin-bottom:20px; border-radius:4px; width:100%; box-sizing:border-box;">
-              <div style="display:flex; align-items:center; gap:10px; color:var(--term-red); font-family:var(--font-tactical); font-size:12px; font-weight:700; margin-bottom:6px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:10px; color:var(--term-red); font-family:var(--font-tactical); font-size:12px; font-weight:700; margin-bottom:6px; flex-wrap:nowrap;">
                 <span class="pulse-led" style="flex-shrink:0;"></span> // IMPORTANT TRANSMISSION NOTICE
               </div>
               <p style="font-size:13px; color:#e2e8f0; margin:0; line-height:1.6; word-break:break-word;">
@@ -141,29 +140,50 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="leader_department">Department / Branch</label>
-                <input type="text" id="leader_department" class="form-control" placeholder="Department">
-                <span class="form-hint">Academic department &amp; branch of study.</span>
+                <label class="form-label" for="leader_gender">Gender <span class="required">*</span></label>
+                <select id="leader_gender" class="form-control" required>
+                  <option value="">-- Select Gender --</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="form-hint">Gender identity of the team leader.</span>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="leader_year">Year of Study</label>
-                <select id="leader_year" class="form-control">
+                <label class="form-label" for="leader_degree">Degree <span class="required">*</span></label>
+                <select id="leader_degree" class="form-control" required>
+                  <option value="">-- Select Degree --</option>
+                  <option value="B.E / B.Tech">B.E / B.Tech</option>
+                  <option value="B.Sc">B.Sc</option>
+                  <option value="BCA">BCA</option>
+                  <option value="B.Com">B.Com</option>
+                  <option value="BBA">BBA</option>
+                  <option value="B.A">B.A</option>
+                  <option value="M.E / M.Tech">M.E / M.Tech</option>
+                  <option value="MCA">MCA</option>
+                  <option value="M.Sc">M.Sc</option>
+                  <option value="MBA">MBA</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="form-hint">Degree program currently enrolled in.</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="leader_year">Year of Study <span class="required">*</span></label>
+                <select id="leader_year" class="form-control" required>
                   <option value="1st Year">1st Year</option>
                   <option value="2nd Year">2nd Year</option>
                   <option value="3rd Year" selected>3rd Year</option>
                   <option value="4th Year">4th Year</option>
                 </select>
+                <span class="form-hint">Current academic year of study.</span>
               </div>
 
-              <div class="form-group">
-                <label class="form-label" for="leader_gender">Gender (Optional)</label>
-                <select id="leader_gender" class="form-control">
-                  <option value="">-- Select --</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label" for="leader_department">Department / Branch <span class="required">*</span></label>
+                <input type="text" id="leader_department" class="form-control" placeholder="e.g. Computer Science" required>
+                <span class="form-hint">Academic department &amp; branch of study.</span>
               </div>
             </div>
 
@@ -385,5 +405,5 @@
 <script>
   window.IS_PREVIEW_MODE = false;
 </script>
-<script src="/static/js/register.js"></script>
+<script src="/static/js/register.js?v=22"></script>
 {% endblock %}

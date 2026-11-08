@@ -11,9 +11,9 @@ const totalSteps = 3;
 
 // Crew Member Management (Min 3 crew + 1 leader = 4 units minimum; max 5 crew + 1 leader = 6 units)
 let membersList = [
-  { id: 2, name: '', phone: '', email: '', department: '', year: '3rd Year' },
-  { id: 3, name: '', phone: '', email: '', department: '', year: '3rd Year' },
-  { id: 4, name: '', phone: '', email: '', department: '', year: '3rd Year' }
+  { id: 2, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' },
+  { id: 3, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' },
+  { id: 4, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' }
 ];
 
 let selectedPptFile = null;
@@ -44,27 +44,60 @@ function renderMembersContainer() {
         <div class="form-group">
           <label class="form-label">Member Full Name <span class="required">*</span></label>
           <input type="text" class="form-control" data-idx="${idx}" data-field="name" value="${escapeHtml(m.name || '')}" placeholder="Full Name" required>
+          <span class="form-hint">Crew member #${memberNum} full name.</span>
         </div>
         <div class="form-group">
           <label class="form-label">Member Mobile Number <span class="required">*</span></label>
           <input type="tel" class="form-control" data-idx="${idx}" data-field="phone" value="${escapeHtml(m.phone || '')}" placeholder="10-digit mobile" required>
+          <span class="form-hint">10-digit primary mobile number.</span>
         </div>
         <div class="form-group">
           <label class="form-label">Member Email ID <span class="required">*</span></label>
           <input type="email" class="form-control" data-idx="${idx}" data-field="email" value="${escapeHtml(m.email || '')}" placeholder="Email Address" required>
+          <span class="form-hint">Official email address.</span>
         </div>
         <div class="form-group">
-          <label class="form-label">Department / Branch</label>
-          <input type="text" class="form-control" data-idx="${idx}" data-field="department" value="${escapeHtml(m.department || '')}" placeholder="Department">
+          <label class="form-label">Gender <span class="required">*</span></label>
+          <select class="form-control" data-idx="${idx}" data-field="gender" required>
+            <option value="">-- Select Gender --</option>
+            <option value="Male" ${m.gender === 'Male' ? 'selected' : ''}>Male</option>
+            <option value="Female" ${m.gender === 'Female' ? 'selected' : ''}>Female</option>
+            <option value="Other" ${m.gender === 'Other' ? 'selected' : ''}>Other</option>
+          </select>
+          <span class="form-hint">Gender identity.</span>
         </div>
         <div class="form-group">
-          <label class="form-label">Year of Study</label>
-          <select class="form-control" data-idx="${idx}" data-field="year">
+          <label class="form-label">Degree <span class="required">*</span></label>
+          <select class="form-control" data-idx="${idx}" data-field="degree" required>
+            <option value="">-- Select Degree --</option>
+            <option value="B.E / B.Tech" ${m.degree === 'B.E / B.Tech' ? 'selected' : ''}>B.E / B.Tech</option>
+            <option value="B.Sc" ${m.degree === 'B.Sc' ? 'selected' : ''}>B.Sc</option>
+            <option value="BCA" ${m.degree === 'BCA' ? 'selected' : ''}>BCA</option>
+            <option value="B.Com" ${m.degree === 'B.Com' ? 'selected' : ''}>B.Com</option>
+            <option value="BBA" ${m.degree === 'BBA' ? 'selected' : ''}>BBA</option>
+            <option value="B.A" ${m.degree === 'B.A' ? 'selected' : ''}>B.A</option>
+            <option value="M.E / M.Tech" ${m.degree === 'M.E / M.Tech' ? 'selected' : ''}>M.E / M.Tech</option>
+            <option value="MCA" ${m.degree === 'MCA' ? 'selected' : ''}>MCA</option>
+            <option value="M.Sc" ${m.degree === 'M.Sc' ? 'selected' : ''}>M.Sc</option>
+            <option value="MBA" ${m.degree === 'MBA' ? 'selected' : ''}>MBA</option>
+            <option value="Other" ${m.degree === 'Other' ? 'selected' : ''}>Other</option>
+          </select>
+          <span class="form-hint">Degree program enrolled in.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year of Study <span class="required">*</span></label>
+          <select class="form-control" data-idx="${idx}" data-field="year" required>
             <option value="1st Year" ${m.year === '1st Year' ? 'selected' : ''}>1st Year</option>
             <option value="2nd Year" ${m.year === '2nd Year' ? 'selected' : ''}>2nd Year</option>
-            <option value="3rd Year" ${m.year === '3rd Year' ? 'selected' : ''}>3rd Year</option>
+            <option value="3rd Year" ${m.year === '3rd Year' || !m.year ? 'selected' : ''}>3rd Year</option>
             <option value="4th Year" ${m.year === '4th Year' ? 'selected' : ''}>4th Year</option>
           </select>
+          <span class="form-hint">Current academic year of study.</span>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="form-label">Department / Branch <span class="required">*</span></label>
+          <input type="text" class="form-control" data-idx="${idx}" data-field="department" value="${escapeHtml(m.department || '')}" placeholder="e.g. Computer Science" required>
+          <span class="form-hint">Academic department &amp; branch of study.</span>
         </div>
       </div>
     `;
@@ -73,13 +106,15 @@ function renderMembersContainer() {
 
   // Attach change listeners to update membersList in memory
   container.querySelectorAll('input, select').forEach(input => {
-    input.addEventListener('input', (e) => {
+    const updateHandler = (e) => {
       const idx = parseInt(e.target.dataset.idx, 10);
       const field = e.target.dataset.field;
-      if (membersList[idx]) {
+      if (membersList[idx] && field) {
         membersList[idx][field] = e.target.value.trim();
       }
-    });
+    };
+    input.addEventListener('input', updateHandler);
+    input.addEventListener('change', updateHandler);
   });
 
   // Update counter badges
@@ -125,6 +160,8 @@ function addMember() {
     name: '',
     phone: '',
     email: '',
+    gender: '',
+    degree: '',
     department: '',
     year: '3rd Year'
   });
@@ -357,6 +394,26 @@ async function validateCurrentStep(step) {
       return false;
     }
 
+    const leaderDegree = document.getElementById('leader_degree')?.value;
+    const leaderDepartment = document.getElementById('leader_department')?.value.trim();
+    const leaderGender = document.getElementById('leader_gender')?.value;
+
+    if (!leaderDegree) {
+      alert('Please select Degree for the Team Leader.');
+      document.getElementById('leader_degree')?.focus();
+      return false;
+    }
+    if (!leaderGender) {
+      alert('Please select Gender for the Team Leader.');
+      document.getElementById('leader_gender')?.focus();
+      return false;
+    }
+    if (!leaderDepartment) {
+      alert('Please enter Department / Branch for the Team Leader.');
+      document.getElementById('leader_department')?.focus();
+      return false;
+    }
+
     // Validate mandatory crew members
     for (let i = 0; i < membersList.length; i++) {
       const m = membersList[i];
@@ -371,6 +428,18 @@ async function validateCurrentStep(step) {
       }
       if (!m.email || !m.email.includes('@')) {
         alert(`Please enter a valid Email ID for Crew Member #${memberNum}.`);
+        return false;
+      }
+      if (!m.gender) {
+        alert(`Please select Gender for Crew Member #${memberNum}.`);
+        return false;
+      }
+      if (!m.degree) {
+        alert(`Please select Degree for Crew Member #${memberNum}.`);
+        return false;
+      }
+      if (!m.department) {
+        alert(`Please enter Department / Branch for Crew Member #${memberNum}.`);
         return false;
       }
     }
@@ -546,7 +615,22 @@ function populateReviewSummary() {
   const leaderName = document.getElementById('leader_name')?.value || '-';
   const leaderPhone = document.getElementById('leader_phone')?.value || '';
   const leaderEmail = document.getElementById('leader_email')?.value || '';
-  document.getElementById('sum-leader').textContent = `${leaderName} (${leaderPhone} | ${leaderEmail})`;
+  const leaderDegree = document.getElementById('leader_degree')?.value || '';
+  const leaderDept = document.getElementById('leader_department')?.value || '';
+  const leaderGender = document.getElementById('leader_gender')?.value || '';
+
+  let leaderDetails = leaderName;
+  const tagParts = [];
+  if (leaderDegree) tagParts.push(leaderDegree);
+  if (leaderDept) tagParts.push(leaderDept);
+  if (leaderGender) tagParts.push(leaderGender);
+  if (tagParts.length > 0) {
+    leaderDetails += ` [${tagParts.join(' • ')}]`;
+  }
+  if (leaderPhone || leaderEmail) {
+    leaderDetails += ` (${[leaderPhone, leaderEmail].filter(Boolean).join(' | ')})`;
+  }
+  document.getElementById('sum-leader').textContent = leaderDetails;
 
   document.getElementById('sum-crew-size').textContent = `${1 + membersList.length} Units (Leader + ${membersList.length} Crew)`;
   document.getElementById('sum-idea-title').textContent = document.getElementById('idea_title')?.value || '-';
@@ -574,6 +658,7 @@ async function initiateRegistrationAndPayment() {
   formData.append('leader_phone', document.getElementById('leader_phone').value.trim());
   formData.append('leader_email', document.getElementById('leader_email').value.trim());
   formData.append('leader_college', document.getElementById('college_name').value.trim());
+  formData.append('leader_degree', document.getElementById('leader_degree')?.value || '');
   formData.append('leader_department', document.getElementById('leader_department')?.value.trim() || 'General');
   formData.append('leader_year', document.getElementById('leader_year')?.value || '3rd Year');
   formData.append('leader_gender', document.getElementById('leader_gender')?.value || '');

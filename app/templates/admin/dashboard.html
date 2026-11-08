@@ -208,15 +208,15 @@
               <td>
                 <div style="display:flex; gap:6px; align-items:center;">
                   <button type="button" class="btn-cyber-outline" style="padding:6px 12px; font-size:11px;" 
-                    onclick='openDossier({{ r.to_dict() | tojson }})'>
+                    onclick="openDossier({{ r.id }})">
                     View
                   </button>
                   <button type="button" class="btn-cyber-outline" style="padding:6px 12px; font-size:11px; color:var(--term-cyan); border-color:rgba(0,210,255,0.4);"
-                    onclick='openEditModal({{ r.to_dict() | tojson }})'>
+                    onclick="openEditModal({{ r.id }})">
                     Edit
                   </button>
                   <button type="button" class="btn-admin-delete"
-                    onclick="deleteRegistration({{ r.id }}, '{{ r.team_name | escape }}', '{{ r.team_code | escape }}')"
+                    onclick="deleteRegistration({{ r.id }})"
                     title="Permanently delete registration">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;">
                       <polyline points="3 6 5 6 21 6"></polyline>
@@ -307,7 +307,7 @@
             <th>Unit</th>
             <th>Name</th>
             <th>Contact</th>
-            <th>Institution &amp; Dept</th>
+            <th>Degree, Dept &amp; Year</th>
           </tr>
         </thead>
         <tbody id="dos-members-tbody">
@@ -400,8 +400,21 @@
             <input type="email" id="edit-leader-email" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" required>
           </div>
           <div class="form-group">
-            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Department</label>
-            <input type="text" id="edit-leader-dept" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Degree</label>
+            <select id="edit-leader-degree" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+              <option value="">-- Select Degree --</option>
+              <option value="B.E / B.Tech">B.E / B.Tech</option>
+              <option value="B.Sc">B.Sc</option>
+              <option value="BCA">BCA</option>
+              <option value="B.Com">B.Com</option>
+              <option value="BBA">BBA</option>
+              <option value="B.A">B.A</option>
+              <option value="M.E / M.Tech">M.E / M.Tech</option>
+              <option value="MCA">MCA</option>
+              <option value="M.Sc">M.Sc</option>
+              <option value="MBA">MBA</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Year of Study</label>
@@ -412,6 +425,19 @@
               <option value="4th Year">4th Year</option>
               <option value="PG / Masters">PG / Masters</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Gender</label>
+            <select id="edit-leader-gender" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Department</label>
+            <input type="text" id="edit-leader-dept" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
           </div>
           <div class="form-group">
             <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Student ID / Roll No</label>
@@ -554,8 +580,11 @@
     </div>
   </div>
 </div>
+<script type="application/json" id="registrations-data">
+  {{ (registrations_dict or {}) | tojson }}
+</script>
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/admin.js"></script>
+<script src="/static/js/admin.js?v=23"></script>
 {% endblock %}

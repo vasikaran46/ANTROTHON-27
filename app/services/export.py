@@ -38,8 +38,30 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
         bottom=Side(style='thin', color='D1D5DB')
     )
 
+    # Headers definition
+    headers = [
+        "S.No", "Team Code", "Team Name", "Track", "Status", 
+        "Payment Status", "Amount (INR)", "Payment ID", "Order ID",
+        "Leader Name", "Leader Email", "Leader Phone", "Leader College", 
+        "Leader Degree", "Leader Department", "Leader Year", "Leader Gender", "Leader Student ID",
+        "Team Size",
+        # Member 2
+        "M2 Name", "M2 Email", "M2 Phone", "M2 Gender", "M2 Degree", "M2 Dept", "M2 Year",
+        # Member 3
+        "M3 Name", "M3 Email", "M3 Phone", "M3 Gender", "M3 Degree", "M3 Dept", "M3 Year",
+        # Member 4
+        "M4 Name", "M4 Email", "M4 Phone", "M4 Gender", "M4 Degree", "M4 Dept", "M4 Year",
+        # Member 5 (Optional)
+        "M5 Name", "M5 Email", "M5 Phone", "M5 Gender", "M5 Degree", "M5 Dept", "M5 Year",
+        # Member 6 (Optional)
+        "M6 Name", "M6 Email", "M6 Phone", "M6 Gender", "M6 Degree", "M6 Dept", "M6 Year",
+        "Idea Title", "Abstract / Summary", "Idea Description", "PPT Presentation File", "Registered At (UTC)"
+    ]
+
+    last_col_letter = get_column_letter(len(headers))
+
     # Title row
-    ws.merge_cells('A1:AC1')
+    ws.merge_cells(f'A1:{last_col_letter}1')
     title_cell = ws['A1']
     title_cell.value = "ANTROTHON'27 — INTER-COLLEGE HACKATHON REGISTRATIONS"
     title_cell.font = Font(name="Calibri", size=16, bold=True, color="FFFFFF")
@@ -47,32 +69,13 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
     title_cell.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[1].height = 40
 
-    ws.merge_cells('A2:AC2')
+    ws.merge_cells(f'A2:{last_col_letter}2')
     sub_cell = ws['A2']
     sub_cell.value = f"Patrician Institute Innovation Cell (PIIC) | Generated: {datetime.now().strftime('%d-%b-%Y %I:%M %p')} | Total Teams: {len(registrations)}"
     sub_cell.font = Font(name="Calibri", size=10, italic=True, color="E5E5EA")
     sub_cell.fill = PatternFill(start_color="161B22", end_color="161B22", fill_type="solid")
     sub_cell.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[2].height = 24
-
-    headers = [
-        "S.No", "Team Code", "Team Name", "Track", "Status", 
-        "Payment Status", "Amount (INR)", "Payment ID", "Order ID",
-        "Leader Name", "Leader Email", "Leader Phone", "Leader College", 
-        "Leader Department", "Leader Year", "Leader Gender", "Leader Student ID",
-        "Team Size",
-        # Member 2
-        "M2 Name", "M2 Email", "M2 Phone", "M2 College", "M2 Dept",
-        # Member 3
-        "M3 Name", "M3 Email", "M3 Phone", "M3 College", "M3 Dept",
-        # Member 4
-        "M4 Name", "M4 Email", "M4 Phone", "M4 College", "M4 Dept",
-        # Member 5 (Optional)
-        "M5 Name", "M5 Email", "M5 Phone", "M5 College", "M5 Dept",
-        # Member 6 (Optional)
-        "M6 Name", "M6 Email", "M6 Phone", "M6 College", "M6 Dept",
-        "Idea Title", "Abstract / Summary", "Idea Description", "PPT Presentation File", "Registered At (UTC)"
-    ]
 
     ws.append([])  # Row 3 is blank spacer
     ws.append(headers)  # Row 4 is Headers
@@ -108,21 +111,22 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
             reg.leader_email,
             reg.leader_phone,
             reg.college_name or reg.leader_college,
+            reg.leader_degree or "-",
             reg.leader_department,
             reg.leader_year,
             reg.leader_gender or "-",
             reg.leader_id_number or "-",
             reg.member_count,
             # M2
-            m2.get("name", "-"), m2.get("email", "-"), m2.get("phone", "-"), m2.get("college", "-"), m2.get("department", "-"),
+            m2.get("name", "-"), m2.get("email", "-"), m2.get("phone", "-"), m2.get("gender", "-"), m2.get("degree", "-"), m2.get("department", "-"), m2.get("year", "-"),
             # M3
-            m3.get("name", "-"), m3.get("email", "-"), m3.get("phone", "-"), m3.get("college", "-"), m3.get("department", "-"),
+            m3.get("name", "-"), m3.get("email", "-"), m3.get("phone", "-"), m3.get("gender", "-"), m3.get("degree", "-"), m3.get("department", "-"), m3.get("year", "-"),
             # M4
-            m4.get("name", "-"), m4.get("email", "-"), m4.get("phone", "-"), m4.get("college", "-"), m4.get("department", "-"),
+            m4.get("name", "-"), m4.get("email", "-"), m4.get("phone", "-"), m4.get("gender", "-"), m4.get("degree", "-"), m4.get("department", "-"), m4.get("year", "-"),
             # M5
-            m5.get("name", "-"), m5.get("email", "-"), m5.get("phone", "-"), m5.get("college", "-"), m5.get("department", "-"),
+            m5.get("name", "-"), m5.get("email", "-"), m5.get("phone", "-"), m5.get("gender", "-"), m5.get("degree", "-"), m5.get("department", "-"), m5.get("year", "-"),
             # M6
-            m6.get("name", "-"), m6.get("email", "-"), m6.get("phone", "-"), m6.get("college", "-"), m6.get("department", "-"),
+            m6.get("name", "-"), m6.get("email", "-"), m6.get("phone", "-"), m6.get("gender", "-"), m6.get("degree", "-"), m6.get("department", "-"), m6.get("year", "-"),
             reg.idea_title or reg.project_title or "-",
             reg.idea_summary or reg.project_synopsis or "-",
             reg.idea_description or "-",
@@ -149,7 +153,7 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
                     c.fill = pending_fill
                     c.font = pending_font
                 c.alignment = Alignment(horizontal="center", vertical="center")
-            elif col_idx in (1, 2, 5, 7, 18):
+            elif col_idx in (1, 2, 5, 7, 19):
                 c.alignment = Alignment(horizontal="center", vertical="center")
 
     # Auto-adjust column widths
@@ -179,13 +183,13 @@ def generate_csv_spreadsheet(registrations: List[Registration]) -> str:
     writer.writerow([
         "Team Code", "Team Name", "Track", "Status", "Payment Status", "Amount INR",
         "Payment ID", "Leader Name", "Leader Email", "Leader Phone", "College",
-        "Leader Department", "Leader Year", "Member Count", "Members Details",
+        "Leader Degree", "Leader Department", "Leader Year", "Leader Gender", "Member Count", "Members Details",
         "Idea Title", "Abstract / Summary", "Idea Description", "PPT Presentation File", "Registered At"
     ])
 
     for reg in registrations:
         members_summary = "; ".join([
-            f"{m.get('name')} ({m.get('department', m.get('dept', ''))}, {m.get('phone', '')}, {m.get('email', '')})"
+            f"{m.get('name')} ({m.get('degree', '')} {m.get('department', m.get('dept', ''))}, {m.get('year', '')}, {m.get('gender', '')}, {m.get('phone', '')}, {m.get('email', '')})"
             for m in reg.get_members()
         ])
         writer.writerow([
@@ -200,8 +204,10 @@ def generate_csv_spreadsheet(registrations: List[Registration]) -> str:
             reg.leader_email,
             reg.leader_phone,
             reg.college_name or reg.leader_college,
+            reg.leader_degree or "",
             reg.leader_department,
             reg.leader_year,
+            reg.leader_gender or "",
             reg.member_count,
             members_summary,
             reg.idea_title or reg.project_title or "",

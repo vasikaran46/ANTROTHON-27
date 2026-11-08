@@ -476,6 +476,9 @@
           <div>
             <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">TEAM LEADER</span>
             <strong style="color:#fff;">{{ registration.leader_name }}</strong>
+            {% if registration.leader_degree or registration.leader_gender %}
+            <span style="color:var(--term-steel); display:block; font-size:11px;">{{ registration.leader_degree or '' }}{% if registration.leader_degree and registration.leader_department %} - {{ registration.leader_department }}{% endif %}{% if registration.leader_gender %} &bull; {{ registration.leader_gender }}{% endif %}</span>
+            {% endif %}
           </div>
           <div>
             <span style="color:var(--term-steel); display:block; font-size:11px; font-family:var(--font-tactical);">COLLEGE</span>
@@ -524,6 +527,9 @@
           {% for m in members %}
           <div style="background:rgba(8,10,14,0.6); padding:8px 12px; border-radius:2px; border-left:2px solid var(--term-red); word-break:break-word;">
             <strong style="color:#fff;">Member #{{ loop.index + 1 }}:</strong> {{ m.name }}<br>
+            {% if m.degree or m.gender or m.department %}
+            <small style="color:var(--term-chrome); display:block; margin:2px 0;">{{ m.degree or '' }}{% if m.degree and m.department %} - {{ m.department }}{% elif m.department %}{{ m.department }}{% endif %}{% if m.gender %} &bull; {{ m.gender }}{% endif %}</small>
+            {% endif %}
             <small style="word-break:break-all;">{{ m.phone }} &bull; {{ m.email }}</small>
           </div>
           {% endfor %}
@@ -744,7 +750,12 @@
           <tr>
             <td style="text-align:center; font-weight:700;">Unit 01</td>
             <td><strong style="color:#b45309;">Team Commander (Leader)</strong></td>
-            <td><strong>{{ registration.leader_name }}</strong></td>
+            <td>
+              <strong>{{ registration.leader_name }}</strong>
+              {% if registration.leader_degree or registration.leader_gender or registration.leader_department %}
+              <div style="font-size:11px; color:#64748b; font-weight:normal; margin-top:2px;">{{ registration.leader_degree or '' }}{% if registration.leader_degree and registration.leader_department %} - {{ registration.leader_department }}{% elif registration.leader_department %}{{ registration.leader_department }}{% endif %}{% if registration.leader_gender %} &bull; {{ registration.leader_gender }}{% endif %}</div>
+              {% endif %}
+            </td>
             <td>{{ registration.leader_phone }}</td>
             <td>{{ registration.leader_email }}</td>
           </tr>
@@ -752,7 +763,12 @@
           <tr>
             <td style="text-align:center; font-weight:600; color:#64748b;">Unit 0{{ loop.index + 1 }}</td>
             <td><span style="color:#475569; font-weight:600;">Crew Member #{{ loop.index + 1 }}</span></td>
-            <td><strong>{{ m.name }}</strong></td>
+            <td>
+              <strong>{{ m.name }}</strong>
+              {% if m.degree or m.gender or m.department %}
+              <div style="font-size:11px; color:#64748b; font-weight:normal; margin-top:2px;">{{ m.degree or '' }}{% if m.degree and m.department %} - {{ m.department }}{% elif m.department %}{{ m.department }}{% endif %}{% if m.gender %} &bull; {{ m.gender }}{% endif %}</div>
+              {% endif %}
+            </td>
             <td>{{ m.phone }}</td>
             <td>{{ m.email }}</td>
           </tr>
