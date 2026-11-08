@@ -944,23 +944,57 @@ strong, b {
 
 @media (max-width: 640px) {
   .inst-partner-strip {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    justify-content: space-between;
     padding: 6px 10px;
     gap: 8px;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
-    justify-content: center;
-    flex-wrap: wrap;
   }
   .inst-logo-patrician {
-    width: 34px;
-    height: 34px;
-  }
-  .inst-logo-iic {
-    height: 22px;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
   }
   .inst-details {
-    font-size: 10.5px;
-    text-align: center;
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    padding: 0 2px;
+  }
+  .inst-details strong {
+    font-size: clamp(9px, 2.7vw, 11px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+    display: block;
+  }
+  .inst-details span {
+    font-size: clamp(8px, 2.3vw, 10px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 1.3;
+  }
+  .inst-divider {
+    height: 22px;
+    margin: 0 2px;
+    flex-shrink: 0;
+  }
+  .inst-logo-iic-badge {
+    padding: 2px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .inst-logo-iic {
+    height: 18px;
+    width: auto;
   }
 }
 
