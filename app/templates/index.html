@@ -13,7 +13,7 @@
           <img src="/static/img/patrician_logo.png" alt="Patrician College of Arts and Science" class="inst-logo-patrician">
           <div class="inst-details">
             <strong>PATRICIAN COLLEGE OF ARTS AND SCIENCE</strong>
-            <span>Patrician Institute Innovation Cell (PIIC)</span>
+            <span>Patrician Institution Innovation Council (PIIC)</span>
           </div>
           <div class="inst-divider"></div>
           <div class="inst-logo-iic-badge" title="Institution's Innovation Council (Ministry of Education Initiative)">
@@ -43,7 +43,7 @@
         </div>
 
         <p class="hero-desc">
-          Organized by <strong>Patrician Institute Innovation Cell (PIIC)</strong> at 
+          Organized by <strong>Patrician Institution Innovation Council (PIIC)</strong> at 
           <strong>Patrician College of Arts and Science</strong>. 
           A high-stakes 24-hour crucible uniting student innovators, technologists, and entrepreneurs 
           to forge technology-driven solutions to critical human and societal challenges.
@@ -133,7 +133,7 @@
 </section>
 
 <!-- STATS STRIP -->
-<section class="section" style="padding-top:0;">
+<section class="section stats-strip-section">
   <div class="container">
     <div class="stats-strip">
       <div class="stat-item">
@@ -151,7 +151,7 @@
       <div class="stat-item">
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
-        <div class="stat-val">&#8377;300</div>
+        <div class="stat-val">&#8377;{{ settings.REGISTRATION_FEE_INR }}</div>
         <div class="stat-desc">Per Team Initial Registration</div>
       </div>
       <div class="stat-item">
@@ -203,7 +203,7 @@
         <div class="about-overview-text">
           <p class="about-overview-p">
             <strong>ANTROTHON’27</strong> is a 24-hour inter-college hackathon organized by the 
-            <strong>Patrician Institute Innovation Cell (PIIC)</strong> of 
+            <strong>Patrician Institution Innovation Council (PIIC)</strong> of 
             <strong>Patrician College of Arts and Science</strong>. The event aims to bring together student innovators, 
             creative thinkers, and aspiring entrepreneurs from different colleges to develop innovative, 
             technology-driven solutions to real-world societal challenges.
@@ -294,8 +294,6 @@
           <li class="track-area-item">Women's &amp; Children's Safety Ecosystems</li>
           <li class="track-area-item">Assistive Technologies for Persons with Disabilities</li>
           <li class="track-area-item">Digital Rights, Data Privacy &amp; Legal Awareness</li>
-          <li class="track-area-item">Community Hazard &amp; Incident Reporting</li>
-          <li class="track-area-item">Skill-development &amp; Employment for Underserved Populations</li>
         </ul>
       </div>
 
@@ -323,8 +321,6 @@
           <li class="track-area-item">Affordable Digital Healthcare &amp; Diagnostics</li>
           <li class="track-area-item">Preventive Health, Mental Wellness &amp; Student Wellbeing</li>
           <li class="track-area-item">Multilingual &amp; Vernacular Educational Tools</li>
-          <li class="track-area-item">Smart Campus &amp; Institutional Governance</li>
-          <li class="track-area-item">Offline-First Tech for Low-Connectivity Communities</li>
         </ul>
       </div>
 
@@ -352,8 +348,6 @@
           <li class="track-area-item">Water &amp; Energy Conservation Monitoring</li>
           <li class="track-area-item">Climate Resilience &amp; Sustainable Agriculture</li>
           <li class="track-area-item">Green Mobility &amp; Urban Transit Efficiency</li>
-          <li class="track-area-item">Community Marketplaces &amp; Local Livelihoods</li>
-          <li class="track-area-item">Social Entrepreneurship Platforms with Measurable Impact</li>
         </ul>
       </div>
     </div>
@@ -498,15 +492,15 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="term-badge" style="margin-bottom:12px;">TIER 1 // APPLICATION</div>
-        <h3 style="font-size:28px; color:#fff; margin-bottom:8px;">
-          &#8377;300 <span style="font-size:15px; color:var(--term-steel); font-family:var(--font-heading);">/ PER TEAM</span>
+        <h3 class="tier-fee-amount">
+          &#8377;{{ settings.REGISTRATION_FEE_INR }} <span class="tier-fee-unit">/ PER TEAM</span>
         </h3>
         <p style="color:var(--term-steel); font-size:15px; margin-bottom:20px;">
           Initial application and synopsis evaluation fee. Teams must complete initial registration and payment 
           to be eligible for jury shortlisting.
         </p>
         <ul style="list-style:none; font-size:14px; color:#cbd5e1; line-height:1.7;">
-          <li>&#10003; Full Team Registration (4 to 6 members)</li>
+          <li>&#10003; Full Team Registration ({{ settings.MIN_TEAM_MEMBERS }} to {{ settings.MAX_TEAM_MEMBERS }} members)</li>
           <li>&#10003; Thematic Track Selection &amp; Mentorship Guide</li>
           <li>&#10003; Technical Synopsis Evaluation by Jury</li>
           <li>&#10003; Digital Participation Credential</li>
@@ -517,8 +511,8 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="term-badge term-badge-amber" style="margin-bottom:12px;">TIER 2 // SHORTLISTED FINALISTS</div>
-        <h3 style="font-size:28px; color:#fff; margin-bottom:8px;">
-          &#8377;350 <span style="font-size:15px; color:var(--term-steel); font-family:var(--font-heading);">/ PER PARTICIPANT</span>
+        <h3 class="tier-fee-amount">
+          &#8377;350 <span class="tier-fee-unit">/ PER PARTICIPANT</span>
         </h3>
         <p style="color:var(--term-steel); font-size:15px; margin-bottom:20px;">
           Applicable exclusively to the <strong>45 Shortlisted Finalist Teams</strong> announced on 27 December 2026.
@@ -541,7 +535,7 @@
         </svg>
         <div style="font-size:14px; color:var(--term-steel); line-height:1.6;">
           <strong style="color:#fff;">CRITICAL PROTOCOL NOTICE:</strong> 
-          Payment of the initial registration fee (&#8377;300/team) qualifies your submission for jury review but does not guarantee finalist selection. 
+          Payment of the initial registration fee (&#8377;{{ settings.REGISTRATION_FEE_INR }}/team) qualifies your submission for jury review but does not guarantee finalist selection. 
           The organizing committee and academic jury select the top 45 finalist teams based on innovation, feasibility, societal impact, and technical execution.
         </div>
       </div>
@@ -563,7 +557,7 @@
       <span class="section-eyebrow">// COMMAND CONTROLLERS</span>
       <h2 class="section-title">Organizing Directorate</h2>
       <p class="section-desc">
-        Patrician Institute Innovation Cell (PIIC) Core Committee. Reach out for any assistance or sponsorship enquiries.
+        Patrician Institution Innovation Council (PIIC) Core Committee. Reach out for any assistance or sponsorship enquiries.
       </p>
     </div>
 

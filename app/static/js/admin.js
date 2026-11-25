@@ -332,7 +332,7 @@ function renderEditMembers() {
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); font-weight:700;">
-          CREW MEMBER #${idx + 2} ${idx >= 3 ? '(OPTIONAL UNIT)' : '(REQUIRED UNIT)'}
+          CREW MEMBER #${idx + 2} ${idx >= ((window.APP_CONFIG?.minTeamMembers || 3) - 1) ? '(OPTIONAL UNIT)' : '(REQUIRED UNIT)'}
         </span>
         <button type="button" onclick="removeEditMember(${idx})" style="background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:11px; font-family:var(--font-tactical);">
           ✕ REMOVE
@@ -398,8 +398,10 @@ function renderEditMembers() {
 }
 
 function addEditMember() {
-  if (editMembersList.length >= 5) {
-    alert('Maximum 6 total units allowed (1 Leader + 5 Crew Members).');
+  const maxCrew = (window.APP_CONFIG?.maxTeamMembers || 4) - 1;
+  const maxTotal = window.APP_CONFIG?.maxTeamMembers || 4;
+  if (editMembersList.length >= maxCrew) {
+    alert(`Maximum ${maxTotal} total units allowed (1 Leader + ${maxCrew} Crew Members).`);
     return;
   }
   editMembersList.push({
@@ -452,7 +454,7 @@ async function saveParticipantEdit() {
     idea_ppt_path: getVal('edit-ppt-path'),
     status: getVal('edit-status', 'submitted'),
     payment_status: getVal('edit-payment-status', 'paid'),
-    amount_paid: parseInt(getVal('edit-amount-paid', '300'), 10),
+    amount_paid: parseInt(getVal('edit-amount-paid', String(window.APP_CONFIG?.registrationFeeInr || 200)), 10),
     admin_notes: getVal('edit-admin-notes'),
     members: editMembersList
   };

@@ -1,6 +1,6 @@
 # ANTROTHON’27 Hackathon Platform
 > **"Think Human. Innovate for Society."**  
-> Organized by **Patrician Institute Innovation Cell (PIIC)**  
+> Organized by **Patrician Institution Innovation Council (PIIC)**  
 > **Patrician College of Arts and Science**, Chennai  
 > Under the aegis of **Institution's Innovation Council (IIC - Ministry of Education Initiative)**  
 > Event Dates: **January 7–8, 2027** (24-Hour Inter-College Hackathon)

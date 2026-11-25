@@ -121,8 +121,8 @@ html, body {
 }
 
 .step-circle {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   background: #060709 !important;
   border: 2px solid var(--term-dark-steel);
   color: var(--term-steel);
@@ -130,8 +130,10 @@ html, body {
   display: grid;
   place-items: center;
   font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 900;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1;
   transition: all 0.25s ease;
   position: relative;
   z-index: 5;
@@ -686,9 +688,11 @@ textarea.form-control {
   }
 
   .step-circle {
-    width: 32px;
-    height: 32px;
-    font-size: 11px;
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
   }
 
   .step-label {

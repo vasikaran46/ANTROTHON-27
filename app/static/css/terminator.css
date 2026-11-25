@@ -141,6 +141,7 @@ body {
 h1, h2, h3, h4, h5, h6, .font-display, .font-heading, .section-title {
   font-family: var(--font-heading);
   letter-spacing: 0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 h1 { font-weight: 800; }
@@ -999,8 +1000,45 @@ strong, b {
 }
 
 @media (max-width: 520px) {
+  .term-logo-wrapper {
+    gap: 6px !important;
+    min-width: 0;
+    max-width: calc(100% - 44px);
+  }
   .nav-inst-group {
-    display: none !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px !important;
+    flex-shrink: 0;
+  }
+  .nav-inst-group img:first-child {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  .nav-inst-group div {
+    padding: 1px 4px !important;
+  }
+  .nav-inst-group div img {
+    height: 13px !important;
+  }
+  .term-emblem {
+    width: 24px !important;
+    height: 24px !important;
+    flex-shrink: 0;
+  }
+  .term-brand-name {
+    font-size: 13px !important;
+    letter-spacing: 0.03em !important;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .term-brand-sub {
+    font-size: 7px !important;
+    letter-spacing: 0.02em !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
   }
 }
 

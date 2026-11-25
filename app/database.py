@@ -202,11 +202,11 @@ class Registration(Base):
     leader_id_number = Column(String(64), nullable=True)
 
     # Member count & structured member list
-    member_count = Column(Integer, default=4)
+    member_count = Column(Integer, default=int(os.getenv("MIN_TEAM_MEMBERS", 3)))
     members_data = Column(Text, default="[]")  # JSON encoded list of member objects
 
     # Payment details
-    amount_paid = Column(Integer, default=300)
+    amount_paid = Column(Integer, default=int(os.getenv("REGISTRATION_FEE_INR", 200)))
     payment_status = Column(String(32), default="pending")  # pending, paid, failed, simulated
     payment_mode = Column(String(32), default="razorpay")   # razorpay, simulator
     razorpay_order_id = Column(String(128), nullable=True)

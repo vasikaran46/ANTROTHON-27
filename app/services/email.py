@@ -113,8 +113,8 @@ def _build_html_body(leader_name: str, team_code: str, team_name: str, track: st
       <strong>Event Details</strong>
       <ul>
         <li><strong>Event Dates:</strong> 7–8 January 2027</li>
-        <li><strong>Registration Fee:</strong> ₹300 per team</li>
-        <li><strong>Finalist Participation Fee:</strong> ₹350 per participant (applicable only to shortlisted teams)</li>
+        <li><strong>Registration Fee:</strong> ₹{settings.REGISTRATION_FEE_INR} per team</li>
+        <li><strong>Finalist Participation Fee:</strong> ₹{settings.FINALIST_FEE_PER_HEAD_INR} per participant (applicable only to shortlisted teams)</li>
         <li><strong>Tagline:</strong> Think Human. Innovate for Society.</li>
       </ul>
     </div>
@@ -174,8 +174,8 @@ IMPORTANT INFORMATION
 EVENT DETAILS
 -------------
 - Event Dates: 7–8 January 2027
-- Registration Fee: Rs.300 per team
-- Finalist Participation Fee: Rs.350 per participant (applicable only to shortlisted teams)
+- Registration Fee: Rs.{settings.REGISTRATION_FEE_INR} per team
+- Finalist Participation Fee: Rs.{settings.FINALIST_FEE_PER_HEAD_INR} per participant (applicable only to shortlisted teams)
 - Tagline: Think Human. Innovate for Society.
 
 Stay connected with us for announcements and updates.

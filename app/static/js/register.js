@@ -9,12 +9,26 @@
 let currentStep = 1;
 const totalSteps = 3;
 
-// Crew Member Management (Min 3 crew + 1 leader = 4 units minimum; max 5 crew + 1 leader = 6 units)
-let membersList = [
-  { id: 2, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' },
-  { id: 3, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' },
-  { id: 4, name: '', phone: '', email: '', gender: '', degree: '', department: '', year: '3rd Year' }
-];
+// Dynamic Crew & Fee configuration from server environment
+const MIN_TEAM_MEMBERS = (window.APP_CONFIG && window.APP_CONFIG.minTeamMembers) || 3;
+const MAX_TEAM_MEMBERS = (window.APP_CONFIG && window.APP_CONFIG.maxTeamMembers) || 4;
+const REG_FEE_INR = (window.APP_CONFIG && window.APP_CONFIG.registrationFeeInr) || 200;
+
+// Dynamic initial crew members list:
+// Leader is Member #1, so crew members are from 2 to MIN_TEAM_MEMBERS
+let membersList = [];
+for (let i = 2; i <= MIN_TEAM_MEMBERS; i++) {
+  membersList.push({
+    id: i,
+    name: '',
+    phone: '',
+    email: '',
+    gender: '',
+    degree: '',
+    department: '',
+    year: '3rd Year'
+  });
+}
 
 let selectedPptFile = null;
 
@@ -26,7 +40,7 @@ function renderMembersContainer() {
 
   membersList.forEach((m, idx) => {
     const memberNum = idx + 2;
-    const isOptional = memberNum > 4; // Member 5 and 6 are optional additions
+    const isOptional = memberNum > MIN_TEAM_MEMBERS;
     const card = document.createElement('div');
     card.className = 'member-card';
     card.id = `member-card-${memberNum}`;
@@ -34,7 +48,7 @@ function renderMembersContainer() {
     card.innerHTML = `
       <div class="member-card-header">
         <span class="member-badge-title">CREW MEMBER #${memberNum} ${isOptional ? '(OPTIONAL UNIT)' : '(REQUIRED UNIT)'}</span>
-        ${membersList.length > 3 ? `
+        ${membersList.length > (MIN_TEAM_MEMBERS - 1) ? `
           <button type="button" class="btn-remove-member" onclick="removeMember(${idx})">
             ✕ REMOVE
           </button>
@@ -120,7 +134,7 @@ function renderMembersContainer() {
   // Update counter badges
   const totalCrew = 1 + membersList.length;
   const countEl = document.getElementById('total-crew-count');
-  if (countEl) countEl.textContent = `${totalCrew} / 6 UNITS`;
+  if (countEl) countEl.textContent = `${totalCrew} / ${MAX_TEAM_MEMBERS} UNITS`;
 
   const dynamicCountEl = document.getElementById('members-dynamic-count');
   if (dynamicCountEl) dynamicCountEl.textContent = membersList.length;
@@ -130,12 +144,12 @@ function renderMembersContainer() {
 
   const addBtn = document.getElementById('btn-add-member');
   if (addBtn) {
-    if (membersList.length >= 5) {
+    if (membersList.length >= (MAX_TEAM_MEMBERS - 1)) {
       addBtn.disabled = true;
-      addBtn.textContent = 'MAX TEAM CAPACITY REACHED (6)';
+      addBtn.textContent = `MAX TEAM CAPACITY REACHED (${MAX_TEAM_MEMBERS})`;
     } else {
       addBtn.disabled = false;
-      addBtn.textContent = '+ ADD TEAM MEMBER (UP TO 6)';
+      addBtn.textContent = `+ ADD TEAM MEMBER (UP TO ${MAX_TEAM_MEMBERS})`;
     }
   }
 }
@@ -151,8 +165,8 @@ function escapeHtml(text) {
 }
 
 function addMember() {
-  if (membersList.length >= 5) {
-    alert('Maximum team size is 6 members (1 Leader + 5 Crew Members).');
+  if (membersList.length >= (MAX_TEAM_MEMBERS - 1)) {
+    alert(`Maximum team size is ${MAX_TEAM_MEMBERS} members (1 Leader + ${MAX_TEAM_MEMBERS - 1} Crew Members).`);
     return;
   }
   membersList.push({
@@ -170,8 +184,8 @@ function addMember() {
 }
 
 function removeMember(idx) {
-  if (membersList.length <= 3) {
-    alert('Minimum team size is 4 members (1 Leader + 3 Members).');
+  if (membersList.length <= (MIN_TEAM_MEMBERS - 1)) {
+    alert(`Minimum team size is ${MIN_TEAM_MEMBERS} members (1 Leader + ${MIN_TEAM_MEMBERS - 1} Members).`);
     return;
   }
   membersList.splice(idx, 1);
@@ -690,13 +704,13 @@ async function initiateRegistrationAndPayment() {
     } catch (parseErr) {
       alert(`Server error (${res.status}). Please check network or try again.`);
       payBtn.disabled = false;
-      payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+      payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
       return;
     }
     if (!res.ok || !data.success) {
       alert(data.message || 'Registration failed. Please check form data.');
       payBtn.disabled = false;
-      payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+      payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
       if (data.message && data.message.toLowerCase().includes('team name')) {
         goToStep(1);
         const nameInput = document.getElementById('team_name');
@@ -717,7 +731,7 @@ async function initiateRegistrationAndPayment() {
         amount: order.amount,
         currency: order.currency || "INR",
         name: "ANTROTHON'27",
-        description: order.description || "Team Registration Fee (₹300)",
+        description: order.description || `Team Registration Fee (₹${REG_FEE_INR})`,
         order_id: order.order_id,
         handler: async function (response) {
           verifyPaymentOnServer({
@@ -738,7 +752,7 @@ async function initiateRegistrationAndPayment() {
         modal: {
           ondismiss: function() {
             payBtn.disabled = false;
-            payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+            payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
           }
         }
       };
@@ -746,7 +760,7 @@ async function initiateRegistrationAndPayment() {
       rzp.on('payment.failed', function (response) {
         alert('Payment Failed: ' + (response.error.description || 'Transaction declined.'));
         payBtn.disabled = false;
-        payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+        payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
       });
       rzp.open();
     }
@@ -763,7 +777,7 @@ async function initiateRegistrationAndPayment() {
       script.onerror = () => {
         alert('Could not load secure Razorpay gateway. Please check your internet connection or disable ad-blockers and try again.');
         payBtn.disabled = false;
-        payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+        payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
       };
       document.head.appendChild(script);
     }
@@ -771,7 +785,7 @@ async function initiateRegistrationAndPayment() {
     console.error(err);
     alert('Network error connecting to payment gateway.');
     payBtn.disabled = false;
-    payBtn.textContent = 'AUTHORIZE REGISTRATION FEE (₹300)';
+    payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
   }
 }
 

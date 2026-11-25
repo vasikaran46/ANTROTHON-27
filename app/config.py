@@ -42,10 +42,10 @@ class Settings:
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", 587))
     
     # Fees & Members
-    REGISTRATION_FEE_INR: int = int(os.getenv("REGISTRATION_FEE_INR", 300))
+    REGISTRATION_FEE_INR: int = int(os.getenv("REGISTRATION_FEE_INR", 200))
     FINALIST_FEE_PER_HEAD_INR: int = int(os.getenv("FINALIST_FEE_PER_HEAD_INR", 350))
-    MIN_TEAM_MEMBERS: int = int(os.getenv("MIN_TEAM_MEMBERS", 4))
-    MAX_TEAM_MEMBERS: int = int(os.getenv("MAX_TEAM_MEMBERS", 6))
+    MIN_TEAM_MEMBERS: int = int(os.getenv("MIN_TEAM_MEMBERS", 3))
+    MAX_TEAM_MEMBERS: int = int(os.getenv("MAX_TEAM_MEMBERS", 4))
     TOTAL_FINALISTS: int = 45
     
     # Milestones (stored in ISO format)
