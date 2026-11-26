@@ -20,12 +20,28 @@
 
 .hero-badge-group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 18px;
 }
 
-.hero-badge-duo {
+.hero-badge-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-desktop-only {
+  display: inline-flex;
+}
+
+.badge-mobile-only {
+  display: none;
+}
+
+.hero-badge-mobile-duo {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -825,8 +841,12 @@
   }
 
   .hero-badge-group {
-    justify-content: center;
+    align-items: center;
     gap: 8px;
+  }
+
+  .hero-badge-row {
+    justify-content: center;
   }
 
   .countdown-container {
@@ -1068,6 +1088,14 @@
     left: -8px;
   }
 
+  .badge-desktop-only {
+    display: none !important;
+  }
+
+  .badge-mobile-only {
+    display: inline-flex !important;
+  }
+
   .hero-badge-group {
     flex-direction: column;
     align-items: center;
@@ -1075,7 +1103,14 @@
     margin-bottom: 16px;
   }
 
-  .hero-badge-duo {
+  .hero-badge-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .hero-badge-mobile-duo {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -1085,7 +1120,7 @@
     width: 100%;
   }
 
-  .hero-badge-duo .term-badge {
+  .hero-badge-mobile-duo .term-badge {
     white-space: nowrap;
     font-size: 9px;
     padding: 4px 8px;

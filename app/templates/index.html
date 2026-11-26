@@ -22,21 +22,31 @@
         </div>
 
         <div class="hero-badge-group">
-          <span class="term-badge">
-            <span class="pulse-led"></span>
-            24-HOUR NATIONAL LEVEL INTER-COLLEGE HACKATHON
-          </span>
-          <div class="hero-badge-duo">
-            <span class="term-badge term-badge-amber">
+          <!-- Row 1: Hackathon Title & Dates (Desktop Single Line) -->
+          <div class="hero-badge-row hero-badge-row-1">
+            <span class="term-badge">
+              <span class="pulse-led"></span>
+              24-HOUR NATIONAL LEVEL INTER-COLLEGE HACKATHON
+            </span>
+            <span class="term-badge term-badge-amber badge-desktop-only">
               JANUARY 8–9, 2027
             </span>
+          </div>
+
+          <!-- Row 2: Team Size & Round 1 / Mobile Duo -->
+          <div class="hero-badge-row hero-badge-row-2">
+            <div class="hero-badge-mobile-duo">
+              <span class="term-badge term-badge-amber badge-mobile-only">
+                JANUARY 8–9, 2027
+              </span>
+              <span class="term-badge">
+                TEAM SIZE: {{ settings.MIN_TEAM_MEMBERS }}–{{ settings.MAX_TEAM_MEMBERS }} MEMBERS
+              </span>
+            </div>
             <span class="term-badge">
-              TEAM SIZE: {{ settings.MIN_TEAM_MEMBERS }}–{{ settings.MAX_TEAM_MEMBERS }} MEMBERS
+              1ST ROUND: PPT SUBMISSION THROUGH ONLINE
             </span>
           </div>
-          <span class="term-badge">
-            1ST ROUND: PPT SUBMISSION THROUGH ONLINE
-          </span>
         </div>
 
         <h1 class="hero-title">
