@@ -118,15 +118,9 @@ async def confirmation_page(request: Request, team_code: str, db: Session = Depe
     context["members"] = reg.get_members()
     return templates.TemplateResponse(request=request, name="confirmation.html", context=context)
 
-@app.get("/invoice/{team_code}", response_class=HTMLResponse)
-async def invoice_page(request: Request, team_code: str, db: Session = Depends(get_db)):
-    context = get_base_context(request)
-    reg = db.query(Registration).filter(Registration.team_code == team_code).first()
-    if not reg:
-        raise HTTPException(status_code=404, detail="Registration record not found.")
-    context["registration"] = reg
-    context["members"] = reg.get_members()
-    return templates.TemplateResponse(request=request, name="invoice.html", context=context)
+@app.get("/invoice/{team_code}")
+async def invoice_page(team_code: str):
+    return RedirectResponse(f"/confirmation/{team_code}", status_code=status.HTTP_302_FOUND)
 
 # ----------------- CONVENIENCE NAV ROUTES ----------------- #
 
@@ -192,12 +186,15 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
     content_type = request.headers.get("content-type", "")
     data = {}
     idea_ppt_file = None
+    payment_screenshot_file = None
 
     if "multipart/form-data" in content_type or "application/x-www-form-urlencoded" in content_type:
         form = await request.form()
         for k, v in form.items():
             if k == "idea_ppt":
                 idea_ppt_file = v
+            elif k in ("payment_screenshot", "payment_proof"):
+                payment_screenshot_file = v
             else:
                 data[k] = v
         
@@ -432,7 +429,143 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
         if not ppt_filename:
             ppt_filename = "Google Drive Presentation"
 
-    # Create Payment Order (₹300)
+    # Process Payment Screenshot Upload (Saved to separate Google Drive folder)
+    payment_screenshot_url = None
+    payment_screenshot_filename = None
+
+    if payment_screenshot_file and hasattr(payment_screenshot_file, "filename") and payment_screenshot_file.filename:
+        try:
+            screenshot_bytes = await payment_screenshot_file.read()
+            if screenshot_bytes and len(screenshot_bytes) > 0:
+                raw_s_filename = payment_screenshot_file.filename
+                clean_s_filename = re.sub(r'[^a-zA-Z0-9_\.-]', '_', raw_s_filename)
+                saved_s_filename = f"{team_code}_Payment_Receipt_{clean_s_filename}"
+                s_ext = Path(raw_s_filename).suffix.lower()
+
+                s_mime = "image/jpeg"
+                if s_ext == ".png":
+                    s_mime = "image/png"
+                elif s_ext == ".webp":
+                    s_mime = "image/webp"
+                elif s_ext == ".pdf":
+                    s_mime = "application/pdf"
+
+                # Check destination folder for payment screenshots (dynamically reload from .env)
+                load_dotenv(BASE_DIR / ".env", override=True)
+                target_payment_folder = (
+                    os.getenv("GOOGLE_DRIVE_PAYMENT_FOLDER_ID", "").strip()
+                    or getattr(settings, "GOOGLE_DRIVE_PAYMENT_FOLDER_ID", "").strip()
+                    or settings.GOOGLE_DRIVE_FOLDER_ID
+                )
+
+                # Upload directly to user's Google Drive
+                from app.services.gdrive import gdrive_service
+                s_upload_ok, s_drive_res, s_file_id = gdrive_service.upload_file(
+                    file_bytes=screenshot_bytes,
+                    filename=saved_s_filename,
+                    mime_type=s_mime,
+                    folder_id=target_payment_folder
+                )
+                if s_upload_ok:
+                    payment_screenshot_url = s_drive_res
+                    payment_screenshot_filename = saved_s_filename
+                    logger.info("[+] Payment screenshot uploaded to Google Drive (%s): %s", target_payment_folder, s_drive_res)
+                else:
+                    logger.warning("[!] Google Drive screenshot upload note (%s), storing local fallback", s_drive_res)
+                    try:
+                        receipt_dir = BASE_DIR / "static" / "uploads" / "receipts"
+                        receipt_dir.mkdir(parents=True, exist_ok=True)
+                        with open(receipt_dir / saved_s_filename, "wb") as rf:
+                            rf.write(screenshot_bytes)
+                        payment_screenshot_url = f"/static/uploads/receipts/{saved_s_filename}"
+                        payment_screenshot_filename = saved_s_filename
+                    except Exception as s_save_err:
+                        logger.error("Failed to save receipt locally: %s", s_save_err)
+        except Exception as s_err:
+            logger.error("Error processing payment screenshot upload: %s", s_err)
+
+    upi_transaction_id = str(data.get("upi_transaction_id", "")).strip()
+
+    if settings.PAYMENT_MODE == "upi_qr":
+        # Direct UPI QR Code Payment Mode (College Authorized)
+        reg = Registration(
+            team_code=team_code,
+            team_name=team_name,
+            college_name=college_name,
+            track=track,
+            project_title=idea_title,
+            project_synopsis=idea_summary,
+            idea_title=idea_title,
+            idea_description=idea_description,
+            idea_summary=idea_summary,
+            idea_ppt_filename=ppt_filename,
+            idea_ppt_path=ppt_disk_path,
+            leader_name=leader_name,
+            leader_email=leader_email,
+            leader_phone=leader_phone,
+            leader_college=leader_college,
+            leader_degree=leader_degree,
+            leader_department=leader_department,
+            leader_year=leader_year,
+            leader_gender=leader_gender,
+            leader_id_number=leader_id_number,
+            member_count=total_team_size,
+            amount_paid=settings.REGISTRATION_FEE_INR,
+            payment_status="paid",
+            payment_mode="upi_qr",
+            razorpay_payment_id=upi_transaction_id or "UPI_VERIFIED",
+            payment_timestamp=datetime.utcnow(),
+            payment_screenshot_filename=payment_screenshot_filename,
+            payment_screenshot_url=payment_screenshot_url,
+            status="submitted"
+        )
+        reg.set_members(members_list)
+
+        try:
+            db.add(reg)
+            db.commit()
+            db.refresh(reg)
+        except IntegrityError:
+            db.rollback()
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "success": False,
+                    "message": f"Team name '{team_name}' is already reserved by another team (team names are unique & case-insensitive). Please choose a different team name."
+                }
+            )
+        except Exception as dberr:
+            db.rollback()
+            logger.error("Database commit error during registration: %s", dberr)
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "success": False,
+                    "message": f"Database error during registration: {str(dberr)}"
+                }
+            )
+
+        # Send confirmation email with WhatsApp community link
+        try:
+            from app.services.email import send_registration_confirmation
+            send_registration_confirmation(
+                to_email=reg.leader_email,
+                team_code=reg.team_code,
+                team_name=reg.team_name,
+                track=reg.track,
+                leader_name=reg.leader_name
+            )
+        except Exception as email_err:
+            logger.warning("Confirmation email failed for %s: %s", team_code, email_err)
+
+        return {
+            "success": True,
+            "team_code": team_code,
+            "payment_mode": "upi_qr",
+            "redirect_url": f"/confirmation/{team_code}"
+        }
+
+    # Fallback to Razorpay Payment Gateway if configured
     order_data = payment_service.create_order(
         amount_in_inr=settings.REGISTRATION_FEE_INR,
         receipt_id=team_code,
@@ -471,6 +604,8 @@ async def api_submit_registration(request: Request, db: Session = Depends(get_db
         payment_status="pending",
         payment_mode=order_data.get("mode", "razorpay"),
         razorpay_order_id=order_data.get("order_id"),
+        payment_screenshot_filename=payment_screenshot_filename,
+        payment_screenshot_url=payment_screenshot_url,
         status="submitted"
     )
     reg.set_members(members_list)
@@ -836,6 +971,24 @@ async def edit_registration_api(
         "message": f"Successfully updated details for Team {reg.team_name}.",
         "changes": changes,
         "log_id": audit_log.id
+    }
+
+@app.get("/api/admin/test-gdrive")
+async def test_gdrive_upload_api():
+    """Diagnostic tool: Uploads a tiny test file to verify Google Drive Webhook."""
+    from app.services.gdrive import gdrive_service
+    test_content = b"ANTROTHON'27 Google Drive Diagnostic Probe - OK!"
+    success, res_msg, file_id = gdrive_service.upload_file(
+        file_bytes=test_content,
+        filename="ANTROTHON_Diagnostic_Probe.txt",
+        mime_type="text/plain"
+    )
+    return {
+        "success": success,
+        "message": res_msg,
+        "file_id": file_id,
+        "configured_folder_id": os.getenv("GOOGLE_DRIVE_FOLDER_ID", "").strip(),
+        "configured_webhook_url": (os.getenv("GOOGLE_DRIVE_WEBHOOK_URL", "").strip()[:60] + "...") if os.getenv("GOOGLE_DRIVE_WEBHOOK_URL") else None
     }
 
 @app.get("/api/admin/audit-logs")

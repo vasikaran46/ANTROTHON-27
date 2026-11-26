@@ -3,7 +3,7 @@
 > Organized by **Patrician Institution Innovation Council (PIIC)**  
 > **Patrician College of Arts and Science**, Chennai  
 > Under the aegis of **Institution's Innovation Council (IIC - Ministry of Education Initiative)**  
-> Event Dates: **January 7–8, 2027** (24-Hour Inter-College Hackathon)
+> Event Dates: **January 8–9, 2027** (24-Hour Inter-College Hackathon)
 
 ---
 
@@ -154,8 +154,8 @@ MAX_TEAM_MEMBERS=6
 REGISTRATION_OPEN_DATE=2026-10-30T00:00:00
 REGISTRATION_DEADLINE=2026-12-20T23:59:59
 FINALIST_ANNOUNCEMENT_DATE=2026-12-27T18:00:00
-HACKATHON_START_DATE=2027-01-07T09:00:00
-HACKATHON_END_DATE=2027-01-08T09:00:00
+HACKATHON_START_DATE=2027-01-08T09:00:00
+HACKATHON_END_DATE=2027-01-09T09:00:00
 
 FORCE_UNLOCK_REGISTRATION=false
 ```

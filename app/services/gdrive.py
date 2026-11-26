@@ -21,6 +21,7 @@ Supported Authentication Methods in .env:
 """
 
 import os
+import re
 import time
 import json
 import base64
@@ -201,30 +202,48 @@ class GoogleDriveService:
                 "base64": b64_str,
                 "folderId": target_folder
             }
-            res = requests.post(webhook_url, json=payload, timeout=7, allow_redirects=True)
+            logger.info("[*] Transmitting file (%s, %d bytes) to Google Apps Script webhook...", filename, len(file_bytes))
+            res = requests.post(webhook_url, json=payload, timeout=60, allow_redirects=True)
 
             content_type = res.headers.get("content-type", "")
-            if "text/html" in content_type or res.text.strip().startswith("<!DOCTYPE html>"):
-                return False, (
-                    "Apps Script returned a Google login page instead of JSON. "
-                    "In Apps Script: Click Deploy -> Manage deployments -> Edit -> Ensure 'Who has access' is set to 'Anyone' (not 'Only myself')."
-                ), None
+            raw_text = res.text.strip()
+
+            if "text/html" in content_type or raw_text.startswith("<!DOCTYPE html>") or "<html" in raw_text.lower():
+                # Extract page title from HTML
+                match_title = re.search(r"<title[^>]*>(.*?)</title>", raw_text, re.IGNORECASE)
+                page_title = match_title.group(1).strip() if match_title else "Unknown HTML Page"
+                logger.error("[!] Google Apps Script returned HTML instead of JSON: %s (Status: %s)", page_title, res.status_code)
+
+                if "sign in" in page_title.lower() or "google accounts" in page_title.lower():
+                    return False, (
+                        f"Google Apps Script redirected to login ('{page_title}'). "
+                        "Because this is an institutional (@patriciancollege.ac.in) account, your Google Workspace organization restricts public web app execution. "
+                        "To fix: Deploy with 'Execute as: Me' and 'Who has access: Anyone' as a 'New version', or ensure external sharing is enabled in Google Workspace Admin."
+                    ), None
+
+                return False, f"Apps Script returned an HTML page ('{page_title}') with HTTP status {res.status_code}.", None
 
             try:
                 data = res.json()
-            except Exception:
-                return False, f"Apps Script returned non-JSON response ({res.status_code}): {res.text[:200]}", None
+            except Exception as json_err:
+                logger.error("[!] Failed to parse Apps Script JSON (%s): %s", res.status_code, raw_text[:300])
+                return False, f"Apps Script returned non-JSON response ({res.status_code}): {raw_text[:200]}", None
 
             if data.get("success") and data.get("url"):
                 return True, data.get("url"), data.get("id")
             elif data.get("url"):
                 return True, data.get("url"), data.get("id")
             elif data.get("error"):
-                return False, f"Apps Script reported error: {data.get('error')}", None
+                logger.error("[!] Apps Script returned error: %s", data.get("error"))
+                return False, f"Apps Script error: {data.get('error')}", None
 
-            return False, f"Apps Script unexpected response: {res.text[:200]}", None
+            return False, f"Apps Script unexpected response: {raw_text[:200]}", None
+        except requests.exceptions.Timeout:
+            logger.error("[!] Google Apps Script request timed out after 60 seconds")
+            return False, "Google Apps Script connection timed out after 60 seconds. The file may be large or Google servers are responding slowly.", None
         except Exception as e:
-            return False, f"Apps Script upload failed: {e}", None
+            logger.error("[!] Apps Script upload exception: %s", e)
+            return False, f"Apps Script upload failed: {str(e)}", None
 
     def upload_file(
         self,

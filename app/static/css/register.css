@@ -419,6 +419,21 @@ textarea.form-control {
   box-sizing: border-box;
 }
 
+/* UPI QR PAYMENT GRID */
+.upi-payment-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .upi-payment-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
 /* FILE UPLOAD BOX & CHAR COUNTERS (BASE) */
 .file-upload-box {
   background: rgba(14, 18, 26, 0.85);

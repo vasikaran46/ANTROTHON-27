@@ -185,7 +185,7 @@ def create_template():
     p.space_after = Pt(6)
 
     p = tf4.add_paragraph()
-    p.text = "• What prototype will your team build during the 24-hour on-campus hackathon on Jan 7–8, 2027?\n• What are potential technical risks, and how will you mitigate them?"
+    p.text = "• What prototype will your team build during the 24-hour on-campus hackathon on Jan 8–9, 2027?\n• What are potential technical risks, and how will you mitigate them?"
     p.font.size = Pt(14)
     p.font.color.rgb = COLOR_WHITE
 

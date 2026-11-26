@@ -208,11 +208,13 @@ class Registration(Base):
     # Payment details
     amount_paid = Column(Integer, default=int(os.getenv("REGISTRATION_FEE_INR", 200)))
     payment_status = Column(String(32), default="pending")  # pending, paid, failed, simulated
-    payment_mode = Column(String(32), default="razorpay")   # razorpay, simulator
+    payment_mode = Column(String(32), default="razorpay")   # razorpay, upi_qr, simulator
     razorpay_order_id = Column(String(128), nullable=True)
     razorpay_payment_id = Column(String(128), nullable=True)
     razorpay_signature = Column(String(256), nullable=True)
     payment_timestamp = Column(DateTime, nullable=True)
+    payment_screenshot_filename = Column(String(256), nullable=True)
+    payment_screenshot_url = Column(String(512), nullable=True)
 
     # Review / Finalist status
     status = Column(String(32), default="submitted")  # submitted, under_review, shortlisted_finalist, waitlist, rejected
@@ -267,6 +269,8 @@ class Registration(Base):
             "razorpay_payment_id": self.razorpay_payment_id,
             "razorpay_signature": self.razorpay_signature,
             "payment_timestamp": self.payment_timestamp.isoformat() if self.payment_timestamp else None,
+            "payment_screenshot_filename": self.payment_screenshot_filename,
+            "payment_screenshot_url": self.payment_screenshot_url,
             "status": self.status,
             "admin_notes": self.admin_notes or "",
             "finalist_paid": self.finalist_paid,
@@ -376,7 +380,9 @@ def init_db():
                     ("idea_ppt_filename", "VARCHAR(256)"),
                     ("idea_ppt_path", "VARCHAR(256)"),
                     ("leader_degree", "VARCHAR(128)"),
-                    ("leader_gender", "VARCHAR(32)")
+                    ("leader_gender", "VARCHAR(32)"),
+                    ("payment_screenshot_filename", "VARCHAR(256)"),
+                    ("payment_screenshot_url", "VARCHAR(512)")
                 ]
                 for col_name, col_type in new_cols:
                     if col_name not in columns:
@@ -389,6 +395,8 @@ def init_db():
                 try:
                     conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS leader_degree VARCHAR(128);"))
                     conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS leader_gender VARCHAR(32);"))
+                    conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS payment_screenshot_filename VARCHAR(256);"))
+                    conn.execute(text("ALTER TABLE registrations ADD COLUMN IF NOT EXISTS payment_screenshot_url VARCHAR(512);"))
                     conn.commit()
                 except Exception as pg_err:
                     logger.debug("PostgreSQL column verification note: %s", pg_err)

@@ -19,6 +19,7 @@ SITE_URL = "https://antrothon-27.vercel.app"
 
 def _build_html_body(leader_name: str, team_code: str, team_name: str, track: str) -> str:
     """Build the HTML email body with dynamic registration data."""
+    wa_url = settings.get_whatsapp_url_for_track(track)
     return f"""\
 <!DOCTYPE html>
 <html>
@@ -80,9 +81,6 @@ def _build_html_body(leader_name: str, team_code: str, team_name: str, track: st
     </table>
   </div>
 
-  <!-- Event Banner -->
-  
-
   <div class="body-content">
     <p>Dear <strong>{leader_name}</strong>,</p>
     <p>Greetings from <strong>Patrician Institution's Innovation Council!</strong></p>
@@ -98,6 +96,13 @@ def _build_html_body(leader_name: str, team_code: str, team_name: str, track: st
       <tr><td>Registration Status</td><td style="color: #2e7d32; font-weight: 600;">✅ Successfully Registered</td></tr>
     </table>
 
+    <!-- WhatsApp Community Callout -->
+    <div style="background: #e8f5e9; border: 2px solid #25D366; padding: 18px 20px; margin: 20px 0; border-radius: 6px; text-align: center;">
+      <h3 style="color: #1b5e20; margin: 0 0 6px; font-size: 16px;">💬 Mandatory: Join Your Track's WhatsApp Community</h3>
+      <p style="margin: 0 0 12px; font-size: 13px; color: #333;">All official announcements, briefing sessions, and finalist results will be posted in this group. All team members must join.</p>
+      <a href="{wa_url}" style="display: inline-block; background: #25D366; color: #060709; font-weight: 800; text-decoration: none; padding: 10px 24px; border-radius: 4px; font-size: 14px;">Join Track WhatsApp Group &rarr;</a>
+    </div>
+
     <div class="info-box">
       <strong>Important Information</strong>
       <ol>
@@ -112,7 +117,7 @@ def _build_html_body(leader_name: str, team_code: str, team_name: str, track: st
     <div class="event-box">
       <strong>Event Details</strong>
       <ul>
-        <li><strong>Event Dates:</strong> 7–8 January 2027</li>
+        <li><strong>Event Dates:</strong> 8–9 January 2027</li>
         <li><strong>Registration Fee:</strong> ₹{settings.REGISTRATION_FEE_INR} per team</li>
         <li><strong>Finalist Participation Fee:</strong> ₹{settings.FINALIST_FEE_PER_HEAD_INR} per participant (applicable only to shortlisted teams)</li>
         <li><strong>Tagline:</strong> Think Human. Innovate for Society.</li>
@@ -142,6 +147,7 @@ def _build_html_body(leader_name: str, team_code: str, team_name: str, track: st
 
 def _build_plain_body(leader_name: str, team_code: str, team_name: str, track: str) -> str:
     """Build the plain-text email body as fallback."""
+    wa_url = settings.get_whatsapp_url_for_track(track)
     return f"""\
 Dear {leader_name},
 
@@ -163,6 +169,11 @@ Team Name: {team_name}
 Track Selected: {track}
 Registration Status: Successfully Registered
 
+OFFICIAL WHATSAPP COMMUNITY (MANDATORY)
+----------------------------------------
+Join your track's official WhatsApp group:
+{wa_url}
+
 IMPORTANT INFORMATION
 ---------------------
 1. Please save your unique Registration ID carefully. You will need it for all future communication and event-related activities.
@@ -173,7 +184,7 @@ IMPORTANT INFORMATION
 
 EVENT DETAILS
 -------------
-- Event Dates: 7–8 January 2027
+- Event Dates: 8–9 January 2027
 - Registration Fee: Rs.{settings.REGISTRATION_FEE_INR} per team
 - Finalist Participation Fee: Rs.{settings.FINALIST_FEE_PER_HEAD_INR} per participant (applicable only to shortlisted teams)
 - Tagline: Think Human. Innovate for Society.

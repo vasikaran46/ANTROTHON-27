@@ -25,6 +25,12 @@
   margin-bottom: 18px;
 }
 
+.hero-badge-duo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .hero-title {
   font-size: clamp(40px, 6vw, 68px);
   font-weight: 900;
@@ -1067,6 +1073,23 @@
     align-items: center;
     gap: 6px;
     margin-bottom: 16px;
+  }
+
+  .hero-badge-duo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .hero-badge-duo .term-badge {
+    white-space: nowrap;
+    font-size: 9px;
+    padding: 4px 8px;
+    flex-shrink: 0;
   }
 
   .hero-badge-group .term-badge {

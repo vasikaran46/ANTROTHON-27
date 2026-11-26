@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}ANTROTHON'27{% endblock %}</title>
-  <meta name="description" content="ANTROTHON'27 — 24-Hour Inter-College Hackathon organized by Patrician Institution Innovation Council (PIIC), Patrician College of Arts and Science. January 7–8, 2027.">
+  <meta name="description" content="ANTROTHON'27 — 24-Hour National Level Inter-College Hackathon organized by Patrician Institution Innovation Council (PIIC), Patrician College of Arts and Science. January 8–9, 2027.">
   <meta name="theme-color" content="#ffd000">
 
   <!-- Favicon / Brand Icon -->
@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <!-- Core Styles -->
-  <link rel="stylesheet" href="/static/css/terminator.css?v=23">
+  <link rel="stylesheet" href="/static/css/terminator.css?v=24">
   <link rel="stylesheet" href="/static/css/components.css?v=26">
   {% block extra_css %}{% endblock %}
 </head>
@@ -88,10 +88,14 @@
         </a>
 
         <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="icon-hamburger" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
 
@@ -110,6 +114,7 @@
           </li>
         </ul>
       </nav>
+      <div class="nav-backdrop" id="nav-backdrop"></div>
 
     <!-- Main Dynamic Content -->
     <main>
@@ -129,7 +134,7 @@
               </div>
             </div>
             <p class="footer-brand-desc">
-              A 24-hour inter-college hackathon empowering students to engineer responsible, human-centered technological solutions.
+              A 24-hour National Levelinter-college hackathon empowering students to engineer responsible, human-centered technological solutions.
             </p>
           </div>
           <div>
@@ -173,7 +178,7 @@
   <audio id="term-bgm" src="/static/audio/bgm.mp3" loop preload="auto" style="display:none;"></audio>
 
   <!-- Core Scripts -->
-  <script src="/static/js/terminator.js?v=21"></script>
+  <script src="/static/js/terminator.js?v=22"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

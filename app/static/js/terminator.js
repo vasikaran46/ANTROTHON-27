@@ -241,26 +241,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. Mobile navigation
+  // 4. Mobile navigation drawer with backdrop
   const navToggle = document.getElementById('mobile-nav-toggle');
   const navLinks = document.getElementById('term-nav-links');
+  const navBackdrop = document.getElementById('nav-backdrop');
+
+  function openNav() {
+    if (!navLinks) return;
+    navLinks.classList.add('open');
+    if (navToggle) navToggle.classList.add('open');
+    if (navBackdrop) navBackdrop.classList.add('active');
+  }
+
+  function closeNav() {
+    if (!navLinks) return;
+    navLinks.classList.remove('open');
+    if (navToggle) navToggle.classList.remove('open');
+    if (navBackdrop) navBackdrop.classList.remove('active');
+  }
+
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      navLinks.classList.toggle('open');
+      if (navLinks.classList.contains('open')) {
+        closeNav();
+      } else {
+        openNav();
+      }
     });
+
+    if (navBackdrop) {
+      navBackdrop.addEventListener('click', closeNav);
+    }
 
     // Auto-close on link click (jump to section or navigate)
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
+        closeNav();
       });
     });
 
     // Auto-close on outside click
     document.addEventListener('click', (e) => {
       if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
-        navLinks.classList.remove('open');
+        closeNav();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+        closeNav();
       }
     });
   }

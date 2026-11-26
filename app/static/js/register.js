@@ -31,6 +31,7 @@ for (let i = 2; i <= MIN_TEAM_MEMBERS; i++) {
 }
 
 let selectedPptFile = null;
+let selectedScreenshotFile = null;
 
 function renderMembersContainer() {
   const container = document.getElementById('members-container');
@@ -500,6 +501,23 @@ async function validateCurrentStep(step) {
       alert('Please upload your Idea Presentation file (.pptx, .ppt, or .pdf).');
       return false;
     }
+  } else if (step === 3) {
+    if (window.APP_CONFIG && window.APP_CONFIG.paymentMode === 'upi_qr') {
+      const upiInput = document.getElementById('upi_transaction_id');
+      const upiVal = upiInput ? upiInput.value.trim() : '';
+      if (!upiVal || upiVal.length < 6) {
+        alert('Please enter your 12-digit UPI Transaction ID / UTR Number after completing payment.');
+        upiInput?.focus();
+        return false;
+      }
+      const screenshotInput = document.getElementById('payment_screenshot');
+      const screenshotToUpload = selectedScreenshotFile || (screenshotInput && screenshotInput.files ? screenshotInput.files[0] : null);
+      if (!screenshotToUpload) {
+        alert('Please upload your Payment Screenshot (GPay / PhonePe / Paytm receipt) to verify your registration.');
+        document.getElementById('screenshot-drop-zone')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+    }
   }
   return true;
 }
@@ -611,11 +629,101 @@ function setupFileUpload() {
     dropZone.classList.remove('drag-over');
   });
 
+  if (dropZone) {
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFileSelection(e.dataTransfer.files[0]);
+        fileInput.files = e.dataTransfer.files;
+      }
+    });
+  }
+
+  setupScreenshotUpload();
+}
+
+function handleScreenshotSelection(file) {
+  const errorEl = document.getElementById('screenshot-error-msg');
+  const labelEl = document.getElementById('screenshot-upload-label');
+  const infoEl = document.getElementById('screenshot-upload-info');
+  const dropZone = document.getElementById('screenshot-drop-zone');
+
+  if (!file) return;
+
+  const validExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.pdf'];
+  const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+  if (!validExtensions.includes(ext)) {
+    if (errorEl) {
+      errorEl.textContent = 'Invalid format. Please upload an image (.png, .jpg, .webp) or .pdf screenshot.';
+      errorEl.style.display = 'block';
+    }
+    dropZone?.classList.remove('has-file');
+    selectedScreenshotFile = null;
+    return;
+  }
+
+  // 10MB limit
+  const maxBytes = 10 * 1024 * 1024;
+  if (file.size > maxBytes) {
+    if (errorEl) {
+      errorEl.textContent = `File size (${formatBytes(file.size)}) exceeds the maximum allowed limit of 10MB.`;
+      errorEl.style.display = 'block';
+    }
+    dropZone?.classList.remove('has-file');
+    selectedScreenshotFile = null;
+    return;
+  }
+
+  if (errorEl) errorEl.style.display = 'none';
+  selectedScreenshotFile = file;
+
+  if (labelEl) labelEl.textContent = `Attached: ${file.name}`;
+  if (infoEl) infoEl.textContent = `Size: ${formatBytes(file.size)} • Ready to upload to Google Drive`;
+  dropZone?.classList.add('has-file');
+  if (dropZone) dropZone.style.borderColor = '#00e676';
+
+  const sumScreenEl = document.getElementById('sum-screenshot-file');
+  if (sumScreenEl) {
+    sumScreenEl.textContent = `${file.name} (${formatBytes(file.size)})`;
+  }
+
+  if (window.cyberAudio) window.cyberAudio.playClick();
+}
+
+function setupScreenshotUpload() {
+  const dropZone = document.getElementById('screenshot-drop-zone');
+  const fileInput = document.getElementById('payment_screenshot');
+  if (!dropZone || !fileInput) return;
+
+  dropZone.addEventListener('click', (e) => {
+    if (e.target !== fileInput) {
+      fileInput.click();
+    }
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleScreenshotSelection(e.target.files[0]);
+    }
+  });
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+
+  dropZone.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+  });
+
   dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileSelection(e.dataTransfer.files[0]);
+      handleScreenshotSelection(e.dataTransfer.files[0]);
       fileInput.files = e.dataTransfer.files;
     }
   });
@@ -655,13 +763,22 @@ function populateReviewSummary() {
   } else {
     pptEl.textContent = 'None attached';
   }
+
+  const screenEl = document.getElementById('sum-screenshot-file');
+  if (screenEl) {
+    if (selectedScreenshotFile) {
+      screenEl.textContent = `${selectedScreenshotFile.name} (${formatBytes(selectedScreenshotFile.size)})`;
+    } else {
+      screenEl.textContent = 'Pending Attachment';
+    }
+  }
 }
 
 // Submitting Registration & Initiating Payment
 async function initiateRegistrationAndPayment() {
   const payBtn = document.getElementById('btn-proceed-pay');
   payBtn.disabled = true;
-  payBtn.textContent = 'TRANSMITTING CREDENTIALS...';
+  payBtn.textContent = 'TRANSMITTING REGISTRATION...';
 
   const formData = new FormData();
   formData.append('team_name', document.getElementById('team_name').value.trim());
@@ -685,11 +802,43 @@ async function initiateRegistrationAndPayment() {
   formData.append('members', JSON.stringify(membersList));
   formData.append('preview_mode', window.IS_PREVIEW_MODE ? 'true' : 'false');
 
+  // UPI Transaction ID (for QR code payment)
+  const upiInput = document.getElementById('upi_transaction_id');
+  const upiVal = upiInput ? upiInput.value.trim() : '';
+  if (window.APP_CONFIG && window.APP_CONFIG.paymentMode === 'upi_qr') {
+    if (!upiVal || upiVal.length < 6) {
+      alert('Please enter your 12-digit UPI Transaction ID / UTR Number before submitting.');
+      payBtn.disabled = false;
+      payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
+      upiInput?.focus();
+      return;
+    }
+    formData.append('upi_transaction_id', upiVal);
+  } else if (upiVal) {
+    formData.append('upi_transaction_id', upiVal);
+  }
+
   // File upload
   const fileInput = document.getElementById('idea_ppt');
   const fileToUpload = selectedPptFile || (fileInput && fileInput.files ? fileInput.files[0] : null);
   if (fileToUpload) {
     formData.append('idea_ppt', fileToUpload);
+  }
+
+  // Payment screenshot upload
+  const screenshotInput = document.getElementById('payment_screenshot');
+  const screenshotToUpload = selectedScreenshotFile || (screenshotInput && screenshotInput.files ? screenshotInput.files[0] : null);
+  if (window.APP_CONFIG && window.APP_CONFIG.paymentMode === 'upi_qr') {
+    if (!screenshotToUpload) {
+      alert('Please attach your Payment Screenshot (GPay / PhonePe / Paytm transaction receipt) to verify your registration.');
+      payBtn.disabled = false;
+      payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
+      document.getElementById('screenshot-drop-zone')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+  if (screenshotToUpload) {
+    formData.append('payment_screenshot', screenshotToUpload);
   }
 
   try {
@@ -704,13 +853,13 @@ async function initiateRegistrationAndPayment() {
     } catch (parseErr) {
       alert(`Server error (${res.status}). Please check network or try again.`);
       payBtn.disabled = false;
-      payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+      payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
       return;
     }
     if (!res.ok || !data.success) {
       alert(data.message || 'Registration failed. Please check form data.');
       payBtn.disabled = false;
-      payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+      payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
       if (data.message && data.message.toLowerCase().includes('team name')) {
         goToStep(1);
         const nameInput = document.getElementById('team_name');
@@ -719,6 +868,12 @@ async function initiateRegistrationAndPayment() {
           verifyTeamName(nameInput.value);
         }
       }
+      return;
+    }
+
+    // Direct redirect to confirmation page (used for UPI QR mode)
+    if (data.redirect_url) {
+      window.location.href = data.redirect_url;
       return;
     }
 
@@ -752,7 +907,7 @@ async function initiateRegistrationAndPayment() {
         modal: {
           ondismiss: function() {
             payBtn.disabled = false;
-            payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+            payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
           }
         }
       };
@@ -760,7 +915,7 @@ async function initiateRegistrationAndPayment() {
       rzp.on('payment.failed', function (response) {
         alert('Payment Failed: ' + (response.error.description || 'Transaction declined.'));
         payBtn.disabled = false;
-        payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+        payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
       });
       rzp.open();
     }
@@ -777,7 +932,7 @@ async function initiateRegistrationAndPayment() {
       script.onerror = () => {
         alert('Could not load secure Razorpay gateway. Please check your internet connection or disable ad-blockers and try again.');
         payBtn.disabled = false;
-        payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+        payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
       };
       document.head.appendChild(script);
     }
@@ -785,7 +940,7 @@ async function initiateRegistrationAndPayment() {
     console.error(err);
     alert('Network error connecting to payment gateway.');
     payBtn.disabled = false;
-    payBtn.textContent = `AUTHORIZE REGISTRATION FEE (₹${REG_FEE_INR})`;
+    payBtn.textContent = 'CONFIRM & SUBMIT REGISTRATION';
   }
 }
 

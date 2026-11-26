@@ -112,6 +112,19 @@ async function openDossier(regIdOrData) {
   setText('dos-payment-id', regData.razorpay_payment_id || 'N/A');
   setText('dos-order-id', regData.razorpay_order_id || 'N/A');
 
+  const screenshotLink = document.getElementById('dos-screenshot-link');
+  const screenshotNone = document.getElementById('dos-screenshot-none');
+  if (regData.payment_screenshot_url) {
+    if (screenshotLink) {
+      screenshotLink.href = regData.payment_screenshot_url;
+      screenshotLink.style.display = 'inline-block';
+    }
+    if (screenshotNone) screenshotNone.style.display = 'none';
+  } else {
+    if (screenshotLink) screenshotLink.style.display = 'none';
+    if (screenshotNone) screenshotNone.style.display = 'inline-block';
+  }
+
   // Members list
   const membersTbody = document.getElementById('dos-members-tbody');
   if (membersTbody) {

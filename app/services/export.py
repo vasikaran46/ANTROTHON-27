@@ -41,7 +41,7 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
     # Headers definition
     headers = [
         "S.No", "Team Code", "Team Name", "Track", "Status", 
-        "Payment Status", "Amount (INR)", "Payment ID", "Order ID",
+        "Payment Status", "Amount (INR)", "Payment ID", "Order ID", "Payment Screenshot (Drive URL)",
         "Leader Name", "Leader Email", "Leader Phone", "Leader College", 
         "Leader Degree", "Leader Department", "Leader Year", "Leader Gender", "Leader Student ID",
         "Team Size",
@@ -102,11 +102,12 @@ def generate_excel_spreadsheet(registrations: List[Registration]) -> bytes:
             reg.team_code,
             reg.team_name,
             reg.track,
-            reg.status.replace("_", " ").title(),
-            reg.payment_status.upper(),
+            (reg.status or "submitted").replace("_", " ").title(),
+            (reg.payment_status or "pending").upper(),
             reg.amount_paid,
             reg.razorpay_payment_id or "-",
             reg.razorpay_order_id or "-",
+            reg.payment_screenshot_url or "-",
             reg.leader_name,
             reg.leader_email,
             reg.leader_phone,
@@ -182,7 +183,7 @@ def generate_csv_spreadsheet(registrations: List[Registration]) -> str:
 
     writer.writerow([
         "Team Code", "Team Name", "Track", "Status", "Payment Status", "Amount INR",
-        "Payment ID", "Leader Name", "Leader Email", "Leader Phone", "College",
+        "Payment ID", "Payment Screenshot URL", "Leader Name", "Leader Email", "Leader Phone", "College",
         "Leader Degree", "Leader Department", "Leader Year", "Leader Gender", "Member Count", "Members Details",
         "Idea Title", "Abstract / Summary", "Idea Description", "PPT Presentation File", "Registered At"
     ])
@@ -200,6 +201,7 @@ def generate_csv_spreadsheet(registrations: List[Registration]) -> str:
             reg.payment_status,
             reg.amount_paid,
             reg.razorpay_payment_id or "",
+            reg.payment_screenshot_url or "",
             reg.leader_name,
             reg.leader_email,
             reg.leader_phone,

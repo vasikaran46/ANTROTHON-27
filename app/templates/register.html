@@ -3,7 +3,7 @@
 {% block title %}Register Team — ANTROTHON'27{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/register.css?v=23">
+<link rel="stylesheet" href="/static/css/register.css?v=24">
 {% endblock %}
 
 {% block content %}
@@ -52,7 +52,7 @@
         </div>
         <div class="step-node" id="step-node-3" onclick="goToStep(3)">
           <div class="step-circle">03</div>
-          <div class="step-label">Authorize &amp; Pay (&#8377;{{ settings.REGISTRATION_FEE_INR }})</div>
+          <div class="step-label">Review &amp; Submit</div>
         </div>
       </div>
 
@@ -99,7 +99,7 @@
                   <option value="">-- SELECT OPERATIONAL TRACK --</option>
                   <option value="Track 1: Human Safety, Rights & Empowerment">Track 1: Human Safety, Rights &amp; Empowerment</option>
                   <option value="Track 2: Health, Education & Digital Innovation">Track 2: Health, Education &amp; Digital Innovation</option>
-                  <option value="Track 3: Sustainability, Smart Communities & Social Entrepreneurship">Track 3: Sustainability, Smart Communities &amp; Social Entrepreneurship</option>
+                  <option value="Track 3: Sustainability & Smart Communities">Track 3: Sustainability &amp; Smart Communitiesp</option>
                 </select>
                 <span class="form-hint">Choose the domain best matching your idea proposal.</span>
               </div>
@@ -281,7 +281,7 @@
 2. Technology Stack (Languages, Frameworks, Hardware, AI Models)
 3. Feasibility &amp; Viability
 4. Novelty / Uniqueness compared to existing solutions
-5. Scope of prototype to be built during the 24-Hour Hackathon on Jan 7–8, 2027..." maxlength="50000" required></textarea>
+5. Scope of prototype to be built during the 24-Hour Hackathon on Jan 8–9, 2027..." maxlength="50000" required></textarea>
               <span class="form-hint">Maximum 50,000 characters. Provide exhaustive technical, architectural, and operational depth.</span>
             </div>
 
@@ -318,15 +318,15 @@
                 <span>&#9668; BACK: TEAM DETAILS</span>
               </button>
               <button type="button" class="btn-terminator" onclick="goToStep(3)">
-                <span>NEXT: REVIEW &amp; AUTHORIZE PAYMENT &#9658;</span>
+                <span>NEXT: REVIEW &amp; SUBMIT DOSSIER &#9658;</span>
               </button>
             </div>
           </div>
 
-          <!-- ================= STEP 3: REVIEW & PAYMENT ================= -->
+          <!-- ================= STEP 3: REVIEW & SUBMISSION ================= -->
           <div class="form-step" id="form-step-3">
             <div class="form-section-title">
-              <span>03 // REVIEW MANIFEST &amp; AUTHORIZE PAYMENT</span>
+              <span>03 // REVIEW MANIFEST &amp; FINAL SUBMISSION</span>
             </div>
 
             <div class="order-summary-box">
@@ -358,22 +358,110 @@
                 <span style="color:var(--term-steel);">Idea Presentation File:</span>
                 <span id="sum-ppt-file" style="color:var(--term-cyan); font-family:var(--font-tactical); font-size:13px;">Not Selected</span>
               </div>
-              <div class="summary-row">
-                <span style="color:var(--term-steel);">Initial Registration Application Fee:</span>
-                <span style="color:#fff;">&#8377;{{ settings.REGISTRATION_FEE_INR }} / Team</span>
-              </div>
-              <div class="summary-row total">
-                <span>TOTAL DUE NOW:</span>
-                <span style="color:var(--term-red); font-size:22px;">&#8377;{{ settings.REGISTRATION_FEE_INR }}</span>
+              <div class="summary-row" style="border-bottom:none;">
+                <span style="color:var(--term-steel);">Payment Screenshot:</span>
+                <span id="sum-screenshot-file" style="color:var(--term-green); font-family:var(--font-tactical); font-size:13px;">Not Selected</span>
               </div>
             </div>
 
-            <div class="hud-panel" style="background:rgba(255,159,10,0.06); border-color:rgba(255,159,10,0.3); margin-bottom:24px; width:100%; box-sizing:border-box;">
+            <!-- ================= UPI QR CODE PAYMENT BLOCK ================= -->
+            <div class="hud-panel" style="background:linear-gradient(180deg, rgba(14, 18, 26, 0.98) 0%, rgba(8, 10, 14, 0.98) 100%); border:1px solid var(--term-red); border-radius:4px; padding:24px 20px; margin-bottom:24px; box-shadow:0 0 30px rgba(255, 208, 0, 0.12);">
+              <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,208,0,0.25); padding-bottom:10px; margin-bottom:18px; flex-wrap:wrap; gap:8px;">
+                <div style="font-family:var(--font-tactical); font-size:13px; font-weight:700; color:var(--term-red); letter-spacing:0.05em;">
+                  // OFFICIAL REGISTRATION FEE PAYMENT (&#8377;{{ settings.REGISTRATION_FEE_INR }})
+                </div>
+                <div class="term-badge term-badge-green" style="font-size:11px;">
+                  SCAN &amp; PAY VIA ANY UPI APP
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start;" class="upi-payment-grid">
+                <!-- QR Code Box -->
+                <div style="text-align:center;">
+                  <div style="background:#ffffff; padding:10px; border-radius:10px; display:inline-block; box-shadow:0 6px 24px rgba(0,0,0,0.6); margin-bottom:10px;">
+                    <img src="{{ settings.UPI_QR_IMAGE }}" alt="UPI Payment QR Code" style="width:190px; height:auto; display:block; border-radius:6px;">
+                  </div>
+                  <div style="font-size:12px; color:#e2e8f0; font-family:var(--font-tactical); margin-bottom:4px;">
+                    PAYEE: <strong>{{ settings.UPI_PAYEE_NAME }}</strong>
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;">
+                    <code id="upi-id-badge" style="background:rgba(255,208,0,0.1); border:1px solid rgba(255,208,0,0.3); padding:3px 8px; border-radius:3px; color:var(--term-red); font-size:12px; font-weight:bold;">{{ settings.UPI_ID }}</code>
+                    <button type="button" class="btn-cyber-outline" onclick="copyUpiId()" id="btn-copy-upi" style="padding:3px 8px; font-size:11px;">
+                      COPY
+                    </button>
+                  </div>
+                  <div style="margin-top:10px;">
+                    <a href="upi://pay?pa={{ settings.UPI_ID }}&pn={{ settings.UPI_PAYEE_NAME | urlencode }}&am={{ settings.REGISTRATION_FEE_INR }}&cu=INR" 
+                       class="btn-cyber-outline" style="border-color:#00e676; color:#00e676; font-size:11px; padding:6px 12px; text-decoration:none; display:inline-block;">
+                      📱 Open in UPI App
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Instructions & UTR input -->
+                <div>
+                  <div style="font-family:var(--font-tactical); font-size:12px; color:var(--term-steel); margin-bottom:12px; line-height:1.6;">
+                    <strong style="color:#ffffff;">PAYMENT INSTRUCTIONS:</strong>
+                    <ol style="margin:6px 0 0 16px; padding:0; color:#cbd5e1;">
+                      <li>Scan the QR code with <strong>Google Pay, PhonePe, Paytm, BHIM</strong> or any UPI app.</li>
+                      <li>Pay the initial team registration fee of <strong>&#8377;{{ settings.REGISTRATION_FEE_INR }}</strong>.</li>
+                      <li>Copy the <strong>12-digit UPI Reference / UTR Number</strong> from your payment receipt.</li>
+                      <li>Paste the UTR number in the field below to verify and complete registration.</li>
+                    </ol>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom:16px;">
+                    <label class="form-label" for="upi_transaction_id">
+                      12-Digit UPI Transaction ID / UTR Number <span class="required">*</span>
+                    </label>
+                    <input type="text" id="upi_transaction_id" class="form-control" 
+                           placeholder="e.g. 412345678901 (12-digit UTR)" required maxlength="35" autocomplete="off"
+                           style="font-family:var(--font-tactical); font-size:15px; letter-spacing:1px;">
+                    <span class="form-hint" style="color:var(--term-cyan);">
+                      &#9670; Check transaction details in GPay/PhonePe for 'UPI Transaction ID' or 'Google Transaction ID'.
+                    </span>
+                  </div>
+
+                  <!-- Payment Screenshot Upload -->
+                  <div class="form-group" style="margin-bottom:16px;">
+                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                      <span>Upload Payment Screenshot (Receipt) <span class="required">*</span></span>
+                      <span style="font-size:11px; color:var(--term-cyan); font-weight:normal;">PNG, JPG, WEBP, PDF (Max 10MB)</span>
+                    </label>
+                    <div class="file-upload-box" id="screenshot-drop-zone" style="padding:16px; border:1.5px dashed var(--term-green); border-radius:6px; cursor:pointer; text-align:center; background:rgba(0, 230, 118, 0.03); transition:all 0.2s ease;">
+                      <input type="file" id="payment_screenshot" name="payment_screenshot" accept="image/*,.pdf" style="display:none;">
+                      <div style="color:var(--term-green); margin-bottom:6px;">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                      </div>
+                      <div style="font-weight:600; color:#fff; font-size:13px; margin-bottom:3px;" id="screenshot-upload-label">
+                        Click to Browse or Drag &amp; Drop Screenshot
+                      </div>
+                      <div style="font-size:11px; color:var(--term-steel);" id="screenshot-upload-info">
+                        PNG, JPG, WEBP, or PDF &bull; Saved directly to Google Drive for jury review
+                      </div>
+                    </div>
+                    <div id="screenshot-error-msg" style="display:none; color:var(--term-red); font-size:12px; font-family:var(--font-tactical); margin-top:6px;"></div>
+                  </div>
+
+                  <div class="hud-panel" style="background:rgba(0, 230, 118, 0.05); border-color:rgba(0, 230, 118, 0.25); padding:10px 14px; border-radius:4px;">
+                    <p style="font-size:12px; color:#cbd5e1; line-height:1.5; margin:0;">
+                      <strong style="color:var(--term-green);">&#10004; IMMEDIATE TICKET GENERATION:</strong> 
+                      Submitting your UTR logs your team instantly and unlocks the <strong>Official WhatsApp Community</strong> link.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hud-panel" style="background:rgba(0, 230, 118, 0.05); border-color:rgba(0, 230, 118, 0.25); margin-bottom:24px; width:100%; box-sizing:border-box;">
               <p style="font-size:13px; color:#cbd5e1; line-height:1.6; margin:0; word-break:break-word;">
-                <strong>&#9670; NOTE ON INITIAL APPLICATION FEE:</strong> 
-                Completing this &#8377;{{ settings.REGISTRATION_FEE_INR }} registration confirms your team's proposal submission for official evaluation by the PIIC jury panel. 
-                Selected finalist teams (45 teams announced on 27 December 2026) will pay the finalist fee of 
-                <strong>&#8377;{{ settings.FINALIST_FEE_PER_HEAD_INR }} per head</strong> prior to attending the 24-hour campus event on January 7–8, 2027.
+                <strong style="color:var(--term-green);">&#9670; SUBMISSION VERIFICATION:</strong> 
+                Please verify that your Team Name, Track, Leader credentials, and Idea Presentation file are accurate. 
+                Click <strong>Confirm &amp; Submit Registration</strong> below to finalize your registration with PIIC.
               </p>
             </div>
 
@@ -383,10 +471,10 @@
               </button>
               <button type="button" class="btn-terminator" id="btn-proceed-pay" style="padding:14px 32px; font-size:14px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
-                <span>AUTHORIZE REGISTRATION FEE (&#8377;{{ settings.REGISTRATION_FEE_INR }})</span>
+                <span>CONFIRM &amp; SUBMIT REGISTRATION</span>
               </button>
             </div>
           </div>
@@ -400,15 +488,24 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- Razorpay Checkout JS CDN -->
+<!-- Razorpay Checkout JS CDN (Fallback) -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   window.IS_PREVIEW_MODE = false;
   window.APP_CONFIG = {
     minTeamMembers: {{ settings.MIN_TEAM_MEMBERS }},
     maxTeamMembers: {{ settings.MAX_TEAM_MEMBERS }},
-    registrationFeeInr: {{ settings.REGISTRATION_FEE_INR }}
+    registrationFeeInr: {{ settings.REGISTRATION_FEE_INR }},
+    paymentMode: "{{ settings.PAYMENT_MODE }}"
   };
+  function copyUpiId() {
+    navigator.clipboard.writeText('{{ settings.UPI_ID }}');
+    const b = document.getElementById('btn-copy-upi');
+    if (b) {
+      b.textContent = 'COPIED!';
+      setTimeout(() => { b.textContent = 'COPY'; }, 2500);
+    }
+  }
 </script>
-<script src="/static/js/register.js?v=23"></script>
+<script src="/static/js/register.js?v=26"></script>
 {% endblock %}

@@ -24,13 +24,18 @@
         <div class="hero-badge-group">
           <span class="term-badge">
             <span class="pulse-led"></span>
-            24-HOUR INTER-COLLEGE HACKATHON
+            24-HOUR NATIONAL LEVEL INTER-COLLEGE HACKATHON
           </span>
-          <span class="term-badge term-badge-amber">
-            JANUARY 7–8, 2027
-          </span>
+          <div class="hero-badge-duo">
+            <span class="term-badge term-badge-amber">
+              JANUARY 8–9, 2027
+            </span>
+            <span class="term-badge">
+              TEAM SIZE: {{ settings.MIN_TEAM_MEMBERS }}–{{ settings.MAX_TEAM_MEMBERS }} MEMBERS
+            </span>
+          </div>
           <span class="term-badge">
-            TEAM SIZE: 4–6 MEMBERS
+            1ST ROUND: PPT SUBMISSION THROUGH ONLINE
           </span>
         </div>
 
@@ -202,7 +207,7 @@
         </div>
         <div class="about-overview-text">
           <p class="about-overview-p">
-            <strong>ANTROTHON’27</strong> is a 24-hour inter-college hackathon organized by the 
+            <strong>ANTROTHON’27</strong> is a 24-hour National level inter-college hackathon organized by the 
             <strong>Patrician Institution Innovation Council (PIIC)</strong> of 
             <strong>Patrician College of Arts and Science</strong>. The event aims to bring together student innovators, 
             creative thinkers, and aspiring entrepreneurs from different colleges to develop innovative, 
@@ -338,7 +343,7 @@
             </svg>
           </div>
         </div>
-        <h3 class="track-title">Sustainability, Smart Communities &amp; Social Entrepreneurship</h3>
+        <h3 class="track-title">Sustainability &amp; Smart Communities</h3>
         <p class="track-desc">
           Challenging builders to create solutions that promote environmental sustainability, efficient resource utilization, 
           resilient infrastructure, and inclusive economic growth.
@@ -417,7 +422,7 @@
           <h4 class="timeline-stage-title">Registration Opens</h4>
           <p style="color:var(--term-steel); font-size:14px;">
             Registrations are now open. 
-            Teams may select their operational track among the 3 thematic tracks and submit their proposal dossier (&#8377;300/team).
+            Teams may select their operational track among the 3 thematic tracks and submit their proposal dossier (&#8377;{{ settings.REGISTRATION_FEE_INR }}/team).
           </p>
         </div>
       </div>
@@ -439,8 +444,8 @@
         </div>
       </div>
 
-      <!-- STAGE 3: Finalist Results Announcement Phase (Active until 07 Jan 2027 08:59:59 IST) -->
-      <div class="timeline-stage" data-deadline="2027-01-07T08:59:59+05:30">
+      <!-- STAGE 3: Finalist Results Announcement Phase (Active until 08 Jan 2027 08:59:59 IST) -->
+      <div class="timeline-stage" data-deadline="2027-01-08T08:59:59+05:30">
         <div class="timeline-node">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -456,15 +461,15 @@
         </div>
       </div>
 
-      <!-- STAGE 4: Hackathon Event Phase (7–8 January 2027) -->
-      <div class="timeline-stage" data-deadline="2027-01-08T23:59:59+05:30">
+      <!-- STAGE 4: Hackathon Event Phase (8–9 January 2027) -->
+      <div class="timeline-stage" data-deadline="2027-01-09T23:59:59+05:30">
         <div class="timeline-node">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
         </div>
         <div class="timeline-info">
-          <div class="timeline-date-badge" style="color:var(--term-red);">7–8 JANUARY 2027</div>
+          <div class="timeline-date-badge" style="color:var(--term-red);">8–9 JANUARY 2027</div>
           <h4 class="timeline-stage-title">ANTROTHON'27 — The 24-Hour Hackathon</h4>
           <p style="color:var(--term-steel); font-size:14px;">
             24 hours of live non-stop prototyping, mentor clinics, midnight reviews, final pitches to industry jurors, 
@@ -706,7 +711,7 @@
           <span class="faq-icon">&#9660;</span>
         </button>
         <div class="faq-content">
-          ANTROTHON'27 features <strong>3 designated thematic tracks</strong>: <strong>Track 1: Human Safety, Rights &amp; Empowerment</strong>, <strong>Track 2: Health, Education &amp; Digital Innovation</strong>, and <strong>Track 3: Sustainability, Smart Communities &amp; Social Entrepreneurship</strong>. Teams select the track that best aligns with their project concept and submit their innovation directly under that track.
+          ANTROTHON'27 features <strong>3 designated thematic tracks</strong>: <strong>Track 1: Human Safety, Rights &amp; Empowerment</strong>, <strong>Track 2: Health, Education &amp; Digital Innovation</strong>, and <strong>Track 3: Sustainability &amp; Smart Communities</strong>. Teams select the track that best aligns with their project concept and submit their innovation directly under that track.
         </div>
       </div>
 
@@ -716,7 +721,7 @@
           <span class="faq-icon">&#9660;</span>
         </button>
         <div class="faq-content">
-          Stage 1: When your team applies, you pay an initial registration fee of <strong>&#8377;300 per team</strong> via the secure Razorpay gateway.<br>
+          Stage 1: When your team applies, you pay an initial registration fee of <strong>&#8377;{{ settings.REGISTRATION_FEE_INR }} per team</strong> via UPI QR code or online payment.<br>
           Stage 2: On 27 December 2026, 45 finalist teams are selected. Only those 45 teams pay the finalist participation fee of <strong>&#8377;350 per head</strong> to attend the on-site 24-hour hackathon.
         </div>
       </div>
@@ -733,7 +738,7 @@
 
       <div class="faq-item">
         <button type="button" class="faq-trigger">
-          <span>What happens during the 24 hours on January 7–8, 2027?</span>
+          <span>What happens during the 24 hours on January 8–9, 2027?</span>
           <span class="faq-icon">&#9660;</span>
         </button>
         <div class="faq-content">

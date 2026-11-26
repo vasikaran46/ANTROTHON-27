@@ -47,13 +47,38 @@ class Settings:
     MIN_TEAM_MEMBERS: int = int(os.getenv("MIN_TEAM_MEMBERS", 3))
     MAX_TEAM_MEMBERS: int = int(os.getenv("MAX_TEAM_MEMBERS", 4))
     TOTAL_FINALISTS: int = 45
+
+    # Google Drive Folders
+    GOOGLE_DRIVE_FOLDER_ID: str = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "11SqDrgMl6Am3v5ObghmzkUo_UCotAnYb").strip()
+    GOOGLE_DRIVE_PAYMENT_FOLDER_ID: str = os.getenv("GOOGLE_DRIVE_PAYMENT_FOLDER_ID", "").strip()
+
+    # Payment Mode & Direct UPI Configuration
+    PAYMENT_MODE: str = os.getenv("PAYMENT_MODE", "upi_qr").strip().lower()  # "upi_qr" or "razorpay"
+    UPI_ID: str = os.getenv("UPI_ID", "karanvasi80@okhdfcbank").strip()
+    UPI_PAYEE_NAME: str = os.getenv("UPI_PAYEE_NAME", "Vasikaran A").strip()
+    UPI_QR_IMAGE: str = os.getenv("UPI_QR_IMAGE", "/static/img/payment_qr.jpg").strip()
+
+    # WhatsApp Community Links
+    WHATSAPP_TRACK_1_URL: str = os.getenv("WHATSAPP_TRACK_1_URL", "https://chat.whatsapp.com/EPgo06iFowmIFyoEk3Elww").strip()
+    WHATSAPP_TRACK_2_URL: str = os.getenv("WHATSAPP_TRACK_2_URL", "https://chat.whatsapp.com/ENQSiLZWCot39pyrxsCRuD").strip()
+    WHATSAPP_TRACK_3_URL: str = os.getenv("WHATSAPP_TRACK_3_URL", "https://chat.whatsapp.com/LF8FKwMueeTDhLRyou2O7X").strip()
+
+    def get_whatsapp_url_for_track(self, track: str) -> str:
+        t = (track or "").lower()
+        if "track 1" in t or "safety" in t or "track-1" in t or "1" in t:
+            return self.WHATSAPP_TRACK_1_URL
+        elif "track 2" in t or "health" in t or "education" in t or "track-2" in t or "2" in t:
+            return self.WHATSAPP_TRACK_2_URL
+        elif "track 3" in t or "sustainability" in t or "communities" in t or "track-3" in t or "3" in t:
+            return self.WHATSAPP_TRACK_3_URL
+        return self.WHATSAPP_TRACK_1_URL
     
     # Milestones (stored in ISO format)
     REGISTRATION_OPEN_DATE_STR: str = os.getenv("REGISTRATION_OPEN_DATE", "2026-10-30T00:00:00")
     REGISTRATION_DEADLINE_STR: str = os.getenv("REGISTRATION_DEADLINE", "2026-12-20T23:59:59")
     FINALIST_ANNOUNCEMENT_DATE_STR: str = os.getenv("FINALIST_ANNOUNCEMENT_DATE", "2026-12-27T18:00:00")
-    HACKATHON_START_DATE_STR: str = os.getenv("HACKATHON_START_DATE", "2027-01-07T09:00:00")
-    HACKATHON_END_DATE_STR: str = os.getenv("HACKATHON_END_DATE", "2027-01-08T09:00:00")
+    HACKATHON_START_DATE_STR: str = os.getenv("HACKATHON_START_DATE", "2027-01-08T09:00:00")
+    HACKATHON_END_DATE_STR: str = os.getenv("HACKATHON_END_DATE", "2027-01-09T09:00:00")
     
     FORCE_UNLOCK_REGISTRATION: bool = os.getenv("FORCE_UNLOCK_REGISTRATION", "true").lower() in ("true", "1", "yes")
 
