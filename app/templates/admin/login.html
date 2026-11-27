@@ -24,8 +24,8 @@
           <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 0 16px rgba(255,208,0,0.5));">
         </div>
       </div>
-      <span class="mono-tag" style="color:var(--term-red); font-size:12px;">PATRICIAN INSTITUTION INNOVATION COUNCIL (PIIC)</span>
-      <h2 style="font-size:22px; color:#fff; margin-top:4px;">ADMIN COMMAND PORTAL</h2>
+      <span class="mono-tag" style="color:var(--term-red); font-size:12px;">Patrician Institution's Innovation Council (PIIC)</span>
+      <h2 style="font-size:22px; color:#fff; margin-top:4px;">Admin Login</h2>
     </div>
 
     {% if error %}
@@ -36,17 +36,17 @@
 
     <form method="POST" action="/admin/login">
       <div class="form-group">
-        <label class="form-label" for="username">USERNAME</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="admin" required autofocus>
+        <label class="form-label" for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required autofocus>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="password">PASSWORD</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••" required>
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
       </div>
 
       <button type="submit" class="btn-terminator" style="width:100%; padding:14px;">
-        <span>AUTHENTICATE &amp; ENTER COMMAND CENTER</span>
+        <span>Log In</span>
       </button>
     </form>
 

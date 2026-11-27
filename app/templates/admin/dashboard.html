@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Pannel — ANTROTHON'27{% endblock %}
+{% block title %}Admin Panel — ANTROTHON'27{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="/static/css/admin.css?v=8">
@@ -21,35 +21,35 @@
           <img src="/static/img/logo.png?v=5" alt="ANTROTHON'27 Logo" style="width:52px; height:52px; object-fit:contain; display:block; filter:drop-shadow(0 0 10px rgba(255,208,0,0.5)); flex-shrink:0;">
         </div>
         <div>
-          <div class="term-badge" style="margin-bottom:6px;">PATRICIAN INSTITUTION INNOVATION COUNCIL // ADMIN DIRECTORY</div>
-          <h1 style="margin:0; font-size:24px;">ANTROTHON'27 REGISTRATION COMMAND CENTER</h1>
+          <div class="term-badge" style="margin-bottom:6px;">Patrician Institution's Innovation Council (PIIC)</div>
+          <h1 style="margin:0; font-size:24px;">Antrothon'27 &mdash; Admin Panel</h1>
         </div>
       </div>
 
       <div class="admin-actions">
         <!-- Export to Excel (.xlsx) -->
-        <a href="/api/admin/export/excel" class="btn-terminator" style="padding:10px 18px; font-size:12px;" title="Extract all data to styled Excel spreadsheet">
+        <a href="/api/admin/export/excel" class="btn-terminator" style="padding:10px 18px; font-size:12px;" title="Download all registrations as an Excel file">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          <span>EXPORT EXCEL (.XLSX)</span>
+          <span>Export Excel</span>
         </a>
 
         <!-- Export to CSV -->
-        <a href="/api/admin/export/csv" class="btn-cyber-outline" style="padding:10px 18px; font-size:12px;" title="Extract all data to CSV">
+        <a href="/api/admin/export/csv" class="btn-cyber-outline" style="padding:10px 18px; font-size:12px;" title="Download all registrations as a CSV file">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          <span>EXPORT CSV</span>
+          <span>Export CSV</span>
         </a>
 
         <!-- Logout -->
         <a href="/admin/logout" class="btn-cyber-outline" style="padding:10px 14px; font-size:12px; color:var(--term-red);" title="Sign out">
-          LOGOUT
+          Logout
         </a>
       </div>
     </div>
@@ -61,11 +61,11 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="metric-label">
-          <span>TOTAL REGISTRATIONS</span>
+          <span>Total Registrations</span>
           <span style="color:var(--term-red);">&#9658;</span>
         </div>
         <div class="metric-value">{{ total_teams }}</div>
-        <div class="metric-sub">{{ paid_teams }} Verified Payments</div>
+        <div class="metric-sub">{{ paid_teams }} Paid Teams</div>
       </div>
 
       <!-- Finalists Quota Tracker -->
@@ -73,8 +73,8 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="metric-label">
-          <span>FINALISTS SELECTED</span>
-          <span style="color:var(--term-amber);">QUOTA: {{ total_finalists_quota }}</span>
+          <span>Finalists Selected</span>
+          <span style="color:var(--term-amber);">Target: {{ total_finalists_quota }}</span>
         </div>
         <div class="metric-value" style="color:var(--term-red);">
           {{ finalist_teams }} <span class="metric-quota-max">/ {{ total_finalists_quota }}</span>
@@ -89,11 +89,11 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="metric-label">
-          <span>PARTICIPANTS</span>
+          <span>Total Participants</span>
           <span style="color:var(--term-green);">&#9670;</span>
         </div>
         <div class="metric-value">{{ total_participants }}</div>
-        <div class="metric-sub">Leader + Crew ({{ settings.MIN_TEAM_MEMBERS }}-{{ settings.MAX_TEAM_MEMBERS }} / team)</div>
+        <div class="metric-sub">Leaders + Team Members</div>
       </div>
 
       <!-- Initial Fee Revenue (₹300 * paid) -->
@@ -101,11 +101,11 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="metric-label">
-          <span>FEE REVENUE RECORDED</span>
+          <span>Fees Collected</span>
           <span style="color:var(--term-green);">&#8377;</span>
         </div>
         <div class="metric-value" style="color:var(--term-green);">&#8377;{{ total_revenue_inr }}</div>
-        <div class="metric-sub">Initial Applications</div>
+        <div class="metric-sub">From Completed Registrations</div>
       </div>
 
       <!-- Launch Alert Leads -->
@@ -113,18 +113,18 @@
         <div class="hud-corner hud-corner-tl"></div>
         <div class="hud-corner hud-corner-br"></div>
         <div class="metric-label">
-          <span>LAUNCH SUBSCRIBERS</span>
+          <span>Email Subscribers</span>
           <span style="color:var(--term-cyan);">&#9654;</span>
         </div>
         <div class="metric-value">{{ total_leads }}</div>
-        <div class="metric-sub">Waiting for 30 Oct release</div>
+        <div class="metric-sub">Notification Alerts</div>
       </div>
     </div>
 
     <!-- FILTER TOOLBAR -->
     <div class="admin-toolbar">
       <form method="GET" action="/admin" style="display:flex; gap:12px; flex-wrap:wrap; width:100%; align-items:center;">
-        <input type="text" name="search" class="admin-search-input" placeholder="Search team, code, leader, college..." value="{{ search_term }}">
+        <input type="text" name="search" class="admin-search-input" placeholder="Search by team name, code, leader, college..." value="{{ search_term }}">
 
         <select name="track" class="admin-select">
           <option value="">-- All Tracks --</option>
@@ -143,12 +143,12 @@
         </select>
 
         <button type="submit" class="btn-cyber-outline" style="padding:8px 16px; font-size:12px;">
-          FILTER
+          Filter
         </button>
 
         {% if search_term or selected_track or selected_status %}
         <a href="/admin" class="btn-cyber-outline" style="padding:8px 14px; font-size:12px; color:var(--term-steel);">
-          CLEAR
+          Clear
         </a>
         {% endif %}
 
@@ -158,7 +158,7 @@
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            AUDIT HISTORY / EDIT LOGS ({{ total_audits }})
+            View Edit History ({{ total_audits }})
           </button>
         </div>
       </form>
@@ -175,10 +175,10 @@
             <th>Track</th>
             <th>Leader Details</th>
             <th>College</th>
-            <th>Crew Size</th>
+            <th>Team Size</th>
             <th>Payment</th>
-            <th>Review Status</th>
-            <th>Action</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -197,7 +197,7 @@
               <td style="text-align:center;"><span class="term-badge" style="font-size:10px;">{{ r.member_count }}</span></td>
               <td>
                 <span class="status-badge {{ 'paid' if r.payment_status == 'paid' else 'pending' }}">
-                  {{ r.payment_status }} (&#8377;{{ r.amount_paid }})
+                  {{ r.payment_status.title() }} (&#8377;{{ r.amount_paid }})
                 </span>
                 {% if r.razorpay_payment_id %}
                 <div style="font-size:11px; font-family:var(--font-tactical); color:var(--term-cyan); margin-top:3px;" title="UTR / Transaction ID">
@@ -236,7 +236,7 @@
                   </button>
                   <button type="button" class="btn-admin-delete"
                     onclick="deleteRegistration({{ r.id }})"
-                    title="Permanently delete registration">
+                    title="Delete registration">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -252,7 +252,7 @@
           {% else %}
             <tr>
               <td colspan="10" style="text-align:center; padding:40px; color:var(--term-steel);">
-                NO REGISTRATION RECORDS FOUND MATCHING QUERY CRITERIA.
+                No registration records found.
               </td>
             </tr>
           {% endif %}
@@ -263,12 +263,12 @@
   </div>
 </section>
 
-<!-- TEAM DOSSIER MODAL -->
+<!-- TEAM DETAILS MODAL -->
 <div class="modal-backdrop" id="dossier-modal">
   <div class="modal-window">
     <div class="modal-header">
       <h3 style="color:#fff; font-size:18px;">
-        <span style="color:var(--term-red);">// TEAM DOSSIER:</span> <span id="dos-team-code">-</span>
+        <span style="color:var(--term-red);">Team Details:</span> <span id="dos-team-code">-</span>
       </h3>
       <button type="button" class="btn-close-modal" id="btn-close-dossier">&times;</button>
     </div>
@@ -278,19 +278,19 @@
       <div id="dos-track" style="color:var(--term-red); font-family:var(--font-tactical); font-size:13px;">-</div>
     </div>
 
-    <!-- Proposed Idea Dossier -->
+    <!-- Proposed Idea Details -->
     <div class="hud-panel" style="background:rgba(8,10,14,0.7); margin-bottom:20px; padding:16px;">
-      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-cyan); display:block; margin-bottom:4px;">PROPOSED IDEA TITLE (MAX 100 CHARS)</span>
+      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-cyan); display:block; margin-bottom:4px;">IDEA TITLE</span>
       <h4 id="dos-project-title" style="color:#fff; font-size:15px; margin-bottom:10px;">-</h4>
       
-      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">ABSTRACT / SUMMARY (MAX 10,000 CHARS)</span>
+      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">SUMMARY</span>
       <p id="dos-project-synopsis" style="color:var(--term-steel); font-size:13px; line-height:1.6; margin-bottom:12px; white-space:pre-wrap;">-</p>
 
-      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">IDEA DESCRIPTION (MAX 50,000 CHARS)</span>
+      <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">DETAILED DESCRIPTION</span>
       <div id="dos-idea-description" style="color:var(--term-steel); font-size:13px; line-height:1.6; max-height:160px; overflow-y:auto; background:rgba(0,0,0,0.3); padding:10px; border-radius:3px; white-space:pre-wrap; margin-bottom:12px;">-</div>
 
       <div id="dos-ppt-box" style="display:flex; align-items:center; gap:8px; font-family:var(--font-tactical); font-size:12px; color:var(--term-cyan);">
-        <span>PPT PRESENTATION:</span>
+        <span>PRESENTATION (PPT):</span>
         <span id="dos-ppt-filename" style="color:#fff;">None</span>
         <a id="dos-ppt-download" href="#" download style="color:var(--term-red); text-decoration:underline; display:none; margin-left:8px;">Download PPT File</a>
       </div>
@@ -299,7 +299,7 @@
     <!-- Leader & Payment -->
     <div class="modal-grid-duo">
       <div class="hud-panel" style="padding:16px;">
-        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:4px;">TEAM COMMANDER (LEADER)</span>
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:4px;">TEAM LEADER</span>
         <strong id="dos-leader-name" style="color:#fff; font-size:15px; display:block;">-</strong>
         <div id="dos-leader-email" style="color:var(--term-steel);">-</div>
         <div id="dos-leader-phone" style="color:var(--term-steel);">-</div>
@@ -308,14 +308,14 @@
       </div>
 
       <div class="hud-panel" style="padding:16px;">
-        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:4px;">FINANCIAL VERIFICATION</span>
+        <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:4px;">PAYMENT DETAILS</span>
         <div>PAYMENT STATUS: <span id="dos-payment-status" class="status-badge paid" style="font-size:10px;">-</span></div>
-        <div style="margin-top:6px; color:var(--term-steel);">PAYMENT ID: <code id="dos-payment-id" style="color:var(--term-chrome); font-size:11px;">-</code></div>
+        <div style="margin-top:6px; color:var(--term-steel);">UTR / TRANSACTION ID: <code id="dos-payment-id" style="color:var(--term-chrome); font-size:11px;">-</code></div>
         <div style="margin-top:4px; color:var(--term-steel);">ORDER ID: <code id="dos-order-id" style="color:var(--term-chrome); font-size:11px;">-</code></div>
         <div id="dos-screenshot-container" style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.1);">
-          <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel);">PAYMENT PROOF:</span>
+          <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel);">PAYMENT SCREENSHOT:</span>
           <a id="dos-screenshot-link" href="#" target="_blank" rel="noopener noreferrer" style="color:#00e676; text-decoration:underline; font-size:12px; margin-left:6px; display:none; font-weight:bold;">
-            View Screenshot in Google Drive &#8599;
+            View Screenshot &#8599;
           </a>
           <span id="dos-screenshot-none" style="color:var(--term-steel); font-size:11px; margin-left:4px;">None attached</span>
         </div>
@@ -324,13 +324,13 @@
 
     <!-- Members Table -->
     <h4 style="font-size:14px; color:#fff; font-family:var(--font-tactical); margin-bottom:10px;">
-      CREW MANIFEST (ADDITIONAL MEMBERS)
+      TEAM MEMBERS
     </h4>
     <div class="table-responsive" style="margin-bottom:24px;">
       <table class="admin-table" style="font-size:12px;">
         <thead>
           <tr>
-            <th>Unit</th>
+            <th>Member #</th>
             <th>Name</th>
             <th>Contact</th>
             <th>Degree, Dept &amp; Year</th>
@@ -345,11 +345,11 @@
     <!-- Status Change Form -->
     <div style="background:rgba(14,18,26,0.9); border:1px solid var(--term-border); padding:18px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
       <div>
-        <label style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">UPDATE SELECTION PROTOCOL:</label>
+        <label style="font-family:var(--font-tactical); font-size:11px; color:var(--term-steel); display:block; margin-bottom:4px;">UPDATE STATUS:</label>
         <select id="dos-status-select" class="admin-select" style="min-width:200px;">
           <option value="submitted">Submitted</option>
           <option value="under_review">Under Review</option>
-          <option value="shortlisted_finalist">Shortlisted Finalist (45 Quota)</option>
+          <option value="shortlisted_finalist">Shortlisted Finalist (Top 45)</option>
           <option value="waitlist">Waitlist</option>
           <option value="rejected">Rejected</option>
         </select>
@@ -361,22 +361,22 @@
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
           </svg>
-          DELETE DOSSIER
+          Delete Team
         </button>
         <button type="button" class="btn-terminator" id="btn-save-dossier-status" style="padding:10px 20px; font-size:12px;">
-          UPDATE PROTOCOL STATUS
+          Save Status
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ================= EDIT PARTICIPANT MODAL ================= -->
+<!-- ================= EDIT TEAM MODAL ================= -->
 <div class="modal-backdrop" id="edit-modal">
   <div class="modal-window" style="max-width:880px;">
     <div class="modal-header">
       <h3 style="color:#fff; font-size:18px;">
-        <span style="color:var(--term-cyan);">// EDIT PARTICIPANT DOSSIER:</span> <span id="edit-team-code-title">-</span>
+        <span style="color:var(--term-cyan);">Edit Team Details:</span> <span id="edit-team-code-title">-</span>
       </h3>
       <button type="button" class="btn-close-modal" onclick="closeEditModal()">&times;</button>
     </div>
@@ -385,7 +385,7 @@
       <!-- 1. Team & Track Specification -->
       <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
-          01 // TEAM SPECIFICATION &amp; OPERATIONAL TRACK
+          1. Team &amp; Track Details
         </span>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px;">
           <div class="form-group">
@@ -410,7 +410,7 @@
       <!-- 2. Team Commander (Leader) -->
       <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
-          02 // PRIMARY COMMANDER (TEAM LEADER)
+          2. Team Leader Details
         </span>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
           <div class="form-group">
@@ -476,10 +476,10 @@
       <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red);">
-            03 // CREW MEMBERS (3 TO 5 CREW UNITS)
+            3. Team Members
           </span>
           <button type="button" class="btn-cyber-outline" onclick="addEditMember()" style="padding:4px 12px; font-size:11px; color:var(--term-cyan); border-color:var(--term-cyan);">
-            + ADD CREW MEMBER
+            + Add Member
           </button>
         </div>
         <div id="edit-members-container">
@@ -490,31 +490,31 @@
       <!-- 4. Idea Dossier & Presentation -->
       <div class="hud-panel" style="padding:16px; margin-bottom:18px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-cyan); display:block; margin-bottom:10px;">
-          04 // PROPOSED IDEA DOSSIER &amp; PRESENTATION
+          4. Idea &amp; PPT Presentation
         </span>
         <div class="form-group" style="margin-bottom:12px;">
-          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Idea Title (Max 100 chars)</label>
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Idea Title</label>
           <input type="text" id="edit-idea-title" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" maxlength="100">
         </div>
         <div class="form-group" style="margin-bottom:12px;">
-          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Abstract / Summary (Max 10,000 chars)</label>
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Summary</label>
           <textarea id="edit-idea-summary" class="form-control" rows="3" style="font-size:12px; width:100%; box-sizing:border-box;" maxlength="10000"></textarea>
         </div>
         <div class="form-group" style="margin-bottom:12px;">
-          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Idea Description (Max 50,000 chars)</label>
+          <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Detailed Description</label>
           <textarea id="edit-idea-description" class="form-control" rows="5" style="font-size:12px; width:100%; box-sizing:border-box;" maxlength="50000"></textarea>
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
           <div class="form-group">
-            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">PPT Filename</label>
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">PPT File Name</label>
             <input type="text" id="edit-ppt-filename" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;">
           </div>
           <div class="form-group">
             <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">
-              PPT URL / Google Drive URL
+              PPT Link / Google Drive Link
               <a id="edit-ppt-test-link" href="#" target="_blank" style="margin-left:8px; color:var(--term-cyan); text-decoration:underline; font-size:10px; display:none;">Open URL &#8599;</a>
             </label>
-            <input type="text" id="edit-ppt-path" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="https://drive.google.com/... or cloud storage URL">
+            <input type="text" id="edit-ppt-path" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="https://drive.google.com/...">
           </div>
         </div>
       </div>
@@ -522,15 +522,15 @@
       <!-- 5. Status, Payment & Admin Notes -->
       <div class="hud-panel" style="padding:16px; margin-bottom:20px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); display:block; margin-bottom:10px;">
-          05 // EVALUATION PROTOCOL &amp; PAYMENT STATUS
+          5. Status &amp; Payment Details
         </span>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
           <div class="form-group">
-            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Selection Status</label>
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Status</label>
             <select id="edit-status" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;">
               <option value="submitted">Submitted</option>
               <option value="under_review">Under Review</option>
-              <option value="shortlisted_finalist">Shortlisted Finalist (45 Quota)</option>
+              <option value="shortlisted_finalist">Shortlisted Finalist (Top 45)</option>
               <option value="waitlist">Waitlist</option>
               <option value="rejected">Rejected</option>
             </select>
@@ -545,37 +545,37 @@
           </div>
           <div class="form-group">
             <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Amount Paid (&#8377;)</label>
-            <input type="number" id="edit-amount-paid" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" value="300">
+            <input type="number" id="edit-amount-paid" class="form-control" style="font-size:13px; width:100%; box-sizing:border-box;" value="200">
           </div>
           <div class="form-group" style="grid-column:1 / -1;">
-            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Internal Admin Notes</label>
-            <input type="text" id="edit-admin-notes" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="Optional jury comments, verification notes...">
+            <label class="form-label" style="font-size:11px; color:var(--term-steel); margin-bottom:4px; display:block;">Notes</label>
+            <input type="text" id="edit-admin-notes" class="form-control" style="font-size:12px; width:100%; box-sizing:border-box;" placeholder="Optional comments or notes...">
           </div>
         </div>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center;">
         <button type="button" class="btn-cyber-outline" onclick="closeEditModal()" style="padding:10px 20px; font-size:12px;">
-          CANCEL
+          Cancel
         </button>
         <button type="button" class="btn-terminator" id="btn-save-edit" onclick="saveParticipantEdit()" style="padding:10px 24px; font-size:12px;">
-          SAVE &amp; RECORD CHANGES
+          Save Changes
         </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- ================= AUDIT TRAIL & EDIT HISTORY MODAL ================= -->
+<!-- ================= EDIT HISTORY MODAL ================= -->
 <div class="modal-backdrop" id="audit-modal">
   <div class="modal-window" style="max-width:940px;">
     <div class="modal-header">
       <div>
         <h3 style="color:#fff; font-size:18px; margin-bottom:4px;">
-          <span style="color:var(--term-cyan);">// AUDIT TRAIL:</span> EDIT HISTORY &amp; UNDO ENGINE
+          <span style="color:var(--term-cyan);">Edit History:</span> Review Changes &amp; Undo
         </h3>
         <p style="color:var(--term-steel); font-size:12px; margin:0;">
-          All participant modifications are cryptographically tracked with exact Indian Standard Time (IST), field diffs, operator ID, and reversible rollback (undo) capability.
+          This log tracks every change made to team details with date, time, and exact field updates. You can undo any change if needed.
         </p>
       </div>
       <button type="button" class="btn-close-modal" onclick="closeAuditModal()">&times;</button>
@@ -585,12 +585,12 @@
       <table class="admin-table" style="font-size:12px;">
         <thead>
           <tr>
-            <th>Log ID</th>
+            <th>Log #</th>
             <th>Date &amp; Time (IST)</th>
             <th>Team</th>
             <th>Action</th>
-            <th>What Changed</th>
-            <th style="text-align:center;">Rollback (Undo)</th>
+            <th>Changes Made</th>
+            <th style="text-align:center;">Undo</th>
           </tr>
         </thead>
         <tbody id="audit-logs-tbody">
@@ -601,7 +601,7 @@
 
     <div style="display:flex; justify-content:flex-end;">
       <button type="button" class="btn-cyber-outline" onclick="closeAuditModal()" style="padding:8px 20px; font-size:12px;">
-        CLOSE
+        Close
       </button>
     </div>
   </div>
@@ -619,5 +619,5 @@
     registrationFeeInr: {{ settings.REGISTRATION_FEE_INR }}
   };
 </script>
-<script src="/static/js/admin.js?v=24"></script>
+<script src="/static/js/admin.js?v=25"></script>
 {% endblock %}

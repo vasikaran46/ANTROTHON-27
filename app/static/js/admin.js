@@ -59,7 +59,7 @@ async function openDossier(regIdOrData) {
 
   const regData = await resolveRegistrationData(regIdOrData);
   if (!regData) {
-    alert('Unable to load registration record for review.');
+    alert('Could not load team details.');
     return;
   }
 
@@ -137,7 +137,7 @@ async function openDossier(regIdOrData) {
       members.forEach((m, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="font-weight:600; color:var(--term-cyan); font-family:var(--font-tactical);">Unit 0${idx + 2}</td>
+          <td style="font-weight:600; color:var(--term-cyan); font-family:var(--font-tactical);">Member ${idx + 2}</td>
           <td><strong>${escapeHtml(m.name || '-')}</strong></td>
           <td>${escapeHtml(m.email || '-')}<br><small style="color:var(--term-steel);">${escapeHtml(m.phone || '-')}</small></td>
           <td>${escapeHtml(m.degree || '')}${m.degree && m.department ? ' - ' : ''}${escapeHtml(m.department || '')}<br><small style="color:var(--term-steel);">${escapeHtml(m.year || '')}${m.gender ? ' • ' + escapeHtml(m.gender) : ''}</small></td>
@@ -158,7 +158,7 @@ async function openDossier(regIdOrData) {
   if (saveBtn) {
     saveBtn.onclick = async () => {
       saveBtn.disabled = true;
-      saveBtn.textContent = 'COMMITTING...';
+      saveBtn.textContent = 'Saving...';
       try {
         const res = await fetch(`/api/admin/registration/${regData.id}/status`, {
           method: 'POST',
@@ -172,12 +172,12 @@ async function openDossier(regIdOrData) {
         } else {
           alert('Failed to update status.');
           saveBtn.disabled = false;
-          saveBtn.textContent = 'UPDATE PROTOCOL STATUS';
+          saveBtn.textContent = 'Save Status';
         }
       } catch (e) {
         alert('Network error.');
         saveBtn.disabled = false;
-        saveBtn.textContent = 'UPDATE PROTOCOL STATUS';
+        saveBtn.textContent = 'Save Status';
       }
     };
   }
@@ -204,7 +204,7 @@ async function deleteRegistration(regId, teamName, teamCode) {
   teamName = teamName || 'Team';
   teamCode = teamCode || `ID #${regId}`;
 
-  const confirmMsg = `PERMANENT PURGE CONFIRMATION:\n\nAre you sure you want to delete registration for:\nTeam: ${teamName} (${teamCode})\n\nThis will permanently delete team details, leader and crew members, and uploaded dossiers. This action cannot be undone.\n\nProceed?`;
+  const confirmMsg = `Are you sure you want to delete this registration?\n\nTeam: ${teamName} (${teamCode})\n\nThis will permanently delete the team details and uploaded files. This action cannot be undone.\n\nDo you want to continue?`;
   if (!confirm(confirmMsg)) return;
 
   try {
@@ -214,14 +214,14 @@ async function deleteRegistration(regId, teamName, teamCode) {
     });
     const data = await res.json();
     if (res.ok && data.success) {
-      alert(data.message || 'Registration successfully purged.');
+      alert(data.message || 'Team registration deleted successfully.');
       window.location.reload();
     } else {
       alert(data.detail || data.message || 'Failed to delete registration.');
     }
   } catch (err) {
     console.error('Delete error:', err);
-    alert('Network error while attempting to delete registration.');
+    alert('Network error while deleting registration.');
   }
 }
 
@@ -251,7 +251,7 @@ async function openEditModal(regIdOrData) {
 
   const regData = await resolveRegistrationData(regIdOrData);
   if (!regData) {
-    alert('Unable to load registration record for editing.');
+    alert('Could not load team details for editing.');
     return;
   }
 
@@ -334,7 +334,7 @@ function renderEditMembers() {
   container.innerHTML = '';
 
   if (editMembersList.length === 0) {
-    container.innerHTML = '<p style="color:var(--term-steel); font-size:12px; margin:4px 0;">No additional crew members recorded.</p>';
+    container.innerHTML = '<p style="color:var(--term-steel); font-size:12px; margin:4px 0;">No additional team members added.</p>';
     return;
   }
 
@@ -345,10 +345,10 @@ function renderEditMembers() {
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span style="font-family:var(--font-tactical); font-size:11px; color:var(--term-red); font-weight:700;">
-          CREW MEMBER #${idx + 2} ${idx >= ((window.APP_CONFIG?.minTeamMembers || 3) - 1) ? '(OPTIONAL UNIT)' : '(REQUIRED UNIT)'}
+          Team Member #${idx + 2} ${idx >= ((window.APP_CONFIG?.minTeamMembers || 3) - 1) ? '(Optional)' : '(Required)'}
         </span>
         <button type="button" onclick="removeEditMember(${idx})" style="background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:11px; font-family:var(--font-tactical);">
-          ✕ REMOVE
+          ✕ Remove
         </button>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px;">
@@ -414,7 +414,7 @@ function addEditMember() {
   const maxCrew = (window.APP_CONFIG?.maxTeamMembers || 4) - 1;
   const maxTotal = window.APP_CONFIG?.maxTeamMembers || 4;
   if (editMembersList.length >= maxCrew) {
-    alert(`Maximum ${maxTotal} total units allowed (1 Leader + ${maxCrew} Crew Members).`);
+    alert(`Maximum ${maxTotal} members allowed (1 Leader + ${maxCrew} Team Members).`);
     return;
   }
   editMembersList.push({
@@ -440,7 +440,7 @@ async function saveParticipantEdit() {
   const saveBtn = document.getElementById('btn-save-edit');
   if (saveBtn) {
     saveBtn.disabled = true;
-    saveBtn.textContent = 'COMMITTING CHANGES & LOGGING AUDIT...';
+    saveBtn.textContent = 'Saving changes...';
   }
 
   const getVal = (id, fallback = '') => {
@@ -480,21 +480,21 @@ async function saveParticipantEdit() {
     });
     const data = await res.json();
     if (res.ok && data.success) {
-      alert(`[+] SUCCESS: Changes recorded into Supabase!\nAudit Log #${data.log_id || 'N/A'} registered.`);
+      alert('Team details saved successfully!');
       window.location.reload();
     } else {
-      alert(data.message || 'Failed to save participant changes.');
+      alert(data.message || 'Failed to save changes.');
       if (saveBtn) {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'SAVE & RECORD CHANGES';
+        saveBtn.textContent = 'Save Changes';
       }
     }
   } catch (err) {
     console.error('Save error:', err);
-    alert('Network error while committing participant changes.');
+    alert('Network error while saving changes.');
     if (saveBtn) {
       saveBtn.disabled = false;
-      saveBtn.textContent = 'SAVE & RECORD CHANGES';
+      saveBtn.textContent = 'Save Changes';
     }
   }
 }
@@ -526,7 +526,7 @@ async function openAuditHistoryModal() {
 
   const tbody = document.getElementById('audit-logs-tbody');
   if (tbody) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--term-steel); font-family:var(--font-tactical);">SCANNING AUDIT RECORDS...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--term-steel); font-family:var(--font-tactical);">Loading edit history...</td></tr>';
   }
 
   try {
@@ -535,10 +535,10 @@ async function openAuditHistoryModal() {
     if (res.ok && data.success) {
       renderAuditLogs(data.logs || []);
     } else {
-      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--term-red);">Failed to load audit logs.</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--term-red);">Failed to load edit history.</td></tr>';
     }
   } catch (err) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--term-red);">Network error loading audit trail.</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--term-red);">Network error loading edit history.</td></tr>';
   }
 }
 
@@ -548,7 +548,7 @@ function renderAuditLogs(logs) {
   tbody.innerHTML = '';
 
   if (logs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:var(--term-steel);">NO AUDIT HISTORY RECORDED YET.<br><small style="margin-top:6px; display:block;">Edits made from the admin panel are logged here with exact timestamp, diffs, and instant rollback capability.</small></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:var(--term-steel);">No edit history recorded yet.<br><small style="margin-top:6px; display:block;">Edits made from the admin panel will appear here.</small></td></tr>';
     return;
   }
 
@@ -582,15 +582,15 @@ function renderAuditLogs(logs) {
     }
 
     const actionBadge = log.action === 'undo'
-      ? '<span class="status-badge" style="background:rgba(0,210,255,0.15); color:var(--term-cyan); border:1px solid var(--term-cyan); font-size:10px;">ROLLBACK</span>'
-      : '<span class="status-badge" style="background:rgba(255,208,0,0.15); color:var(--term-red); border:1px solid var(--term-red); font-size:10px;">EDIT</span>';
+      ? '<span class="status-badge" style="background:rgba(0,210,255,0.15); color:var(--term-cyan); border:1px solid var(--term-cyan); font-size:10px;">UNDONE</span>'
+      : '<span class="status-badge" style="background:rgba(255,208,0,0.15); color:var(--term-red); border:1px solid var(--term-red); font-size:10px;">EDITED</span>';
 
     const undoButtonHtml = log.is_undone
-      ? '<span style="color:var(--term-steel); font-size:11px; font-family:var(--font-tactical);">[ROLLED BACK]</span>'
+      ? '<span style="color:var(--term-steel); font-size:11px; font-family:var(--font-tactical);">[Already Undone]</span>'
       : log.action === 'undo'
       ? '<span style="color:var(--term-steel); font-size:11px;">-</span>'
       : `<button type="button" class="btn-cyber-outline" style="padding:4px 10px; font-size:11px; color:#ff9f0a; border-color:rgba(255,159,10,0.4);" onclick="undoAuditLog(${log.id}, '${escapeHtml(log.team_name || '')}')">
-          &#8630; UNDO
+          &#8630; Undo
         </button>`;
 
     tr.innerHTML = `
@@ -611,7 +611,7 @@ function renderAuditLogs(logs) {
 }
 
 async function undoAuditLog(logId, teamName) {
-  const confirmMsg = `CONFIRM UNDO / ROLLBACK:\n\nAre you sure you want to rollback edit #${logId} for Team "${teamName}"?\n\nThis will restore all modified fields to their exact state before this edit.\n\nProceed?`;
+  const confirmMsg = `Are you sure you want to undo this edit for Team "${teamName}"?\n\nThis will restore all changed fields back to how they were before this edit.\n\nDo you want to continue?`;
   if (!confirm(confirmMsg)) return;
 
   try {
@@ -621,14 +621,14 @@ async function undoAuditLog(logId, teamName) {
     });
     const data = await res.json();
     if (res.ok && data.success) {
-      alert(`[+] ${data.message || 'Operation rolled back successfully!'}`);
+      alert(data.message || 'Edit undone successfully!');
       window.location.reload();
     } else {
-      alert(data.message || 'Failed to rollback edit.');
+      alert(data.message || 'Failed to undo edit.');
     }
   } catch (err) {
     console.error('Undo error:', err);
-    alert('Network error while processing undo rollback.');
+    alert('Network error while undoing edit.');
   }
 }
 
