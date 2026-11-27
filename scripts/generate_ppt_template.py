@@ -5,10 +5,13 @@ from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 
-def create_template():
+def create_template(force: bool = False):
     downloads_dir = Path(__file__).resolve().parent.parent / "app" / "static" / "downloads"
     downloads_dir.mkdir(parents=True, exist_ok=True)
     output_path = downloads_dir / "ANTROTHON27_Idea_Presentation_Template.pptx"
+    if output_path.exists() and not force:
+        print(f"[*] Official template already exists at: {output_path}")
+        return
 
     prs = Presentation()
     prs.slide_width = Inches(13.333)
